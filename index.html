@@ -348,7 +348,7 @@ body.senior .show-overlay .so-jp{font-size:2.8em}
   <div class="so-cn" id="soCn"></div>
   <div class="so-close">点击关闭 / タップして閉じる</div>
 </div>
-<button class="tools-toggle" id="toolsBtn" onclick="openTools()">📖</button>
+<button class="tools-toggle" id="toolsBtn" onclick="toggleTools()">📖</button>
 <div class="tools-panel" id="toolsPanel"></div>
 
 <script>
@@ -904,9 +904,9 @@ function openSearch(){
 }
 
 // ===== TOOLS PANEL =====
+function toggleTools(){const p=document.getElementById('toolsPanel');if(p.classList.contains('open')){closeTools()}else{openTools()}}
 function openTools(){
   const p=document.getElementById('toolsPanel');
-  if(p.classList.contains('open')){closeTools();return}
   const cats=Object.keys(PHRASES);
   const ac=window._tc||cats[0];
   const trDir=window._trDir||'zh2ja';

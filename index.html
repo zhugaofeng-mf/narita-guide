@@ -2,183 +2,666 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>成田空港→西大島 换乘指南</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;background:#f0f4f8;color:#333;max-width:480px;margin:0 auto;padding:12px}
-h1{text-align:center;font-size:20px;color:#1a365d;margin:12px 0 6px;line-height:1.3}
-.sub{text-align:center;font-size:13px;color:#666;margin-bottom:16px}
-.tabs{display:flex;gap:6px;margin-bottom:16px}
-.tabs button{flex:1;padding:10px 4px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
-.tabs .on1{background:#e63946;color:#fff;box-shadow:0 2px 8px rgba(230,57,70,.3)}
-.tabs .on2{background:#2a9d8f;color:#fff;box-shadow:0 2px 8px rgba(42,157,143,.3)}
-.tabs .off{background:#fff;color:#666;border:1px solid #ddd}
-.rt{display:none}.rt.show{display:block}
-.box{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #e63946}
-.g .box{border-left-color:#2a9d8f}
-.num{display:inline-block;width:26px;height:26px;border-radius:50%;background:#e63946;color:#fff;text-align:center;line-height:26px;font-size:13px;font-weight:700;margin-right:8px}
-.g .num{background:#2a9d8f}
-.ttl{font-size:15px;font-weight:700;display:inline}
-.cn{display:block;margin:8px 0 4px;font-size:14px;line-height:1.6}
-.jp{display:block;background:#f7f7f7;border-radius:6px;padding:8px 10px;font-size:13px;color:#555;line-height:1.6;margin-top:4px}
-.wrn{background:#fff3cd;border-radius:6px;padding:8px 10px;font-size:13px;color:#856404;margin-top:8px;line-height:1.5}
-.wrn::before{content:"⚠️ "}
-.tip{background:#d4edda;border-radius:6px;padding:8px 10px;font-size:13px;color:#155724;margin-top:8px;line-height:1.5}
-.tip::before{content:"💡 "}
-.ml{display:block;background:#e8f4fd;border:1px solid #bee3f8;border-radius:8px;padding:10px 12px;margin-top:8px;text-decoration:none;color:#2b6cb0;font-size:13px;font-weight:600;text-align:center;line-height:1.5}
-.ml:hover{background:#bee3f8}
-.ml::before{content:"🗺️ "}
-.ph{display:block;background:#f0f0f0;border:2px dashed #ccc;border-radius:8px;padding:20px 12px;margin-top:8px;text-align:center;color:#999;font-size:12px;line-height:1.5}
-.arr{text-align:center;font-size:22px;color:#999;margin:4px 0}
-.sm{color:#fff;border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.7}
-.sm b{color:#ffd700}
-.sm1{background:linear-gradient(135deg,#667eea,#764ba2)}
-.sm2{background:linear-gradient(135deg,#2a9d8f,#264653)}
-.hlp{background:#fff;border-radius:12px;padding:14px;margin-top:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.hlp h3{font-size:15px;margin-bottom:10px;color:#1a365d}
-.hi{background:#f7f7f7;border-radius:8px;padding:10px;margin-bottom:8px}
-.hj{font-size:16px;font-weight:700;color:#e63946;line-height:1.6}
-.hc{font-size:12px;color:#666;margin-top:2px}
-.sec{font-size:16px;font-weight:700;color:#1a365d;margin:16px 0 8px;padding-left:8px;border-left:3px solid #e63946}
-.g .sec{border-left-color:#2a9d8f}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC","PingFang SC",sans-serif;background:#f0f4f8;color:#333;max-width:480px;margin:0 auto;padding:0;min-height:100vh;padding-bottom:60px}
+
+/* Landing */
+.landing{padding:20px 14px}
+.landing h1{text-align:center;font-size:22px;color:#1a365d;margin:20px 0 6px;line-height:1.3}
+.landing .sub{text-align:center;font-size:13px;color:#888;margin-bottom:24px}
+.route-card{border-radius:14px;padding:18px;margin-bottom:14px;color:#fff;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+.route-card:active{transform:scale(.97)}
+.route-card.r1{background:linear-gradient(135deg,#667eea,#764ba2)}
+.route-card.r2{background:linear-gradient(135deg,#2a9d8f,#264653)}
+.route-card .rt-label{font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:1px}
+.route-card .rt-name{font-size:18px;font-weight:700;margin:4px 0}
+.route-card .rt-stops{font-size:13px;opacity:.9;margin-bottom:8px}
+.route-card .rt-meta{display:flex;gap:10px;font-size:12px}
+.route-card .rt-meta span{background:rgba(255,255,255,.2);border-radius:6px;padding:3px 8px}
+.route-card .rt-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;opacity:.6}
+.resume-bar{background:#fff;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:10px;cursor:pointer}
+.resume-bar:active{background:#f7f7f7}
+.resume-bar .rb-icon{width:36px;height:36px;border-radius:50%;background:#e63946;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.resume-bar .rb-icon.c2{background:#2a9d8f}
+.resume-bar .rb-text{flex:1;font-size:13px;color:#666}
+.resume-bar .rb-text b{display:block;font-size:14px;color:#333}
+.resume-bar .rb-go{color:#e63946;font-weight:700;font-size:14px}
+
+/* Progress bar */
+.progress-wrap{position:sticky;top:0;z-index:100;background:#fff;padding:10px 14px 12px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.progress-header .ph-title{font-size:14px;font-weight:700;color:#1a365d}
+.progress-header .ph-back{font-size:12px;color:#888;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid #ddd;background:#fff}
+.progress-header .ph-back:active{background:#f0f0f0}
+.progress-bar{display:flex;align-items:center;gap:0}
+.progress-bar .pb-stop{display:flex;flex-direction:column;align-items:center;cursor:pointer;flex-shrink:0;position:relative;z-index:1}
+.progress-bar .pb-dot{width:28px;height:28px;border-radius:50%;border:3px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#999;transition:.2s}
+.progress-bar .pb-dot.done{border-color:#4caf50;background:#4caf50;color:#fff}
+.progress-bar .pb-dot.current{border-color:#e63946;background:#e63946;color:#fff;box-shadow:0 0 0 4px rgba(230,57,70,.2)}
+.c2 .pb-dot.current{border-color:#2a9d8f;background:#2a9d8f;box-shadow:0 0 0 4px rgba(42,157,143,.2)}
+.progress-bar .pb-name{font-size:9px;color:#666;margin-top:3px;white-space:nowrap;max-width:60px;overflow:hidden;text-overflow:ellipsis}
+.progress-bar .pb-line{flex:1;height:3px;background:#ddd;min-width:8px}
+.progress-bar .pb-line.done{background:#4caf50}
+
+/* Step cards */
+.steps-wrap{padding:10px 14px}
+.step-card{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;transition:all .2s}
+.step-head{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.step-head .sh-num{width:30px;height:30px;border-radius:50%;background:#ddd;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.step-head .sh-num.done{background:#4caf50}
+.step-head .sh-num.current{background:#e63946}
+.c2 .step-head .sh-num.current{background:#2a9d8f}
+.step-head .sh-info{flex:1}
+.step-head .sh-title{font-size:14px;font-weight:700;color:#333}
+.step-head .sh-jp{font-size:11px;color:#999;margin-top:1px}
+.step-head .sh-arrow{font-size:14px;color:#ccc;transition:transform .2s}
+.step-head .sh-arrow.open{transform:rotate(90deg)}
+.step-body{display:none;padding:0 16px 16px;border-top:1px solid #f0f0f0}
+.step-body.open{display:block}
+
+/* Checklist */
+.checklist{margin:12px 0}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.cl-item:last-child{border-bottom:none}
+.cl-check{width:24px;height:24px;border-radius:6px;border:2px solid #ddd;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;margin-top:1px}
+.cl-check.checked{background:#4caf50;border-color:#4caf50;color:#fff}
+.cl-check svg{width:14px;height:14px;opacity:0;transition:.15s}
+.cl-check.checked svg{opacity:1}
+.cl-text{flex:1;font-size:13px;line-height:1.5;color:#555}
+.cl-text.checked{text-decoration:line-through;color:#bbb}
+.cl-text .cl-jp{display:block;font-size:11px;color:#999;margin-top:2px}
+.cl-text.checked .cl-jp{color:#ccc}
+
+/* Warnings, tips, links */
+.wrn{background:#fff3cd;border-radius:8px;padding:10px 12px;font-size:13px;color:#856404;margin-top:10px;line-height:1.5}
+.wrn::before{content:"\26A0\FE0F "}
+.tip{background:#d4edda;border-radius:8px;padding:10px 12px;font-size:13px;color:#155724;margin-top:10px;line-height:1.5}
+.tip::before{content:"\1F4A1 "}
+.ml{display:block;background:#e8f4fd;border:1px solid #bee3f8;border-radius:8px;padding:10px 12px;margin-top:8px;text-decoration:none;color:#2b6cb0;font-size:12px;font-weight:600;text-align:center;line-height:1.4}
+.ml::before{content:"\1F5FA\FE0F "}
+.ml-photo{background:#fff3cd;border-color:#ffc107;color:#856404}
+.ml-photo::before{content:"\1F4F8 "}
+
+/* Next button */
+.next-btn{display:block;width:100%;padding:14px;border:none;border-radius:10px;font-size:15px;font-weight:700;color:#fff;background:#e63946;cursor:pointer;margin-top:14px;transition:.15s}
+.c2 .next-btn{background:#2a9d8f}
+.next-btn:active{transform:scale(.97);opacity:.9}
+.next-btn.finish{background:linear-gradient(135deg,#4caf50,#2e7d32)}
+
+/* Done overlay */
+.done-screen{display:none;text-align:center;padding:40px 20px}
+.done-screen.show{display:block}
+.done-screen .ds-emoji{font-size:60px;margin-bottom:16px}
+.done-screen .ds-title{font-size:22px;font-weight:700;color:#1a365d;margin-bottom:6px}
+.done-screen .ds-sub{font-size:14px;color:#888;margin-bottom:24px}
+.done-screen .ds-reset{padding:12px 24px;border:1px solid #ddd;border-radius:10px;background:#fff;font-size:14px;color:#666;cursor:pointer}
+
+/* Translation Helper */
+.trans-section{margin:16px 14px 0;background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.trans-header{padding:14px 16px;font-size:15px;font-weight:700;color:#1a365d;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.trans-header .th-arrow{transition:transform .2s;font-size:14px;color:#ccc}
+.trans-header .th-arrow.open{transform:rotate(90deg)}
+.trans-body{display:none;padding:0 16px 16px}
+.trans-body.open{display:block}
+.trans-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.trans-tabs::-webkit-scrollbar{display:none}
+.tt-btn{padding:7px 12px;border:1px solid #ddd;border-radius:8px;font-size:12px;white-space:nowrap;cursor:pointer;background:#fff;color:#666;flex-shrink:0;transition:.15s}
+.tt-btn.active{background:#1a365d;color:#fff;border-color:#1a365d}
+.phrase-card{background:#f7f7f7;border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.phrase-card:active{background:#eee}
+.phrase-card .pc-jp{font-size:16px;font-weight:700;color:#e63946;line-height:1.5}
+.phrase-card .pc-cn{font-size:12px;color:#888;margin-top:3px}
+.phrase-card .pc-hint{font-size:10px;color:#bbb;margin-top:4px}
+
+/* Show mode overlay */
+.show-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer}
+.show-overlay.open{display:flex}
+.show-overlay .so-jp{font-size:32px;font-weight:700;color:#fff;text-align:center;line-height:1.6;margin-bottom:16px}
+.show-overlay .so-cn{font-size:14px;color:rgba(255,255,255,.5);text-align:center}
+.show-overlay .so-close{font-size:12px;color:rgba(255,255,255,.3);margin-top:30px}
+
+/* Footer */
+.footer{text-align:center;font-size:11px;color:#999;padding:16px 14px}
+
+/* Reset btn in progress */
+.reset-link{font-size:11px;color:#ccc;text-align:center;display:block;margin-top:12px;cursor:pointer}
+.reset-link:active{color:#e63946}
+
+/* Animations */
+@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.step-body.open{animation:slideIn .2s ease}
 </style>
 </head>
 <body>
 
-<h1>✈️ 成田空港 → 西大島<br>换乘指南</h1>
-<p class="sub">中日双语 / 中日二ヶ国語ガイド</p>
-
-<div class="tabs">
-  <button class="on1" id="b1" onclick="sw(1)">路线① 快速 70分钟</button>
-  <button class="off" id="b2" onclick="sw(2)">路线② 便宜 100分钟</button>
+<div id="app"></div>
+<div class="show-overlay" id="showOverlay" onclick="closeShow()">
+  <div class="so-jp" id="soJp"></div>
+  <div class="so-cn" id="soCn"></div>
+  <div class="so-close">点击任意处关闭 / タップして閉じる</div>
 </div>
-
-<!-- ====== 路线① ====== -->
-<div class="rt show" id="p1">
-
-<div class="sm sm1">
-  <b>路线①</b> Access特快（快速推荐）<br>
-  成田空港 → 押上 → 住吉 → 西大島<br>
-  全程约<b>70-80分钟</b>｜费用约<b>1500日元</b><br>
-  换乘2次，全部站内换乘，不用出站
-</div>
-
-<div class="sec">🔋 第0步：给IC卡充值</div>
-<div class="box">
-  <span class="num">0</span><span class="ttl">给IC卡充值</span>
-  <span class="cn">到达成田机场后，先在<b>到达大厅</b>找到<b>京成线的售票机</b>，给手机里的IC卡（Suica/PASMO）充值<b>2000日元</b>以上。</span>
-  <span class="jp">到着ロビーで「京成線」の券売機を探して、ICカード（Suica/PASMO）に<b>2000円以上</b>チャージしてください。</span>
-  <div class="tip">充值机上有中文界面，按"チャージ"（充值）按钮即可。<br>券売機には中国語表示あり。「チャージ」ボタンを押す。</div>
-   <img src="https://prebell.so-net.ne.jp/content/so_net/prebell/tips/pre_23071101/_jcr_content/mainparsys/image_2130419092.img.jpg/1689007438993.jpg" alt="充值机"> 
-</div>
-
-<div class="sec">🚃 出发！</div>
-<div class="box">
-  <span class="num">1</span><span class="ttl">成田空港 → 押上</span>
-  <span class="cn">从到达大厅跟着<b>「京成線 / Keisei」</b>的标识走到<b>地下B1F</b>。<br>进改札后，去<b>1号站台</b>（アクセス特急专用）。<br>坐<b>「アクセス特急」</b>（Access特快），往<b>押上/羽田空港</b>方向。<br>坐到<b>押上</b>站下车。约<b>60分钟</b>。</span>
-  <span class="jp">到着ロビーから「京成線」の案内に従いB1Fへ。<br>改札を入って<b>1番ホーム</b>で「<b>アクセス特急</b>」押上・羽田空港方面に乗車。<br><b>押上駅</b>で下車。約60分。</span>
-  <div class="wrn">绝对不要坐「スカイライナー」！那个需要额外买特急券，很贵！<br>スカイライナーは別料金です！アクセス特急に乗ってください！</div>
-  <div class="wrn">进改札后注意：不要通过「中间改札口」！直接往1号站台走。<br>改札を入ったら「中間改札口」を通らず、直接1番ホームへ。</div>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">点击查看：成田空港站 官方构内图（中文版PDF）<br>成田空港駅 構内図を見る</a>
-</div>
-
-<div class="arr">⬇️</div>
-<div class="box">
-  <span class="num">2</span><span class="ttl">押上 → 住吉（换乘半蔵門線）</span>
-  <span class="cn">在押上站下车后，<b>不要出改札</b>！<br>跟着<b>「半蔵門線 Hanzōmon Line」</b>的换乘标识走。<br>从B1F下到<b>B2F</b>出京成改札，然后往<b>半蔵門線</b>方向走，到<b>B3F</b>站台。<br>坐<b>半蔵門線</b>往<b>渋谷方向</b>，坐<b>1站</b>到<b>住吉</b>。</span>
-  <span class="jp">押上駅で降りたら改札を出ずに「<b>半蔵門線</b>」乗り換え案内に従う。<br>B1F→B2F（京成改札出る）→半蔵門線方向→B3Fホーム。<br><b>半蔵門線 渋谷方面</b>に乗車、<b>1駅で住吉</b>。</span>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf" target="_blank">点击查看：押上站 京成构内图（中文版PDF）<br>押上駅 構内図を見る</a>
-  <a class="ml" href="https://tren.hatenablog.com/entry/z14-a20" target="_blank" style="background:#fff3cd;border-color:#ffc107;color:#856404">📸 点击查看：押上站换乘实拍图文教程（日文，有照片）<br>押上駅乗り換え写真付き解説を見る</a>
-</div>
-
-<div class="arr">⬇️</div>
-<div class="box">
-  <span class="num">3</span><span class="ttl">住吉 → 西大島</span>
-  <span class="cn">到住吉站后，跟着<b>「都営新宿線 Shinjuku Line」</b>标识换乘。<br>同一层走过去就好，很近。<br>坐<b>都営新宿線</b>往<b>本八幡方向</b>，坐<b>1站</b>到<b>西大島</b>！</span>
-  <span class="jp">住吉駅で「<b>都営新宿線</b>」案内に従い乗り換え。同じフロア内。<br><b>都営新宿線 本八幡方面</b>に乗車、<b>1駅で西大島</b>！</span>
-  <div class="tip">到了！出站就到家了！🎉<br>着きました！改札を出ればもうすぐです！</div>
-</div>
-</div>
-
-<!-- ====== 路线② ====== -->
-<div class="rt g" id="p2">
-
-<div class="sm sm2">
-  <b>路线②</b> 京成本線（便宜）<br>
-  成田空港 → 京成八幡 → 本八幡 → 西大島<br>
-  全程约<b>100-110分钟</b>｜费用约<b>1300日元</b><br>
-  换乘1次，但需要出站步行约5分钟
-</div>
-
-<div class="sec">🔋 第0步：给IC卡充值</div>
-<div class="box">
-  <span class="num">0</span><span class="ttl">给IC卡充值</span>
-  <span class="cn">到达成田机场后，先在<b>到达大厅</b>找到<b>京成线的售票机</b>，给手机里的IC卡（Suica/PASMO）充值<b>2000日元</b>以上。</span>
-  <span class="jp">到着ロビーで「京成線」の券売機を探して、ICカードに<b>2000円以上</b>チャージしてください。</span>
-  <div class="tip">充值机上有中文界面，按"チャージ"按钮即可。</div>
-   <img src="https://prebell.so-net.ne.jp/content/so_net/prebell/tips/pre_23071101/_jcr_content/mainparsys/image_2130419092.img.jpg/1689007438993.jpg" alt="充值机"> 
-</div>
-
-<div class="sec">🚃 出发！</div>
-<div class="box">
-  <span class="num">1</span><span class="ttl">成田空港 → 京成八幡</span>
-  <span class="cn">从到达大厅跟着<b>「京成線 / Keisei」</b>标识走到<b>地下</b>。<br>进改札后，需要通过<b>「中间改札口」</b>，到达京成本线专用站台。<br>去<b>2号或3号站台</b>，坐<b>「快速特急」或「特急」</b>，往<b>京成上野/押上</b>方向。<br>坐到<b>京成八幡</b>站下车。约<b>80分钟</b>。</span>
-  <span class="jp">「京成線」の案内に従い地下へ。改札を入り、<b>「中間改札口」を通って</b>京成本線ホームへ。<br><b>2・3番ホーム</b>で「<b>快速特急</b>」または「<b>特急</b>」京成上野・押上方面に乗車。<br><b>京成八幡駅</b>で下車。約80分。</span>
-  <div class="wrn">注意！京成本线和Access线的站台是<b>分开的</b>！必须通过「中间改札口」才能到2/3号站台。<br>IC卡刷两次改札是正常的，不要紧张。<br>ICカードで2回タッチは正常です。</div>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">点击查看：成田空港站 官方构内图（中文版PDF）<br>成田空港駅 構内図を見る</a>
-</div>
-
-<div class="arr">⬇️</div>
-<div class="box">
-  <span class="num">2</span><span class="ttl">京成八幡 → 步行 → 本八幡</span>
-  <span class="cn">京成八幡是<b>高架站</b>（楼上）。下车后坐扶梯到1F，<b>出改札</b>。<br>出站后<b>往左走</b>，沿着大马路（国道14号）直走约<b>5分钟</b>，就能看到<b>本八幡站</b>的入口（地下站）。<br>进入<b>都営新宿線 本八幡站</b>。</span>
-  <span class="jp">京成八幡は高架駅です。下車後エスカレーターで1Fへ、改札を出ます。<br>出たら<b>左に曲がり</b>、国道14号沿いに約<b>5分</b>歩くと<b>本八幡駅</b>（都営新宿線・地下）の入口が見えます。</span>
-  <div class="wrn">带大行李箱的话走室外要注意，约5-7分钟路程。<br>スーツケースがある場合、歩道にご注意ください。</div>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf" target="_blank">点击查看：京成八幡站 官方构内图（中文版PDF）<br>京成八幡駅 構内図を見る</a>
-  <a class="ml" href="https://eroom.earthrevo.jp/archives/7326" target="_blank" style="background:#fff3cd;border-color:#ffc107;color:#856404">📸 点击查看：京成八幡→本八幡 步行实拍教程（有照片）<br>京成八幡→本八幡 写真付き乗り換え解説を見る</a>
-</div>
-
-<div class="arr">⬇️</div>
-<div class="box">
-  <span class="num">3</span><span class="ttl">本八幡 → 西大島</span>
-  <span class="cn">进入本八幡站（地下站），刷IC卡进改札。<br>坐<b>都営新宿線</b>往<b>新宿方向</b>，坐约<b>15分钟</b>（6站）到<b>西大島</b>！</span>
-  <span class="jp">本八幡駅に入り、ICカードで改札を通ります。<br><b>都営新宿線 新宿方面</b>に乗車、約<b>15分（6駅）</b>で<b>西大島</b>！</span>
-  <div class="tip">到了！出站就到家了！🎉<br>着きました！改札を出ればもうすぐです！</div>
-</div>
-</div>
-
-<!-- 求助用语 -->
-<div class="hlp">
-  <h3>🆘 万一迷路了？给日本人看：</h3>
-  <div class="hi"><div class="hj">西大島駅に行きたいです。</div><div class="hc">我想去西大島站。</div></div>
-  <div class="hi"><div class="hj">都営新宿線はどこですか？</div><div class="hc">都营新宿线在哪里？</div></div>
-  <div class="hi"><div class="hj">押上駅で半蔵門線に乗り換えたいです。</div><div class="hc">我想在押上站换乘半蔵門线。</div></div>
-  <div class="hi"><div class="hj">京成八幡駅から本八幡駅はどう行きますか？</div><div class="hc">从京成八幡到本八幡怎么走？</div></div>
-  <div class="hi"><div class="hj">ICカードにチャージしたいです。</div><div class="hc">我想给IC卡充值。</div></div>
-  <div class="hi"><div class="hj">すみません、この電車は押上に止まりますか？</div><div class="hc">请问这趟车停押上吗？</div></div>
-</div>
-
-<!-- 官方资源 -->
-<div class="hlp" style="margin-top:12px">
-  <h3>📎 官方构内图（中文版）</h3>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">成田空港站（第1航站楼）</a>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/144.pdf" target="_blank">成田空港第2候机楼站</a>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf" target="_blank">押上站</a>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf" target="_blank">京成八幡站</a>
-  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/skyliner/tc/traffic/index.php" target="_blank">京成电铁 交通指南（中文官网）</a>
-  <a class="ml" href="https://www.narita-airport.jp/zh-sc/access/train/" target="_blank">成田机场官网 电车交通（简体中文）</a>
-</div>
-
-<p style="text-align:center;font-size:11px;color:#999;margin-top:16px">制作日期：2026年2月 ｜ 信息仅供参考，以现场实际为准</p>
 
 <script>
-function sw(n){
-  document.getElementById('p1').className=n===1?'rt show':'rt';
-  document.getElementById('p2').className=n===2?'rt g show':'rt g';
-  document.getElementById('b1').className=n===1?'on1':'off';
-  document.getElementById('b2').className=n===2?'on2':'off';
+// ===== DATA =====
+const ROUTES = [
+  {
+    id:1, color:'#e63946', label:'路线①', name:'Access特快（快速推荐）',
+    nameJp:'アクセス特急（速い・おすすめ）',
+    stops:['成田空港','押上','住吉','西大島'],
+    summary:{time:'70-80分钟',cost:'~1500日元',transfers:'2次换乘（站内）'},
+    steps:[
+      {
+        title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
+        checklist:[
+          {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
+          {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
+          {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
+        ],
+        warnings:[],
+        tips:[
+          {cn:'充值机上有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}
+        ],
+        links:[],
+      },
+      {
+        title:{cn:'成田空港 → 押上（坐Access特快）',jp:'成田空港 → 押上（アクセス特急）'},
+        checklist:[
+          {cn:'跟着「京成線 / Keisei」标识走',jp:'「京成線」の案内に従う'},
+          {cn:'下到地下B1F',jp:'B1Fへ降りる'},
+          {cn:'进改札',jp:'改札を入る'},
+          {cn:'去1号站台（不要通过中间改札口！）',jp:'1番ホームへ（中間改札口を通らない！）'},
+          {cn:'确认是「アクセス特急」（不是スカイライナー！）',jp:'「アクセス特急」を確認（スカイライナーではない！）'},
+          {cn:'坐上车，往押上/羽田空港方向',jp:'押上・羽田空港方面に乗車'},
+          {cn:'到达押上站，下车',jp:'押上駅で下車'},
+        ],
+        warnings:[
+          {cn:'绝对不要坐「スカイライナー」！那个需要额外买特急券，很贵！',jp:'スカイライナーは別料金です！アクセス特急に乗ってください！'},
+          {cn:'进改札后不要通过「中间改札口」！直接往1号站台走。',jp:'改札を入ったら「中間改札口」を通らず、直接1番ホームへ。'},
+        ],
+        tips:[
+          {cn:'车程约60分钟，可以休息一下。',jp:'乗車時間は約60分、ゆっくり休めます。'},
+        ],
+        links:[
+          {text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+        ],
+      },
+      {
+        title:{cn:'押上 → 住吉（换乘半蔵門線）',jp:'押上 → 住吉（半蔵門線乗り換え）'},
+        checklist:[
+          {cn:'下车后不要出改札！',jp:'改札を出ない！'},
+          {cn:'跟着「半蔵門線 Hanzomon Line」标识走',jp:'「半蔵門線」の案内に従う'},
+          {cn:'从B1F到B2F出京成改札',jp:'B1F→B2F 京成改札を出る'},
+          {cn:'继续往半蔵門線方向走到B3F站台',jp:'半蔵門線方向へ→B3Fホーム'},
+          {cn:'坐半蔵門線，往渋谷方向',jp:'半蔵門線 渋谷方面に乗車'},
+          {cn:'坐1站到住吉',jp:'1駅で住吉'},
+        ],
+        warnings:[],
+        tips:[],
+        links:[
+          {text:{cn:'押上站 构内图（中文PDF）',jp:'押上駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
+          {text:{cn:'押上站换乘实拍图文教程',jp:'押上駅乗り換え写真付き解説'},url:'https://tren.hatenablog.com/entry/z14-a20',photo:true},
+        ],
+      },
+      {
+        title:{cn:'住吉 → 西大島（最后一步！）',jp:'住吉 → 西大島（最後のステップ！）'},
+        checklist:[
+          {cn:'跟着「都営新宿線 Shinjuku Line」标识走',jp:'「都営新宿線」の案内に従う'},
+          {cn:'同一层换乘，很近',jp:'同じフロアで乗り換え、近い'},
+          {cn:'坐都営新宿線，往本八幡方向',jp:'都営新宿線 本八幡方面に乗車'},
+          {cn:'坐1站到西大島！',jp:'1駅で西大島！'},
+        ],
+        warnings:[],
+        tips:[
+          {cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'},
+        ],
+        links:[],
+      },
+    ],
+  },
+  {
+    id:2, color:'#2a9d8f', label:'路线②', name:'京成本線（省钱方案）',
+    nameJp:'京成本線（安い）',
+    stops:['成田空港','京成八幡','本八幡','西大島'],
+    summary:{time:'100-110分钟',cost:'~1300日元',transfers:'1次换乘（需出站步行5分钟）'},
+    steps:[
+      {
+        title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
+        checklist:[
+          {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
+          {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
+          {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
+        ],
+        warnings:[],
+        tips:[
+          {cn:'充值机上有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}
+        ],
+        links:[],
+      },
+      {
+        title:{cn:'成田空港 → 京成八幡（坐京成本線）',jp:'成田空港 → 京成八幡（京成本線）'},
+        checklist:[
+          {cn:'跟着「京成線 / Keisei」标识走到地下',jp:'「京成線」の案内に従い地下へ'},
+          {cn:'进改札',jp:'改札を入る'},
+          {cn:'通过「中间改札口」到京成本线站台',jp:'「中間改札口」を通って京成本線ホームへ'},
+          {cn:'去2号或3号站台',jp:'2・3番ホームへ'},
+          {cn:'坐「快速特急」或「特急」，往京成上野/押上方向',jp:'「快速特急」または「特急」京成上野・押上方面に乗車'},
+          {cn:'到达京成八幡站，下车',jp:'京成八幡駅で下車'},
+        ],
+        warnings:[
+          {cn:'京成本线和Access线的站台是分开的！必须通过「中间改札口」才能到2/3号站台。IC卡刷两次改札是正常的，不要紧张。',jp:'中間改札口を通って京成本線ホームへ。ICカードで2回タッチは正常です。'},
+        ],
+        tips:[
+          {cn:'车程约80分钟，可以休息一下。',jp:'乗車時間は約80分、ゆっくり休めます。'},
+        ],
+        links:[
+          {text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+        ],
+      },
+      {
+        title:{cn:'京成八幡 → 步行 → 本八幡',jp:'京成八幡 → 徒歩 → 本八幡'},
+        checklist:[
+          {cn:'下车后坐扶梯到1F',jp:'下車後エスカレーターで1Fへ'},
+          {cn:'出改札',jp:'改札を出る'},
+          {cn:'出站后往左走',jp:'駅を出たら左に曲がる'},
+          {cn:'沿大马路（国道14号）直走约5分钟',jp:'国道14号沿いに約5分歩く'},
+          {cn:'找到本八幡站入口（地下站）',jp:'本八幡駅の入口を見つける（地下駅）'},
+          {cn:'进入都営新宿線 本八幡站',jp:'都営新宿線 本八幡駅に入る'},
+        ],
+        warnings:[
+          {cn:'带大行李箱的话走室外要注意，约5-7分钟路程。',jp:'スーツケースがある場合、歩道にご注意ください。'},
+        ],
+        tips:[],
+        links:[
+          {text:{cn:'京成八幡站 构内图（中文PDF）',jp:'京成八幡駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf'},
+          {text:{cn:'京成八幡→本八幡 步行实拍教程',jp:'京成八幡→本八幡 写真付き乗り換え解説'},url:'https://eroom.earthrevo.jp/archives/7326',photo:true},
+        ],
+      },
+      {
+        title:{cn:'本八幡 → 西大島（最后一步！）',jp:'本八幡 → 西大島（最後のステップ！）'},
+        checklist:[
+          {cn:'刷IC卡进本八幡站改札',jp:'ICカードで本八幡駅の改札を通る'},
+          {cn:'坐都営新宿線，往新宿方向',jp:'都営新宿線 新宿方面に乗車'},
+          {cn:'坐6站（约15分钟）到西大島！',jp:'6駅（約15分）で西大島！'},
+        ],
+        warnings:[],
+        tips:[
+          {cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'},
+        ],
+        links:[],
+      },
+    ],
+  },
+];
+
+const PHRASES = {
+  transport:{
+    label:'交通乘车',
+    icon:'🚃',
+    items:[
+      {cn:'我想去西大島站。',jp:'西大島駅に行きたいです。'},
+      {cn:'请问这趟车停押上吗？',jp:'すみません、この電車は押上に止まりますか？'},
+      {cn:'请问这是开往哪里的车？',jp:'すみません、この電車はどこ行きですか？'},
+      {cn:'我想坐Access特快。',jp:'アクセス特急に乗りたいです。'},
+      {cn:'我想在押上站换乘半蔵門线。',jp:'押上駅で半蔵門線に乗り換えたいです。'},
+      {cn:'请问都营新宿线在哪里？',jp:'都営新宿線はどこですか？'},
+      {cn:'从京成八幡到本八幡怎么走？',jp:'京成八幡駅から本八幡駅はどう行きますか？'},
+      {cn:'我坐过站了，怎么回去？',jp:'乗り過ごしました。どうやって戻れますか？'},
+    ]
+  },
+  ticket:{
+    label:'买票充值',
+    icon:'💳',
+    items:[
+      {cn:'我想给IC卡充值。',jp:'ICカードにチャージしたいです。'},
+      {cn:'请问充值机在哪里？',jp:'チャージできる機械はどこですか？'},
+      {cn:'可以用现金充值吗？',jp:'現金でチャージできますか？'},
+      {cn:'请问去西大島多少钱？',jp:'西大島までいくらですか？'},
+      {cn:'我的IC卡余额不够了。',jp:'ICカードの残高が足りません。'},
+    ]
+  },
+  directions:{
+    label:'问路',
+    icon:'🗺️',
+    items:[
+      {cn:'请问出口在哪里？',jp:'出口はどこですか？'},
+      {cn:'请问厕所在哪里？',jp:'トイレはどこですか？'},
+      {cn:'请问电梯在哪里？',jp:'エレベーターはどこですか？'},
+      {cn:'请问检票口在哪里？',jp:'改札はどこですか？'},
+      {cn:'请问哪个是1号站台？',jp:'1番ホームはどちらですか？'},
+      {cn:'我迷路了，能帮帮我吗？',jp:'道に迷いました。助けてもらえますか？'},
+    ]
+  },
+  emergency:{
+    label:'紧急求助',
+    icon:'🆘',
+    items:[
+      {cn:'请帮帮我！',jp:'助けてください！'},
+      {cn:'我不会说日语。',jp:'日本語が話せません。'},
+      {cn:'可以帮我叫出租车吗？',jp:'タクシーを呼んでもらえますか？'},
+      {cn:'我的东西丢了。',jp:'荷物をなくしました。'},
+      {cn:'请帮我叫警察。',jp:'警察を呼んでください。'},
+      {cn:'我身体不舒服。',jp:'体調が悪いです。'},
+      {cn:'请问附近有药店吗？',jp:'近くに薬局はありますか？'},
+    ]
+  },
+};
+
+// ===== STATE =====
+let state = loadState();
+
+function loadState(){
+  try{
+    const s = JSON.parse(localStorage.getItem('narita-v3'));
+    if(s && s.route !== undefined) return s;
+  }catch(e){}
+  return {route:null, step:0, checks:{}};
 }
+function saveState(){
+  localStorage.setItem('narita-v3', JSON.stringify(state));
+}
+function resetState(){
+  state = {route:null, step:0, checks:{}};
+  saveState();
+  render();
+}
+
+// ===== RENDER =====
+const app = document.getElementById('app');
+
+function render(){
+  if(state.route === null){
+    renderLanding();
+  } else {
+    const route = ROUTES[state.route];
+    if(state.step >= route.steps.length){
+      renderDone(route);
+    } else {
+      renderJourney(route);
+    }
+  }
+  renderTranslation();
+}
+
+function renderLanding(){
+  let resumeHtml = '';
+  if(loadState().route !== null){
+    const s = loadState();
+    const r = ROUTES[s.route];
+    const stepName = s.step < r.steps.length ? r.steps[s.step].title.cn : '已完成';
+    resumeHtml = `
+      <div class="resume-bar" onclick="state=loadState();render()">
+        <div class="rb-icon ${s.route===1?'c2':''}">${s.route===0?'①':'②'}</div>
+        <div class="rb-text"><b>继续上次的进度</b>${r.label} · ${stepName}</div>
+        <div class="rb-go">继续 ›</div>
+      </div>`;
+  }
+
+  let html = `
+    <div class="landing">
+      <h1>✈️ 成田空港 → 西大島<br>换乘指南</h1>
+      <p class="sub">中日双语 · 一步一步带你到家<br>中日二ヶ国語 · ステップバイステップガイド</p>
+      ${resumeHtml}`;
+
+  ROUTES.forEach((r,i) => {
+    html += `
+      <div class="route-card ${i===0?'r1':'r2'}" onclick="selectRoute(${i})">
+        <div class="rt-label">${r.label}</div>
+        <div class="rt-name">${r.name}</div>
+        <div class="rt-stops">${r.stops.join(' → ')}</div>
+        <div class="rt-meta">
+          <span>⏱ ${r.summary.time}</span>
+          <span>💰 ${r.summary.cost}</span>
+          <span>🔄 ${r.summary.transfers}</span>
+        </div>
+        <div class="rt-arrow">›</div>
+      </div>`;
+  });
+
+  html += `</div>`;
+  app.innerHTML = html;
+}
+
+function renderJourney(route){
+  const ci = route.id === 2 ? 'c2' : '';
+
+  // Progress bar
+  let progressHtml = `
+    <div class="progress-wrap ${ci}">
+      <div class="progress-header">
+        <span class="ph-title">${route.label} ${route.name}</span>
+        <button class="ph-back" onclick="goBack()">← 返回</button>
+      </div>
+      <div class="progress-bar">`;
+
+  route.stops.forEach((stop, i) => {
+    const stepIdx = i; // stop index maps to step index (0=charge, 1=first train, etc)
+    let dotClass = '';
+    if(i < state.step) dotClass = 'done';
+    else if(i === state.step) dotClass = 'current';
+
+    if(i > 0) {
+      progressHtml += `<div class="pb-line ${i <= state.step ? 'done' : ''}"></div>`;
+    }
+    progressHtml += `
+      <div class="pb-stop" onclick="jumpStep(${i})">
+        <div class="pb-dot ${dotClass}">${dotClass==='done'?'✓':i}</div>
+        <div class="pb-name">${stop}</div>
+      </div>`;
+  });
+
+  progressHtml += `</div></div>`;
+
+  // Steps
+  let stepsHtml = `<div class="steps-wrap ${ci}">`;
+
+  route.steps.forEach((step, i) => {
+    const isDone = i < state.step;
+    const isCurrent = i === state.step;
+    const isOpen = isCurrent || isDone;
+    const numClass = isDone ? 'done' : (isCurrent ? 'current' : '');
+
+    stepsHtml += `
+      <div class="step-card" id="step-${i}">
+        <div class="step-head" onclick="toggleStep(${i})">
+          <div class="sh-num ${numClass}">${isDone?'✓':i}</div>
+          <div class="sh-info">
+            <div class="sh-title">${step.title.cn}</div>
+            <div class="sh-jp">${step.title.jp}</div>
+          </div>
+          <div class="sh-arrow ${isOpen?'open':''}">›</div>
+        </div>
+        <div class="step-body ${isOpen?'open':''}" id="step-body-${i}">`;
+
+    // Checklist
+    stepsHtml += `<div class="checklist">`;
+    step.checklist.forEach((item, j) => {
+      const key = `${state.route}-${i}-${j}`;
+      const checked = state.checks[key];
+      stepsHtml += `
+        <div class="cl-item">
+          <div class="cl-check ${checked?'checked':''}" onclick="toggleCheck('${key}',${i})">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="cl-text ${checked?'checked':''}" onclick="toggleCheck('${key}',${i})">${item.cn}<span class="cl-jp">${item.jp}</span></div>
+        </div>`;
+    });
+    stepsHtml += `</div>`;
+
+    // Warnings
+    step.warnings.forEach(w => {
+      stepsHtml += `<div class="wrn">${w.cn}<br><span style="font-size:12px;color:#a07000">${w.jp}</span></div>`;
+    });
+
+    // Tips
+    step.tips.forEach(t => {
+      stepsHtml += `<div class="tip">${t.cn}<br><span style="font-size:12px;color:#0f5132">${t.jp}</span></div>`;
+    });
+
+    // Links
+    step.links.forEach(l => {
+      stepsHtml += `<a class="ml ${l.photo?'ml-photo':''}" href="${l.url}" target="_blank">${l.text.cn}<br><span style="font-size:11px">${l.text.jp}</span></a>`;
+    });
+
+    // Next button (only on current step)
+    if(isCurrent){
+      const isLast = i === route.steps.length - 1;
+      stepsHtml += `<button class="next-btn ${isLast?'finish':''}" onclick="nextStep()">
+        ${isLast ? '🎉 到达西大島！/ 西大島に到着！' : '✓ 完成，下一步 / 次のステップへ'}
+      </button>`;
+    }
+
+    stepsHtml += `</div></div>`;
+  });
+
+  stepsHtml += `
+    <div class="reset-link" onclick="if(confirm('确定要重置进度吗？'))resetState()">重置进度 / リセット</div>
+  </div>`;
+
+  app.innerHTML = progressHtml + stepsHtml;
+
+  // Scroll to current step
+  setTimeout(() => {
+    const el = document.getElementById(`step-${state.step}`);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 100);
+}
+
+function renderDone(route){
+  app.innerHTML = `
+    <div class="progress-wrap ${route.id===2?'c2':''}">
+      <div class="progress-header">
+        <span class="ph-title">${route.label} 已完成！</span>
+        <button class="ph-back" onclick="goBack()">← 返回</button>
+      </div>
+      <div class="progress-bar">
+        ${route.stops.map((s,i) => `
+          ${i>0?'<div class="pb-line done"></div>':''}
+          <div class="pb-stop">
+            <div class="pb-dot done">✓</div>
+            <div class="pb-name">${s}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div class="done-screen show">
+      <div class="ds-emoji">🎉🏠</div>
+      <div class="ds-title">到家了！</div>
+      <div class="ds-sub">着きました！お疲れ様でした！<br>所有步骤已完成</div>
+      <button class="ds-reset" onclick="resetState()">重新开始 / 最初からやり直す</button>
+    </div>`;
+}
+
+function renderTranslation(){
+  // Remove existing
+  document.querySelectorAll('.trans-section,.footer').forEach(el=>el.remove());
+
+  const cats = Object.keys(PHRASES);
+  const activeCat = window._transCat || cats[0];
+  const isOpen = window._transOpen !== false;
+
+  let html = `
+    <div class="trans-section">
+      <div class="trans-header" onclick="toggleTrans()">
+        <span>📖 中日翻译助手 / 日中フレーズ集</span>
+        <span class="th-arrow ${isOpen?'open':''}">›</span>
+      </div>
+      <div class="trans-body ${isOpen?'open':''}">
+        <div class="trans-tabs">`;
+
+  cats.forEach(cat => {
+    const p = PHRASES[cat];
+    html += `<div class="tt-btn ${cat===activeCat?'active':''}" onclick="switchCat('${cat}')">${p.icon} ${p.label}</div>`;
+  });
+
+  html += `</div>`;
+
+  PHRASES[activeCat].items.forEach(item => {
+    html += `
+      <div class="phrase-card" onclick="showPhrase('${esc(item.jp)}','${esc(item.cn)}')">
+        <div class="pc-jp">${item.jp}</div>
+        <div class="pc-cn">${item.cn}</div>
+        <div class="pc-hint">点击放大给日本人看 / タップして拡大表示</div>
+      </div>`;
+  });
+
+  html += `</div></div>
+    <div class="footer">制作日期：2026年2月 ｜ 信息仅供参考，以现场实际为准</div>`;
+
+  app.insertAdjacentHTML('afterend','');
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function esc(s){ return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+
+// ===== ACTIONS =====
+function selectRoute(i){
+  state = {route:i, step:0, checks:{}};
+  saveState();
+  render();
+  window.scrollTo(0,0);
+}
+
+function nextStep(){
+  state.step++;
+  saveState();
+  render();
+  window.scrollTo(0,0);
+}
+
+function jumpStep(i){
+  if(i <= state.step){
+    const body = document.getElementById(`step-body-${i}`);
+    const el = document.getElementById(`step-${i}`);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+}
+
+function toggleStep(i){
+  const body = document.getElementById(`step-body-${i}`);
+  const card = document.getElementById(`step-${i}`);
+  if(!body) return;
+  body.classList.toggle('open');
+  card.querySelector('.sh-arrow').classList.toggle('open');
+}
+
+function toggleCheck(key, stepIdx){
+  state.checks[key] = !state.checks[key];
+  saveState();
+  // Re-render just the checkbox
+  render();
+}
+
+function goBack(){
+  state.route = null;
+  // Don't reset progress, just go to landing
+  saveState();
+  render();
+  window.scrollTo(0,0);
+}
+
+// Translation
+function toggleTrans(){
+  window._transOpen = !(window._transOpen !== false);
+  renderTranslation();
+}
+function switchCat(cat){
+  window._transCat = cat;
+  renderTranslation();
+}
+function showPhrase(jp, cn){
+  document.getElementById('soJp').textContent = jp;
+  document.getElementById('soCn').textContent = cn;
+  document.getElementById('showOverlay').classList.add('open');
+}
+function closeShow(){
+  document.getElementById('showOverlay').classList.remove('open');
+}
+
+// ===== INIT =====
+render();
 </script>
 </body>
 </html>

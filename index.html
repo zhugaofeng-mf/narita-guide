@@ -3,157 +3,207 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
 <title>成田空港→西大島 换乘指南</title>
 <style>
+:root{
+  --bg:#0a0e1a;--bg2:#111827;--card:rgba(255,255,255,.06);--card-border:rgba(255,255,255,.1);
+  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#6366f1;--accent2:#818cf8;--accent-glow:rgba(99,102,241,.3);
+  --red:#ef4444;--red-glow:rgba(239,68,68,.3);
+  --teal:#14b8a6;--teal-glow:rgba(20,184,166,.3);
+  --green:#22c55e;--green-glow:rgba(34,197,94,.3);
+  --yellow:#eab308;
+  --glass:rgba(255,255,255,.05);--glass-border:rgba(255,255,255,.08);
+  --font-base:14px;--font-sm:12px;--font-xs:10px;--font-lg:16px;--font-xl:20px;--font-2xl:24px;
+}
+body.senior{
+  --font-base:20px;--font-sm:17px;--font-xs:15px;--font-lg:23px;--font-xl:28px;--font-2xl:34px;
+}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC","PingFang SC",sans-serif;background:#f0f4f8;color:#333;max-width:480px;margin:0 auto;padding:0;min-height:100vh;padding-bottom:60px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC",sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;font-size:var(--font-base);-webkit-tap-highlight-color:transparent}
+
+/* Glass card */
+.glass{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:16px}
 
 /* Landing */
-.landing{padding:20px 14px}
-.landing h1{text-align:center;font-size:22px;color:#1a365d;margin:20px 0 6px;line-height:1.3}
-.landing .sub{text-align:center;font-size:13px;color:#888;margin-bottom:24px}
-.route-card{border-radius:14px;padding:18px;margin-bottom:14px;color:#fff;cursor:pointer;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden}
+.landing{padding:20px 16px;min-height:100vh;display:flex;flex-direction:column}
+.brand{text-align:center;padding:30px 0 20px}
+.brand .logo{font-size:48px;margin-bottom:8px}
+.brand h1{font-size:var(--font-2xl);font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.3}
+.brand .sub{font-size:var(--font-sm);color:var(--text3);margin-top:8px;line-height:1.5}
+.route-pick{margin-top:16px;flex:1}
+.route-card{border-radius:16px;padding:20px;margin-bottom:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.route-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,.5),rgba(168,85,247,.3));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .route-card:active{transform:scale(.97)}
-.route-card.r1{background:linear-gradient(135deg,#667eea,#764ba2)}
-.route-card.r2{background:linear-gradient(135deg,#2a9d8f,#264653)}
-.route-card .rt-label{font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:1px}
-.route-card .rt-name{font-size:18px;font-weight:700;margin:4px 0}
-.route-card .rt-stops{font-size:13px;opacity:.9;margin-bottom:8px}
-.route-card .rt-meta{display:flex;gap:10px;font-size:12px}
-.route-card .rt-meta span{background:rgba(255,255,255,.2);border-radius:6px;padding:3px 8px}
-.route-card .rt-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:24px;opacity:.6}
-.resume-bar{background:#fff;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;align-items:center;gap:10px;cursor:pointer}
-.resume-bar:active{background:#f7f7f7}
-.resume-bar .rb-icon{width:36px;height:36px;border-radius:50%;background:#e63946;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.resume-bar .rb-icon.c2{background:#2a9d8f}
-.resume-bar .rb-text{flex:1;font-size:13px;color:#666}
-.resume-bar .rb-text b{display:block;font-size:14px;color:#333}
-.resume-bar .rb-go{color:#e63946;font-weight:700;font-size:14px}
+.route-card .rc-badge{display:inline-block;font-size:var(--font-xs);padding:3px 10px;border-radius:20px;font-weight:700;margin-bottom:8px}
+.r1 .rc-badge{background:rgba(239,68,68,.15);color:#f87171}
+.r2 .rc-badge{background:rgba(20,184,166,.15);color:#5eead4}
+.route-card .rc-name{font-size:var(--font-lg);font-weight:700;margin-bottom:4px}
+.route-card .rc-stops{font-size:var(--font-sm);color:var(--text2);margin-bottom:12px}
+.route-card .rc-meta{display:flex;gap:8px;flex-wrap:wrap}
+.route-card .rc-meta span{font-size:var(--font-xs);padding:4px 10px;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border)}
+.route-card .rc-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--text3)}
+.resume-card{border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
+.resume-card:active{opacity:.8}
+.resume-card .rc-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:pulse 2s infinite}
+.resume-card .rc-info{flex:1;font-size:var(--font-sm);color:var(--text2)}
+.resume-card .rc-info b{display:block;color:var(--text);font-size:var(--font-base)}
+.resume-card .rc-go{color:var(--accent2);font-weight:700;font-size:var(--font-base)}
+.landing-footer{display:flex;gap:8px;margin-top:auto;padding-top:20px}
+.landing-footer button{flex:1;padding:10px;border:1px solid var(--card-border);border-radius:10px;background:var(--card);color:var(--text2);font-size:var(--font-sm);cursor:pointer}
+.landing-footer button:active{background:rgba(255,255,255,.1)}
 
-/* Progress bar */
-.progress-wrap{position:sticky;top:0;z-index:100;background:#fff;padding:10px 14px 12px;box-shadow:0 1px 6px rgba(0,0,0,.08)}
-.progress-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.progress-header .ph-title{font-size:14px;font-weight:700;color:#1a365d}
-.progress-header .ph-back{font-size:12px;color:#888;cursor:pointer;padding:4px 8px;border-radius:6px;border:1px solid #ddd;background:#fff}
-.progress-header .ph-back:active{background:#f0f0f0}
-.progress-bar{display:flex;align-items:center;gap:0}
-.progress-bar .pb-stop{display:flex;flex-direction:column;align-items:center;cursor:pointer;flex-shrink:0;position:relative;z-index:1}
-.progress-bar .pb-dot{width:28px;height:28px;border-radius:50%;border:3px solid #ddd;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#999;transition:.2s}
-.progress-bar .pb-dot.done{border-color:#4caf50;background:#4caf50;color:#fff}
-.progress-bar .pb-dot.current{border-color:#e63946;background:#e63946;color:#fff;box-shadow:0 0 0 4px rgba(230,57,70,.2)}
-.c2 .pb-dot.current{border-color:#2a9d8f;background:#2a9d8f;box-shadow:0 0 0 4px rgba(42,157,143,.2)}
-.progress-bar .pb-name{font-size:9px;color:#666;margin-top:3px;white-space:nowrap;max-width:60px;overflow:hidden;text-overflow:ellipsis}
-.progress-bar .pb-line{flex:1;height:3px;background:#ddd;min-width:8px}
-.progress-bar .pb-line.done{background:#4caf50}
+/* HUD Progress */
+.hud{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:10px 16px 14px;border-bottom:1px solid var(--card-border)}
+.hud-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.hud-top .ht-mission{font-size:var(--font-xs);color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:1px}
+.hud-top .ht-back{font-size:var(--font-xs);color:var(--text3);cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid var(--card-border);background:transparent}
+.hud-bar{display:flex;align-items:center}
+.hud-bar .hb-node{display:flex;flex-direction:column;align-items:center;cursor:pointer;flex-shrink:0;z-index:1}
+.hud-bar .hb-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:var(--font-xs);font-weight:700;color:var(--text3);transition:.3s}
+.hud-bar .hb-dot.done{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 0 10px var(--green-glow)}
+.hud-bar .hb-dot.current{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 0 12px var(--accent-glow);animation:pulse 2s infinite}
+.c2 .hb-dot.current{border-color:var(--teal);background:var(--teal);box-shadow:0 0 12px var(--teal-glow)}
+.hud-bar .hb-name{font-size:8px;color:var(--text3);margin-top:3px;max-width:55px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hud-bar .hb-line{flex:1;height:2px;background:var(--text3);min-width:6px;opacity:.3}
+.hud-bar .hb-line.done{background:var(--green);opacity:1;box-shadow:0 0 6px var(--green-glow)}
 
-/* Step cards */
-.steps-wrap{padding:10px 14px}
-.step-card{background:#fff;border-radius:14px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;transition:all .2s}
-.step-head{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.step-head .sh-num{width:30px;height:30px;border-radius:50%;background:#ddd;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
-.step-head .sh-num.done{background:#4caf50}
-.step-head .sh-num.current{background:#e63946}
-.c2 .step-head .sh-num.current{background:#2a9d8f}
+/* Steps */
+.steps-area{padding:12px 16px 80px}
+.step-card{border-radius:16px;margin-bottom:14px;overflow:hidden;transition:.2s;background:var(--card);border:1px solid var(--card-border)}
+.step-card.current-card{border-color:rgba(99,102,241,.3);box-shadow:0 0 20px rgba(99,102,241,.1)}
+.c2 .step-card.current-card{border-color:rgba(20,184,166,.3);box-shadow:0 0 20px rgba(20,184,166,.1)}
+.step-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.step-head .sh-num{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:var(--font-sm);font-weight:800;flex-shrink:0;background:var(--glass);color:var(--text3);border:1px solid var(--glass-border)}
+.step-head .sh-num.done{background:rgba(34,197,94,.15);color:var(--green);border-color:rgba(34,197,94,.3)}
+.step-head .sh-num.current{background:rgba(99,102,241,.15);color:var(--accent2);border-color:rgba(99,102,241,.3)}
+.c2 .sh-num.current{background:rgba(20,184,166,.15);color:var(--teal);border-color:rgba(20,184,166,.3)}
 .step-head .sh-info{flex:1}
-.step-head .sh-title{font-size:14px;font-weight:700;color:#333}
-.step-head .sh-jp{font-size:11px;color:#999;margin-top:1px}
-.step-head .sh-arrow{font-size:14px;color:#ccc;transition:transform .2s}
+.step-head .sh-mission{font-size:var(--font-xs);color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.c2 .sh-mission{color:var(--teal)}
+.step-head .sh-title{font-size:var(--font-base);font-weight:700}
+.step-head .sh-jp{font-size:var(--font-xs);color:var(--text3);margin-top:2px}
+.step-head .sh-arrow{color:var(--text3);transition:transform .2s;font-size:var(--font-base)}
 .step-head .sh-arrow.open{transform:rotate(90deg)}
-.step-body{display:none;padding:0 16px 16px;border-top:1px solid #f0f0f0}
-.step-body.open{display:block}
+.step-body{display:none;padding:0 16px 16px}
+.step-body.open{display:block;animation:fadeIn .25s ease}
+
+/* Mini-map */
+.minimap{background:rgba(0,0,0,.3);border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid var(--glass-border);font-size:var(--font-sm);position:relative;overflow:hidden}
+.minimap::before{content:'MAP';position:absolute;top:8px;right:10px;font-size:9px;color:var(--text3);letter-spacing:2px;font-weight:700;opacity:.5}
+.mm-floor{padding:8px 10px;border-radius:8px;margin-bottom:4px;display:flex;align-items:center;gap:8px;position:relative}
+.mm-floor.active{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2)}
+.c2 .mm-floor.active{background:rgba(20,184,166,.1);border:1px solid rgba(20,184,166,.2)}
+.mm-floor .mf-label{font-size:var(--font-xs);font-weight:700;color:var(--text3);width:32px;flex-shrink:0}
+.mm-floor .mf-content{flex:1;font-size:var(--font-sm);color:var(--text2);line-height:1.5}
+.mm-floor .mf-you{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:pulse 2s infinite;margin-right:4px;vertical-align:middle}
+.c2 .mf-you{background:var(--teal);box-shadow:0 0 8px var(--teal-glow)}
+.mm-arrow{text-align:center;color:var(--text3);font-size:14px;margin:2px 0;animation:bounce .8s infinite}
+.mm-line{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.mm-line.keisei{background:#2563eb}.mm-line.hanzomon{background:#9333ea}.mm-line.shinjuku{background:#16a34a}.mm-line.access{background:#dc2626}
 
 /* Checklist */
-.checklist{margin:12px 0}
-.cl-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.checklist{margin:4px 0 8px}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--glass-border)}
 .cl-item:last-child{border-bottom:none}
-.cl-check{width:24px;height:24px;border-radius:6px;border:2px solid #ddd;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.15s;margin-top:1px}
-.cl-check.checked{background:#4caf50;border-color:#4caf50;color:#fff}
-.cl-check svg{width:14px;height:14px;opacity:0;transition:.15s}
+.cl-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--text3);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s;margin-top:1px}
+.cl-check.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 8px var(--green-glow)}
+.cl-check svg{width:14px;height:14px;opacity:0;color:#fff;transition:.15s}
 .cl-check.checked svg{opacity:1}
-.cl-text{flex:1;font-size:13px;line-height:1.5;color:#555}
-.cl-text.checked{text-decoration:line-through;color:#bbb}
-.cl-text .cl-jp{display:block;font-size:11px;color:#999;margin-top:2px}
-.cl-text.checked .cl-jp{color:#ccc}
+.cl-text{flex:1;font-size:var(--font-sm);line-height:1.6;color:var(--text2)}
+.cl-text.checked{text-decoration:line-through;color:var(--text3)}
+.cl-text .cl-jp{display:block;font-size:var(--font-xs);color:var(--text3);margin-top:1px}
 
-/* Warnings, tips, links */
-.wrn{background:#fff3cd;border-radius:8px;padding:10px 12px;font-size:13px;color:#856404;margin-top:10px;line-height:1.5}
+/* Alerts */
+.wrn{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.2);border-radius:10px;padding:10px 12px;font-size:var(--font-sm);color:#fbbf24;margin-top:10px;line-height:1.5}
 .wrn::before{content:"\26A0\FE0F "}
-.tip{background:#d4edda;border-radius:8px;padding:10px 12px;font-size:13px;color:#155724;margin-top:10px;line-height:1.5}
+.wrn .wrn-jp{font-size:var(--font-xs);color:rgba(251,191,36,.6);display:block;margin-top:4px}
+.tip{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 12px;font-size:var(--font-sm);color:#4ade80;margin-top:10px;line-height:1.5}
 .tip::before{content:"\1F4A1 "}
-.ml{display:block;background:#e8f4fd;border:1px solid #bee3f8;border-radius:8px;padding:10px 12px;margin-top:8px;text-decoration:none;color:#2b6cb0;font-size:12px;font-weight:600;text-align:center;line-height:1.4}
-.ml::before{content:"\1F5FA\FE0F "}
-.ml-photo{background:#fff3cd;border-color:#ffc107;color:#856404}
-.ml-photo::before{content:"\1F4F8 "}
+.tip .tip-jp{font-size:var(--font-xs);color:rgba(74,222,128,.6);display:block;margin-top:4px}
+.ml{display:block;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:10px 12px;margin-top:8px;text-decoration:none;color:var(--accent2);font-size:var(--font-sm);font-weight:600;text-align:center;line-height:1.4;transition:.15s}
+.ml:active{background:rgba(99,102,241,.15)}
+.ml-photo{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.2);color:#fbbf24}
 
 /* Next button */
-.next-btn{display:block;width:100%;padding:14px;border:none;border-radius:10px;font-size:15px;font-weight:700;color:#fff;background:#e63946;cursor:pointer;margin-top:14px;transition:.15s}
-.c2 .next-btn{background:#2a9d8f}
+.next-btn{display:block;width:100%;padding:16px;border:none;border-radius:12px;font-size:var(--font-lg);font-weight:700;color:#fff;cursor:pointer;margin-top:16px;transition:.15s;position:relative;overflow:hidden}
+.next-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.c2 .next-btn{background:linear-gradient(135deg,#14b8a6,#0d9488)}
 .next-btn:active{transform:scale(.97);opacity:.9}
-.next-btn.finish{background:linear-gradient(135deg,#4caf50,#2e7d32)}
+.next-btn.finish{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.next-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 3s infinite}
 
-/* Done overlay */
-.done-screen{display:none;text-align:center;padding:40px 20px}
-.done-screen.show{display:block}
-.done-screen .ds-emoji{font-size:60px;margin-bottom:16px}
-.done-screen .ds-title{font-size:22px;font-weight:700;color:#1a365d;margin-bottom:6px}
-.done-screen .ds-sub{font-size:14px;color:#888;margin-bottom:24px}
-.done-screen .ds-reset{padding:12px 24px;border:1px solid #ddd;border-radius:10px;background:#fff;font-size:14px;color:#666;cursor:pointer}
+/* Done screen */
+.done-screen{text-align:center;padding:60px 20px}
+.done-screen .ds-emoji{font-size:80px;margin-bottom:20px}
+.done-screen .ds-title{font-size:var(--font-2xl);font-weight:800;background:linear-gradient(135deg,#22c55e,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.done-screen .ds-sub{font-size:var(--font-base);color:var(--text2);margin:12px 0 30px;line-height:1.6}
+.done-screen .ds-btn{padding:12px 28px;border:1px solid var(--card-border);border-radius:12px;background:var(--card);font-size:var(--font-sm);color:var(--text2);cursor:pointer}
 
-/* Translation Helper */
-.trans-section{margin:16px 14px 0;background:#fff;border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
-.trans-header{padding:14px 16px;font-size:15px;font-weight:700;color:#1a365d;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.trans-header .th-arrow{transition:transform .2s;font-size:14px;color:#ccc}
+/* Translation */
+.trans-section{margin:0 16px 16px;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--card-border)}
+.trans-header{padding:14px 16px;font-size:var(--font-base);font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.trans-header .th-arrow{transition:transform .2s;color:var(--text3)}
 .trans-header .th-arrow.open{transform:rotate(90deg)}
 .trans-body{display:none;padding:0 16px 16px}
 .trans-body.open{display:block}
 .trans-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
 .trans-tabs::-webkit-scrollbar{display:none}
-.tt-btn{padding:7px 12px;border:1px solid #ddd;border-radius:8px;font-size:12px;white-space:nowrap;cursor:pointer;background:#fff;color:#666;flex-shrink:0;transition:.15s}
-.tt-btn.active{background:#1a365d;color:#fff;border-color:#1a365d}
-.phrase-card{background:#f7f7f7;border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s}
-.phrase-card:active{background:#eee}
-.phrase-card .pc-jp{font-size:16px;font-weight:700;color:#e63946;line-height:1.5}
-.phrase-card .pc-cn{font-size:12px;color:#888;margin-top:3px}
-.phrase-card .pc-hint{font-size:10px;color:#bbb;margin-top:4px}
-
-/* Show mode overlay */
-.show-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer}
-.show-overlay.open{display:flex}
-.show-overlay .so-jp{font-size:32px;font-weight:700;color:#fff;text-align:center;line-height:1.6;margin-bottom:16px}
-.show-overlay .so-cn{font-size:14px;color:rgba(255,255,255,.5);text-align:center}
-.show-overlay .so-close{font-size:12px;color:rgba(255,255,255,.3);margin-top:30px}
+.tt-btn{padding:7px 12px;border:1px solid var(--card-border);border-radius:8px;font-size:var(--font-xs);white-space:nowrap;cursor:pointer;background:transparent;color:var(--text3);flex-shrink:0;transition:.15s}
+.tt-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.phrase-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.phrase-card:active{background:rgba(255,255,255,.1)}
+.phrase-card .pc-jp{font-size:var(--font-lg);font-weight:700;color:#f87171;line-height:1.5}
+.phrase-card .pc-cn{font-size:var(--font-xs);color:var(--text3);margin-top:3px}
+.phrase-card .pc-hint{font-size:var(--font-xs);color:var(--text3);margin-top:4px;opacity:.5}
 
 /* Translator */
-.translator{margin-top:14px;padding-top:14px;border-top:1px solid #eee}
-.translator .tr-label{font-size:13px;font-weight:700;color:#1a365d;margin-bottom:8px}
+.translator{margin-top:14px;padding-top:14px;border-top:1px solid var(--glass-border)}
+.translator .tr-label{font-size:var(--font-sm);font-weight:700;margin-bottom:8px}
+.translator .tr-swap{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0;font-size:var(--font-xs);color:var(--text3)}
+.translator .tr-swap button{background:var(--glass);border:1px solid var(--glass-border);border-radius:6px;padding:2px 10px;font-size:16px;cursor:pointer;color:var(--text2)}
 .translator .tr-input-wrap{display:flex;gap:8px}
-.translator textarea{flex:1;border:1px solid #ddd;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;resize:none;height:44px;line-height:1.4;outline:none;transition:border-color .15s}
-.translator textarea:focus{border-color:#667eea}
-.translator .tr-btn{width:52px;border:none;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:700;cursor:pointer;flex-shrink:0;transition:.15s}
-.translator .tr-btn:active{transform:scale(.95);opacity:.9}
-.translator .tr-btn:disabled{opacity:.5}
-.translator .tr-swap{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0;font-size:12px;color:#888}
-.translator .tr-swap button{background:none;border:1px solid #ddd;border-radius:6px;padding:2px 10px;font-size:16px;cursor:pointer;color:#666}
-.translator .tr-swap button:active{background:#f0f0f0}
+.translator textarea{flex:1;border:1px solid var(--card-border);border-radius:10px;padding:10px 12px;font-size:var(--font-base);font-family:inherit;resize:none;height:44px;line-height:1.4;outline:none;background:var(--glass);color:var(--text);transition:.15s}
+.translator textarea:focus{border-color:var(--accent)}
+.translator textarea::placeholder{color:var(--text3)}
+.translator .tr-btn{width:56px;border:none;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:var(--font-base);font-weight:700;cursor:pointer;flex-shrink:0}
+.translator .tr-btn:active{opacity:.8}
+.translator .tr-btn:disabled{opacity:.4}
 .tr-result{margin-top:10px;display:none}
 .tr-result.show{display:block}
-.tr-result-card{background:#f0f4f8;border-radius:10px;padding:14px;cursor:pointer;transition:.15s}
-.tr-result-card:active{background:#e2e8f0}
-.tr-result-card .trc-target{font-size:18px;font-weight:700;color:#e63946;line-height:1.5}
-.tr-result-card .trc-source{font-size:12px;color:#888;margin-top:4px}
-.tr-result-card .trc-hint{font-size:10px;color:#bbb;margin-top:6px}
-.tr-error{margin-top:8px;font-size:12px;color:#e63946}
+.tr-result-card{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:14px;cursor:pointer}
+.tr-result-card:active{background:rgba(99,102,241,.15)}
+.tr-result-card .trc-target{font-size:var(--font-xl);font-weight:700;color:var(--accent2);line-height:1.5}
+.tr-result-card .trc-source{font-size:var(--font-xs);color:var(--text3);margin-top:4px}
+.tr-result-card .trc-hint{font-size:var(--font-xs);color:var(--text3);margin-top:6px;opacity:.5}
+.tr-error{margin-top:8px;font-size:var(--font-xs);color:var(--red)}
+
+/* Show overlay */
+.show-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer}
+.show-overlay.open{display:flex}
+.show-overlay .so-jp{font-size:36px;font-weight:700;color:#fff;text-align:center;line-height:1.6;margin-bottom:16px}
+.show-overlay .so-cn{font-size:16px;color:rgba(255,255,255,.4);text-align:center}
+.show-overlay .so-close{font-size:12px;color:rgba(255,255,255,.2);margin-top:40px}
+body.senior .show-overlay .so-jp{font-size:48px}
 
 /* Footer */
-.footer{text-align:center;font-size:11px;color:#999;padding:16px 14px}
-
-/* Reset btn in progress */
-.reset-link{font-size:11px;color:#ccc;text-align:center;display:block;margin-top:12px;cursor:pointer}
-.reset-link:active{color:#e63946}
+.footer{text-align:center;font-size:var(--font-xs);color:var(--text3);padding:16px}
+.reset-link{font-size:var(--font-xs);color:var(--text3);text-align:center;display:block;margin-top:12px;cursor:pointer;opacity:.5}
 
 /* Animations */
-@keyframes slideIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.step-body.open{animation:slideIn .2s ease}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+@keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+@keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* Confetti */
+.confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;overflow:hidden}
+.confetti span{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall 3s linear forwards}
 </style>
 </head>
 <body>
@@ -169,131 +219,156 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC"
 // ===== DATA =====
 const ROUTES = [
   {
-    id:1, color:'#e63946', label:'路线①', name:'Access特快（快速推荐）',
+    id:1, color:'#ef4444', accentClass:'', label:'路线①', name:'Access特快（快速推荐）',
     nameJp:'アクセス特急（速い・おすすめ）',
     stops:['成田空港','押上','住吉','西大島'],
-    summary:{time:'70-80分钟',cost:'~1500日元',transfers:'2次换乘（站内）'},
+    summary:{time:'70-80min',cost:'~1500¥',transfers:'2次站内换乘'},
     steps:[
       {
         title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
+        mission:'PREPARE',
         checklist:[
           {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
           {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
           {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
         ],
-        warnings:[],
-        tips:[
-          {cn:'充值机上有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}
+        minimap:[
+          {floor:'1F',content:'到着ロビー → 找京成線售票机',active:true,you:true},
         ],
+        warnings:[],
+        tips:[{cn:'充值机有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}],
         links:[],
       },
       {
-        title:{cn:'成田空港 → 押上（坐Access特快）',jp:'成田空港 → 押上（アクセス特急）'},
+        title:{cn:'成田空港 → 押上',jp:'成田空港 → 押上（アクセス特急）'},
+        mission:'RIDE 01',
         checklist:[
           {cn:'跟着「京成線 / Keisei」标识走',jp:'「京成線」の案内に従う'},
           {cn:'下到地下B1F',jp:'B1Fへ降りる'},
-          {cn:'进改札',jp:'改札を入る'},
+          {cn:'进改札（刷IC卡）',jp:'改札を入る（ICカードタッチ）'},
           {cn:'去1号站台（不要通过中间改札口！）',jp:'1番ホームへ（中間改札口を通らない！）'},
-          {cn:'确认是「アクセス特急」（不是スカイライナー！）',jp:'「アクセス特急」を確認（スカイライナーではない！）'},
+          {cn:'确认是「アクセス特急」',jp:'「アクセス特急」を確認'},
           {cn:'坐上车，往押上/羽田空港方向',jp:'押上・羽田空港方面に乗車'},
-          {cn:'到达押上站，下车',jp:'押上駅で下車'},
+          {cn:'到达押上站，下车（约60分钟）',jp:'押上駅で下車（約60分）'},
+        ],
+        minimap:[
+          {floor:'1F',content:'到着ロビー'},
+          {floor:'B1F',content:'<span class="mm-line access"></span>京成線改札口 → <b>1号站台</b>',active:true,you:true},
+          {floor:'',content:'<b>アクセス特急 → 押上方向</b> 🚃 约60min'},
         ],
         warnings:[
-          {cn:'绝对不要坐「スカイライナー」！那个需要额外买特急券，很贵！',jp:'スカイライナーは別料金です！アクセス特急に乗ってください！'},
+          {cn:'不要坐「スカイライナー」！需要额外买特急券，很贵！',jp:'スカイライナーは別料金！アクセス特急に乗ってください！'},
           {cn:'进改札后不要通过「中间改札口」！直接往1号站台走。',jp:'改札を入ったら「中間改札口」を通らず、直接1番ホームへ。'},
         ],
-        tips:[
-          {cn:'车程约60分钟，可以休息一下。',jp:'乗車時間は約60分、ゆっくり休めます。'},
-        ],
-        links:[
-          {text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
-        ],
+        tips:[{cn:'车程约60分钟，可以休息。',jp:'約60分、ゆっくり休めます。'}],
+        links:[{text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'}],
       },
       {
-        title:{cn:'押上 → 住吉（换乘半蔵門線）',jp:'押上 → 住吉（半蔵門線乗り換え）'},
+        title:{cn:'押上 → 住吉',jp:'押上 → 住吉（半蔵門線乗り換え）'},
+        mission:'TRANSFER 01',
         checklist:[
           {cn:'下车后不要出改札！',jp:'改札を出ない！'},
-          {cn:'跟着「半蔵門線 Hanzomon Line」标识走',jp:'「半蔵門線」の案内に従う'},
-          {cn:'从B1F到B2F出京成改札',jp:'B1F→B2F 京成改札を出る'},
-          {cn:'继续往半蔵門線方向走到B3F站台',jp:'半蔵門線方向へ→B3Fホーム'},
-          {cn:'坐半蔵門線，往渋谷方向',jp:'半蔵門線 渋谷方面に乗車'},
-          {cn:'坐1站到住吉',jp:'1駅で住吉'},
+          {cn:'跟着「半蔵門線」标识走',jp:'「半蔵門線」の案内に従う'},
+          {cn:'B1F → B2F 出京成改札',jp:'B1F→B2F 京成改札を出る'},
+          {cn:'继续往半蔵門線方向 → B3F站台',jp:'半蔵門線方向→B3Fホーム'},
+          {cn:'坐半蔵門線，渋谷方向',jp:'半蔵門線 渋谷方面に乗車'},
+          {cn:'1站到住吉',jp:'1駅で住吉'},
+        ],
+        minimap:[
+          {floor:'B1F',content:'押上駅 到着（京成線ホーム）'},
+          {floor:'B2F',content:'京成改札を出る → <span class="mm-line hanzomon"></span>半蔵門線へ',active:true,you:true},
+          {floor:'B3F',content:'<span class="mm-line hanzomon"></span><b>半蔵門線ホーム → 渋谷方面</b>'},
+          {floor:'',content:'🚃 1駅 → 住吉'},
         ],
         warnings:[],
         tips:[],
         links:[
           {text:{cn:'押上站 构内图（中文PDF）',jp:'押上駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
-          {text:{cn:'押上站换乘实拍图文教程',jp:'押上駅乗り換え写真付き解説'},url:'https://tren.hatenablog.com/entry/z14-a20',photo:true},
+          {text:{cn:'押上站换乘实拍教程',jp:'押上駅乗り換え写真付き解説'},url:'https://tren.hatenablog.com/entry/z14-a20',photo:true},
         ],
       },
       {
-        title:{cn:'住吉 → 西大島（最后一步！）',jp:'住吉 → 西大島（最後のステップ！）'},
+        title:{cn:'住吉 → 西大島',jp:'住吉 → 西大島（最後！）'},
+        mission:'FINAL',
         checklist:[
-          {cn:'跟着「都営新宿線 Shinjuku Line」标识走',jp:'「都営新宿線」の案内に従う'},
-          {cn:'同一层换乘，很近',jp:'同じフロアで乗り換え、近い'},
-          {cn:'坐都営新宿線，往本八幡方向',jp:'都営新宿線 本八幡方面に乗車'},
-          {cn:'坐1站到西大島！',jp:'1駅で西大島！'},
+          {cn:'跟着「都営新宿線」标识走',jp:'「都営新宿線」の案内に従う'},
+          {cn:'同一层换乘，很近',jp:'同じフロアで乗り換え'},
+          {cn:'坐都営新宿線，本八幡方向',jp:'都営新宿線 本八幡方面に乗車'},
+          {cn:'1站到西大島！',jp:'1駅で西大島！'},
+        ],
+        minimap:[
+          {floor:'B3F',content:'住吉駅（半蔵門線ホーム）'},
+          {floor:'B3F',content:'<span class="mm-line shinjuku"></span><b>都営新宿線ホーム → 本八幡方面</b>',active:true,you:true},
+          {floor:'',content:'🚃 1駅 → <b>西大島！🎉</b>'},
         ],
         warnings:[],
-        tips:[
-          {cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'},
-        ],
+        tips:[{cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'}],
         links:[],
       },
     ],
   },
   {
-    id:2, color:'#2a9d8f', label:'路线②', name:'京成本線（省钱方案）',
+    id:2, color:'#14b8a6', accentClass:'c2', label:'路线②', name:'京成本線（省钱方案）',
     nameJp:'京成本線（安い）',
     stops:['成田空港','京成八幡','本八幡','西大島'],
-    summary:{time:'100-110分钟',cost:'~1300日元',transfers:'1次换乘（需出站步行5分钟）'},
+    summary:{time:'100-110min',cost:'~1300¥',transfers:'1次换乘+步行5min'},
     steps:[
       {
         title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
+        mission:'PREPARE',
         checklist:[
           {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
           {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
           {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
         ],
-        warnings:[],
-        tips:[
-          {cn:'充值机上有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}
+        minimap:[
+          {floor:'1F',content:'到着ロビー → 找京成線售票机',active:true,you:true},
         ],
+        warnings:[],
+        tips:[{cn:'充值机有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}],
         links:[],
       },
       {
-        title:{cn:'成田空港 → 京成八幡（坐京成本線）',jp:'成田空港 → 京成八幡（京成本線）'},
+        title:{cn:'成田空港 → 京成八幡',jp:'成田空港 → 京成八幡（京成本線）'},
+        mission:'RIDE 01',
         checklist:[
-          {cn:'跟着「京成線 / Keisei」标识走到地下',jp:'「京成線」の案内に従い地下へ'},
-          {cn:'进改札',jp:'改札を入る'},
+          {cn:'跟着「京成線」标识走到地下',jp:'「京成線」の案内に従い地下へ'},
+          {cn:'进改札（刷IC卡）',jp:'改札を入る（ICカードタッチ）'},
           {cn:'通过「中间改札口」到京成本线站台',jp:'「中間改札口」を通って京成本線ホームへ'},
           {cn:'去2号或3号站台',jp:'2・3番ホームへ'},
-          {cn:'坐「快速特急」或「特急」，往京成上野/押上方向',jp:'「快速特急」または「特急」京成上野・押上方面に乗車'},
-          {cn:'到达京成八幡站，下车',jp:'京成八幡駅で下車'},
+          {cn:'坐「快速特急」或「特急」',jp:'「快速特急」または「特急」に乗車'},
+          {cn:'到达京成八幡站，下车（约80分钟）',jp:'京成八幡駅で下車（約80分）'},
+        ],
+        minimap:[
+          {floor:'1F',content:'到着ロビー'},
+          {floor:'B1F',content:'京成線改札口 → <b>中間改札口を通る！</b>',active:true,you:true},
+          {floor:'B1F',content:'<span class="mm-line keisei"></span><b>2/3号站台</b> → 快速特急/特急'},
+          {floor:'',content:'🚃 京成本線 → 京成八幡 约80min'},
         ],
         warnings:[
-          {cn:'京成本线和Access线的站台是分开的！必须通过「中间改札口」才能到2/3号站台。IC卡刷两次改札是正常的，不要紧张。',jp:'中間改札口を通って京成本線ホームへ。ICカードで2回タッチは正常です。'},
+          {cn:'必须通过「中间改札口」才能到2/3号站台！IC卡刷两次是正常的。',jp:'中間改札口を通って京成本線ホームへ。ICカードで2回タッチは正常です。'},
         ],
-        tips:[
-          {cn:'车程约80分钟，可以休息一下。',jp:'乗車時間は約80分、ゆっくり休めます。'},
-        ],
-        links:[
-          {text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
-        ],
+        tips:[{cn:'车程约80分钟，可以休息。',jp:'約80分、ゆっくり休めます。'}],
+        links:[{text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'}],
       },
       {
         title:{cn:'京成八幡 → 步行 → 本八幡',jp:'京成八幡 → 徒歩 → 本八幡'},
+        mission:'WALK',
         checklist:[
           {cn:'下车后坐扶梯到1F',jp:'下車後エスカレーターで1Fへ'},
           {cn:'出改札',jp:'改札を出る'},
           {cn:'出站后往左走',jp:'駅を出たら左に曲がる'},
-          {cn:'沿大马路（国道14号）直走约5分钟',jp:'国道14号沿いに約5分歩く'},
-          {cn:'找到本八幡站入口（地下站）',jp:'本八幡駅の入口を見つける（地下駅）'},
+          {cn:'沿国道14号直走约5分钟',jp:'国道14号沿いに約5分歩く'},
+          {cn:'找到本八幡站入口（地下站）',jp:'本八幡駅の入口を見つける'},
           {cn:'进入都営新宿線 本八幡站',jp:'都営新宿線 本八幡駅に入る'},
         ],
-        warnings:[
-          {cn:'带大行李箱的话走室外要注意，约5-7分钟路程。',jp:'スーツケースがある場合、歩道にご注意ください。'},
+        minimap:[
+          {floor:'2F',content:'京成八幡駅（高架站）到着'},
+          {floor:'1F',content:'出改札 → 往左走',active:true,you:true},
+          {floor:'',content:'🚶 国道14号沿い 步行约5分钟'},
+          {floor:'B1F',content:'<span class="mm-line shinjuku"></span><b>本八幡駅（地下站）入口</b>'},
         ],
+        warnings:[{cn:'带大行李箱走室外要注意，约5-7分钟。',jp:'スーツケースがある場合、歩道にご注意ください。'}],
         tips:[],
         links:[
           {text:{cn:'京成八幡站 构内图（中文PDF）',jp:'京成八幡駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf'},
@@ -301,16 +376,20 @@ const ROUTES = [
         ],
       },
       {
-        title:{cn:'本八幡 → 西大島（最后一步！）',jp:'本八幡 → 西大島（最後のステップ！）'},
+        title:{cn:'本八幡 → 西大島',jp:'本八幡 → 西大島（最後！）'},
+        mission:'FINAL',
         checklist:[
-          {cn:'刷IC卡进本八幡站改札',jp:'ICカードで本八幡駅の改札を通る'},
-          {cn:'坐都営新宿線，往新宿方向',jp:'都営新宿線 新宿方面に乗車'},
-          {cn:'坐6站（约15分钟）到西大島！',jp:'6駅（約15分）で西大島！'},
+          {cn:'刷IC卡进本八幡站改札',jp:'ICカードで改札を通る'},
+          {cn:'坐都営新宿線，新宿方向',jp:'都営新宿線 新宿方面に乗車'},
+          {cn:'6站（约15分钟）到西大島！',jp:'6駅（約15分）で西大島！'},
+        ],
+        minimap:[
+          {floor:'B1F',content:'本八幡駅 改札 → 入る',active:true,you:true},
+          {floor:'B2F',content:'<span class="mm-line shinjuku"></span><b>都営新宿線 → 新宿方面</b>'},
+          {floor:'',content:'🚃 6駅 → <b>西大島！🎉</b>'},
         ],
         warnings:[],
-        tips:[
-          {cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'},
-        ],
+        tips:[{cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'}],
         links:[],
       },
     ],
@@ -318,443 +397,346 @@ const ROUTES = [
 ];
 
 const PHRASES = {
-  transport:{
-    label:'交通乘车',
-    icon:'🚃',
-    items:[
-      {cn:'我想去西大島站。',jp:'西大島駅に行きたいです。'},
-      {cn:'请问这趟车停押上吗？',jp:'すみません、この電車は押上に止まりますか？'},
-      {cn:'请问这是开往哪里的车？',jp:'すみません、この電車はどこ行きですか？'},
-      {cn:'我想坐Access特快。',jp:'アクセス特急に乗りたいです。'},
-      {cn:'我想在押上站换乘半蔵門线。',jp:'押上駅で半蔵門線に乗り換えたいです。'},
-      {cn:'请问都营新宿线在哪里？',jp:'都営新宿線はどこですか？'},
-      {cn:'从京成八幡到本八幡怎么走？',jp:'京成八幡駅から本八幡駅はどう行きますか？'},
-      {cn:'我坐过站了，怎么回去？',jp:'乗り過ごしました。どうやって戻れますか？'},
-    ]
-  },
-  ticket:{
-    label:'买票充值',
-    icon:'💳',
-    items:[
-      {cn:'我想给IC卡充值。',jp:'ICカードにチャージしたいです。'},
-      {cn:'请问充值机在哪里？',jp:'チャージできる機械はどこですか？'},
-      {cn:'可以用现金充值吗？',jp:'現金でチャージできますか？'},
-      {cn:'请问去西大島多少钱？',jp:'西大島までいくらですか？'},
-      {cn:'我的IC卡余额不够了。',jp:'ICカードの残高が足りません。'},
-    ]
-  },
-  directions:{
-    label:'问路',
-    icon:'🗺️',
-    items:[
-      {cn:'请问出口在哪里？',jp:'出口はどこですか？'},
-      {cn:'请问厕所在哪里？',jp:'トイレはどこですか？'},
-      {cn:'请问电梯在哪里？',jp:'エレベーターはどこですか？'},
-      {cn:'请问检票口在哪里？',jp:'改札はどこですか？'},
-      {cn:'请问哪个是1号站台？',jp:'1番ホームはどちらですか？'},
-      {cn:'我迷路了，能帮帮我吗？',jp:'道に迷いました。助けてもらえますか？'},
-    ]
-  },
-  emergency:{
-    label:'紧急求助',
-    icon:'🆘',
-    items:[
-      {cn:'请帮帮我！',jp:'助けてください！'},
-      {cn:'我不会说日语。',jp:'日本語が話せません。'},
-      {cn:'可以帮我叫出租车吗？',jp:'タクシーを呼んでもらえますか？'},
-      {cn:'我的东西丢了。',jp:'荷物をなくしました。'},
-      {cn:'请帮我叫警察。',jp:'警察を呼んでください。'},
-      {cn:'我身体不舒服。',jp:'体調が悪いです。'},
-      {cn:'请问附近有药店吗？',jp:'近くに薬局はありますか？'},
-    ]
-  },
+  transport:{label:'交通乘车',icon:'🚃',items:[
+    {cn:'我想去西大島站。',jp:'西大島駅に行きたいです。'},
+    {cn:'请问这趟车停押上吗？',jp:'すみません、この電車は押上に止まりますか？'},
+    {cn:'请问这是开往哪里的车？',jp:'すみません、この電車はどこ行きですか？'},
+    {cn:'我想坐Access特快。',jp:'アクセス特急に乗りたいです。'},
+    {cn:'我想在押上站换乘半蔵門线。',jp:'押上駅で半蔵門線に乗り換えたいです。'},
+    {cn:'请问都营新宿线在哪里？',jp:'都営新宿線はどこですか？'},
+    {cn:'从京成八幡到本八幡怎么走？',jp:'京成八幡駅から本八幡駅はどう行きますか？'},
+    {cn:'我坐过站了，怎么回去？',jp:'乗り過ごしました。どうやって戻れますか？'},
+  ]},
+  ticket:{label:'买票充值',icon:'💳',items:[
+    {cn:'我想给IC卡充值。',jp:'ICカードにチャージしたいです。'},
+    {cn:'请问充值机在哪里？',jp:'チャージできる機械はどこですか？'},
+    {cn:'可以用现金充值吗？',jp:'現金でチャージできますか？'},
+    {cn:'请问去西大島多少钱？',jp:'西大島までいくらですか？'},
+    {cn:'我的IC卡余额不够了。',jp:'ICカードの残高が足りません。'},
+  ]},
+  directions:{label:'问路',icon:'🗺️',items:[
+    {cn:'请问出口在哪里？',jp:'出口はどこですか？'},
+    {cn:'请问厕所在哪里？',jp:'トイレはどこですか？'},
+    {cn:'请问电梯在哪里？',jp:'エレベーターはどこですか？'},
+    {cn:'请问检票口在哪里？',jp:'改札はどこですか？'},
+    {cn:'请问哪个是1号站台？',jp:'1番ホームはどちらですか？'},
+    {cn:'我迷路了，能帮帮我吗？',jp:'道に迷いました。助けてもらえますか？'},
+  ]},
+  emergency:{label:'紧急求助',icon:'🆘',items:[
+    {cn:'请帮帮我！',jp:'助けてください！'},
+    {cn:'我不会说日语。',jp:'日本語が話せません。'},
+    {cn:'可以帮我叫出租车吗？',jp:'タクシーを呼んでもらえますか？'},
+    {cn:'我的东西丢了。',jp:'荷物をなくしました。'},
+    {cn:'请帮我叫警察。',jp:'警察を呼んでください。'},
+    {cn:'我身体不舒服。',jp:'体調が悪いです。'},
+    {cn:'请问附近有药店吗？',jp:'近くに薬局はありますか？'},
+  ]},
 };
 
 // ===== STATE =====
 let state = loadState();
+let seniorMode = localStorage.getItem('narita-senior') === '1';
+if(seniorMode) document.body.classList.add('senior');
 
 function loadState(){
-  try{
-    const s = JSON.parse(localStorage.getItem('narita-v3'));
-    if(s && s.route !== undefined) return s;
-  }catch(e){}
+  try{ const s = JSON.parse(localStorage.getItem('narita-v4')); if(s && s.route!==undefined) return s; }catch(e){}
   return {route:null, step:0, checks:{}};
 }
-function saveState(){
-  localStorage.setItem('narita-v3', JSON.stringify(state));
-}
-function resetState(){
-  state = {route:null, step:0, checks:{}};
-  saveState();
-  render();
-}
+function saveState(){ localStorage.setItem('narita-v4', JSON.stringify(state)); }
+function resetState(){ state={route:null,step:0,checks:{}}; saveState(); render(); }
 
 // ===== RENDER =====
 const app = document.getElementById('app');
 
 function render(){
-  if(state.route === null){
-    renderLanding();
-  } else {
+  if(state.route===null) renderLanding();
+  else{
     const route = ROUTES[state.route];
-    if(state.step >= route.steps.length){
-      renderDone(route);
-    } else {
-      renderJourney(route);
-    }
+    if(state.step>=route.steps.length) renderDone(route);
+    else renderJourney(route);
   }
   renderTranslation();
 }
 
 function renderLanding(){
-  let resumeHtml = '';
-  if(loadState().route !== null){
-    const s = loadState();
-    const r = ROUTES[s.route];
-    const stepName = s.step < r.steps.length ? r.steps[s.step].title.cn : '已完成';
-    resumeHtml = `
-      <div class="resume-bar" onclick="state=loadState();render()">
-        <div class="rb-icon ${s.route===1?'c2':''}">${s.route===0?'①':'②'}</div>
-        <div class="rb-text"><b>继续上次的进度</b>${r.label} · ${stepName}</div>
-        <div class="rb-go">继续 ›</div>
+  // Check if there's saved progress
+  let saved = null;
+  try{ const s=JSON.parse(localStorage.getItem('narita-v4')); if(s&&s.route!==null) saved=s; }catch(e){}
+
+  let resumeHtml='';
+  if(saved){
+    const r=ROUTES[saved.route];
+    const sn = saved.step<r.steps.length ? r.steps[saved.step].title.cn : '已完成';
+    resumeHtml=`
+      <div class="resume-card" onclick="state=loadState();render()">
+        <div class="rc-dot"></div>
+        <div class="rc-info"><b>继续上次进度</b>${r.label} · ${sn}</div>
+        <div class="rc-go">继续 ›</div>
       </div>`;
   }
 
-  let html = `
-    <div class="landing">
-      <h1>✈️ 成田空港 → 西大島<br>换乘指南</h1>
-      <p class="sub">中日双语 · 一步一步带你到家<br>中日二ヶ国語 · ステップバイステップガイド</p>
-      ${resumeHtml}`;
+  let html=`<div class="landing">
+    <div class="brand">
+      <div class="logo">🚃</div>
+      <h1>成田空港 → 西大島</h1>
+      <div class="sub">中日双语换乘指南<br>中日二ヶ国語ガイド</div>
+    </div>
+    ${resumeHtml}
+    <div class="route-pick">`;
 
-  ROUTES.forEach((r,i) => {
-    html += `
+  ROUTES.forEach((r,i)=>{
+    html+=`
       <div class="route-card ${i===0?'r1':'r2'}" onclick="selectRoute(${i})">
-        <div class="rt-label">${r.label}</div>
-        <div class="rt-name">${r.name}</div>
-        <div class="rt-stops">${r.stops.join(' → ')}</div>
-        <div class="rt-meta">
+        <span class="rc-badge">${r.label}</span>
+        <div class="rc-name">${r.name}</div>
+        <div class="rc-stops">${r.stops.join(' → ')}</div>
+        <div class="rc-meta">
           <span>⏱ ${r.summary.time}</span>
           <span>💰 ${r.summary.cost}</span>
           <span>🔄 ${r.summary.transfers}</span>
         </div>
-        <div class="rt-arrow">›</div>
+        <div class="rc-arrow">›</div>
       </div>`;
   });
 
-  html += `</div>`;
-  app.innerHTML = html;
+  html+=`</div>
+    <div class="landing-footer">
+      <button onclick="toggleSenior()">${seniorMode?'✓ ':''}大字模式</button>
+      <button onclick="installPWA()">📲 添加到桌面</button>
+    </div>
+  </div>`;
+  app.innerHTML=html;
 }
 
 function renderJourney(route){
-  const ci = route.id === 2 ? 'c2' : '';
+  const ci=route.accentClass;
 
-  // Progress bar
-  let progressHtml = `
-    <div class="progress-wrap ${ci}">
-      <div class="progress-header">
-        <span class="ph-title">${route.label} ${route.name}</span>
-        <button class="ph-back" onclick="goBack()">← 返回</button>
-      </div>
-      <div class="progress-bar">`;
+  // HUD
+  let hud=`<div class="hud ${ci}">
+    <div class="hud-top">
+      <span class="ht-mission">${route.label} · STEP ${state.step+1}/${route.steps.length}</span>
+      <button class="ht-back" onclick="goBack()">← 返回</button>
+    </div>
+    <div class="hud-bar">`;
 
-  route.stops.forEach((stop, i) => {
-    const stepIdx = i; // stop index maps to step index (0=charge, 1=first train, etc)
-    let dotClass = '';
-    if(i < state.step) dotClass = 'done';
-    else if(i === state.step) dotClass = 'current';
-
-    if(i > 0) {
-      progressHtml += `<div class="pb-line ${i <= state.step ? 'done' : ''}"></div>`;
-    }
-    progressHtml += `
-      <div class="pb-stop" onclick="jumpStep(${i})">
-        <div class="pb-dot ${dotClass}">${dotClass==='done'?'✓':i}</div>
-        <div class="pb-name">${stop}</div>
-      </div>`;
+  route.stops.forEach((stop,i)=>{
+    if(i>0) hud+=`<div class="hb-line ${i<=state.step?'done':''}"></div>`;
+    let dc=i<state.step?'done':i===state.step?'current':'';
+    hud+=`<div class="hb-node" onclick="jumpStep(${i})">
+      <div class="hb-dot ${dc}">${dc==='done'?'✓':i}</div>
+      <div class="hb-name">${stop}</div>
+    </div>`;
   });
-
-  progressHtml += `</div></div>`;
+  hud+=`</div></div>`;
 
   // Steps
-  let stepsHtml = `<div class="steps-wrap ${ci}">`;
+  let steps=`<div class="steps-area ${ci}">`;
+  route.steps.forEach((step,i)=>{
+    const isDone=i<state.step, isCurrent=i===state.step, isOpen=isCurrent;
+    const numC=isDone?'done':isCurrent?'current':'';
+    const cardC=isCurrent?'current-card':'';
 
-  route.steps.forEach((step, i) => {
-    const isDone = i < state.step;
-    const isCurrent = i === state.step;
-    const isOpen = isCurrent || isDone;
-    const numClass = isDone ? 'done' : (isCurrent ? 'current' : '');
-
-    stepsHtml += `
-      <div class="step-card" id="step-${i}">
-        <div class="step-head" onclick="toggleStep(${i})">
-          <div class="sh-num ${numClass}">${isDone?'✓':i}</div>
-          <div class="sh-info">
-            <div class="sh-title">${step.title.cn}</div>
-            <div class="sh-jp">${step.title.jp}</div>
-          </div>
-          <div class="sh-arrow ${isOpen?'open':''}">›</div>
+    steps+=`<div class="step-card ${cardC}" id="step-${i}">
+      <div class="step-head" onclick="toggleStep(${i})">
+        <div class="sh-num ${numC}">${isDone?'✓':i}</div>
+        <div class="sh-info">
+          <div class="sh-mission">${step.mission}</div>
+          <div class="sh-title">${step.title.cn}</div>
+          <div class="sh-jp">${step.title.jp}</div>
         </div>
-        <div class="step-body ${isOpen?'open':''}" id="step-body-${i}">`;
+        <div class="sh-arrow ${isOpen?'open':''}">›</div>
+      </div>
+      <div class="step-body ${isOpen?'open':''}" id="step-body-${i}">`;
 
-    // Checklist
-    stepsHtml += `<div class="checklist">`;
-    step.checklist.forEach((item, j) => {
-      const key = `${state.route}-${i}-${j}`;
-      const checked = state.checks[key];
-      stepsHtml += `
-        <div class="cl-item">
-          <div class="cl-check ${checked?'checked':''}" onclick="toggleCheck('${key}',${i})">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div class="cl-text ${checked?'checked':''}" onclick="toggleCheck('${key}',${i})">${item.cn}<span class="cl-jp">${item.jp}</span></div>
-        </div>`;
-    });
-    stepsHtml += `</div>`;
-
-    // Warnings
-    step.warnings.forEach(w => {
-      stepsHtml += `<div class="wrn">${w.cn}<br><span style="font-size:12px;color:#a07000">${w.jp}</span></div>`;
-    });
-
-    // Tips
-    step.tips.forEach(t => {
-      stepsHtml += `<div class="tip">${t.cn}<br><span style="font-size:12px;color:#0f5132">${t.jp}</span></div>`;
-    });
-
-    // Links
-    step.links.forEach(l => {
-      stepsHtml += `<a class="ml ${l.photo?'ml-photo':''}" href="${l.url}" target="_blank">${l.text.cn}<br><span style="font-size:11px">${l.text.jp}</span></a>`;
-    });
-
-    // Next button (only on current step)
-    if(isCurrent){
-      const isLast = i === route.steps.length - 1;
-      stepsHtml += `<button class="next-btn ${isLast?'finish':''}" onclick="nextStep()">
-        ${isLast ? '🎉 到达西大島！/ 西大島に到着！' : '✓ 完成，下一步 / 次のステップへ'}
-      </button>`;
+    // Mini-map
+    if(step.minimap&&step.minimap.length){
+      steps+=`<div class="minimap">`;
+      step.minimap.forEach((m,mi)=>{
+        if(mi>0) steps+=`<div class="mm-arrow">↓</div>`;
+        steps+=`<div class="mm-floor ${m.active?'active':''}">`;
+        if(m.floor) steps+=`<span class="mf-label">${m.floor}</span>`;
+        else steps+=`<span class="mf-label"></span>`;
+        steps+=`<span class="mf-content">${m.you?'<span class="mf-you"></span>':''}${m.content}</span>`;
+        steps+=`</div>`;
+      });
+      steps+=`</div>`;
     }
 
-    stepsHtml += `</div></div>`;
+    // Checklist
+    steps+=`<div class="checklist">`;
+    step.checklist.forEach((item,j)=>{
+      const key=`${state.route}-${i}-${j}`, checked=state.checks[key];
+      steps+=`<div class="cl-item">
+        <div class="cl-check ${checked?'checked':''}" onclick="toggleCheck('${key}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="cl-text ${checked?'checked':''}" onclick="toggleCheck('${key}')">${item.cn}<span class="cl-jp">${item.jp}</span></div>
+      </div>`;
+    });
+    steps+=`</div>`;
+
+    // Warnings, Tips, Links
+    step.warnings.forEach(w=>{
+      steps+=`<div class="wrn">${w.cn}<span class="wrn-jp">${w.jp}</span></div>`;
+    });
+    step.tips.forEach(t=>{
+      steps+=`<div class="tip">${t.cn}<span class="tip-jp">${t.jp}</span></div>`;
+    });
+    step.links.forEach(l=>{
+      steps+=`<a class="ml ${l.photo?'ml-photo':''}" href="${l.url}" target="_blank">${l.text.cn}<br><span style="font-size:var(--font-xs)">${l.text.jp}</span></a>`;
+    });
+
+    if(isCurrent){
+      const isLast=i===route.steps.length-1;
+      steps+=`<button class="next-btn ${isLast?'finish':''}" onclick="nextStep()">
+        ${isLast?'🎉 到达西大島！':'✓ 完成，下一步 →'}
+      </button>`;
+    }
+    steps+=`</div></div>`;
   });
 
-  stepsHtml += `
-    <div class="reset-link" onclick="if(confirm('确定要重置进度吗？'))resetState()">重置进度 / リセット</div>
-  </div>`;
+  steps+=`<div class="reset-link" onclick="if(confirm('确定重置？'))resetState()">重置进度</div></div>`;
+  app.innerHTML=hud+steps;
 
-  app.innerHTML = progressHtml + stepsHtml;
-
-  // Scroll to current step
-  setTimeout(() => {
-    const el = document.getElementById(`step-${state.step}`);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
-  }, 100);
+  setTimeout(()=>{
+    const el=document.getElementById(`step-${state.step}`);
+    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
 }
 
 function renderDone(route){
-  app.innerHTML = `
-    <div class="progress-wrap ${route.id===2?'c2':''}">
-      <div class="progress-header">
-        <span class="ph-title">${route.label} 已完成！</span>
-        <button class="ph-back" onclick="goBack()">← 返回</button>
+  const ci=route.accentClass;
+  app.innerHTML=`
+    <div class="hud ${ci}">
+      <div class="hud-top">
+        <span class="ht-mission">MISSION COMPLETE</span>
+        <button class="ht-back" onclick="goBack()">← 返回</button>
       </div>
-      <div class="progress-bar">
-        ${route.stops.map((s,i) => `
-          ${i>0?'<div class="pb-line done"></div>':''}
-          <div class="pb-stop">
-            <div class="pb-dot done">✓</div>
-            <div class="pb-name">${s}</div>
-          </div>
-        `).join('')}
+      <div class="hud-bar">
+        ${route.stops.map((s,i)=>`${i>0?'<div class="hb-line done"></div>':''}
+          <div class="hb-node"><div class="hb-dot done">✓</div><div class="hb-name">${s}</div></div>`).join('')}
       </div>
     </div>
-    <div class="done-screen show">
+    <div class="done-screen">
       <div class="ds-emoji">🎉🏠</div>
-      <div class="ds-title">到家了！</div>
-      <div class="ds-sub">着きました！お疲れ様でした！<br>所有步骤已完成</div>
-      <button class="ds-reset" onclick="resetState()">重新开始 / 最初からやり直す</button>
+      <div class="ds-title">MISSION COMPLETE</div>
+      <div class="ds-sub">到家了！お疲れ様でした！<br>所有步骤已完成</div>
+      <button class="ds-btn" onclick="resetState()">重新开始</button>
     </div>`;
+  showConfetti();
 }
 
 function renderTranslation(){
-  // Remove existing
   document.querySelectorAll('.trans-section,.footer').forEach(el=>el.remove());
+  const cats=Object.keys(PHRASES);
+  const activeCat=window._transCat||cats[0];
+  const isOpen=window._transOpen!==false;
 
-  const cats = Object.keys(PHRASES);
-  const activeCat = window._transCat || cats[0];
-  const isOpen = window._transOpen !== false;
-
-  let html = `
-    <div class="trans-section">
-      <div class="trans-header" onclick="toggleTrans()">
-        <span>📖 中日翻译助手 / 日中フレーズ集</span>
-        <span class="th-arrow ${isOpen?'open':''}">›</span>
-      </div>
-      <div class="trans-body ${isOpen?'open':''}">
-        <div class="trans-tabs">`;
-
-  cats.forEach(cat => {
-    const p = PHRASES[cat];
-    html += `<div class="tt-btn ${cat===activeCat?'active':''}" onclick="switchCat('${cat}')">${p.icon} ${p.label}</div>`;
+  let html=`<div class="trans-section">
+    <div class="trans-header" onclick="toggleTrans()">
+      <span>📖 中日翻译助手</span>
+      <span class="th-arrow ${isOpen?'open':''}">›</span>
+    </div>
+    <div class="trans-body ${isOpen?'open':''}">
+      <div class="trans-tabs">`;
+  cats.forEach(c=>{
+    html+=`<div class="tt-btn ${c===activeCat?'active':''}" onclick="switchCat('${c}')">${PHRASES[c].icon} ${PHRASES[c].label}</div>`;
   });
-
-  html += `</div>`;
-
-  PHRASES[activeCat].items.forEach(item => {
-    html += `
-      <div class="phrase-card" onclick="showPhrase('${esc(item.jp)}','${esc(item.cn)}')">
-        <div class="pc-jp">${item.jp}</div>
-        <div class="pc-cn">${item.cn}</div>
-        <div class="pc-hint">点击放大给日本人看 / タップして拡大表示</div>
-      </div>`;
+  html+=`</div>`;
+  PHRASES[activeCat].items.forEach(item=>{
+    html+=`<div class="phrase-card" onclick="showPhrase('${esc(item.jp)}','${esc(item.cn)}')">
+      <div class="pc-jp">${item.jp}</div>
+      <div class="pc-cn">${item.cn}</div>
+      <div class="pc-hint">点击放大 / タップして拡大</div>
+    </div>`;
   });
 
   // Translator
-  const trDir = window._trDir || 'zh2ja';
-  const srcLabel = trDir === 'zh2ja' ? '中文' : '日本語';
-  const tgtLabel = trDir === 'zh2ja' ? '日本語' : '中文';
-  const trResult = window._trResult || '';
-  const trSource = window._trSource || '';
-  const trError = window._trError || '';
-  const trLoading = window._trLoading || false;
+  const trDir=window._trDir||'zh2ja';
+  const srcL=trDir==='zh2ja'?'中文':'日本語';
+  const tgtL=trDir==='zh2ja'?'日本語':'中文';
+  const trR=window._trResult||'';
+  const trS=window._trSource||'';
+  const trE=window._trError||'';
+  const trL=window._trLoading||false;
 
-  html += `
-    <div class="translator">
-      <div class="tr-label">✏️ 实时翻译 / リアルタイム翻訳</div>
-      <div class="tr-swap">
-        <span>${srcLabel}</span>
-        <button onclick="swapDir()">⇄</button>
-        <span>${tgtLabel}</span>
+  html+=`<div class="translator">
+    <div class="tr-label">✏️ 实时翻译</div>
+    <div class="tr-swap"><span>${srcL}</span><button onclick="swapDir()">⇄</button><span>${tgtL}</span></div>
+    <div class="tr-input-wrap">
+      <textarea id="trInput" placeholder="${trDir==='zh2ja'?'输入中文...':'日本語を入力...'}" oninput="autoResize(this)">${trS}</textarea>
+      <button class="tr-btn" onclick="doTranslate()" ${trL?'disabled':''}>${trL?'...':'翻译'}</button>
+    </div>
+    ${trE?`<div class="tr-error">${trE}</div>`:''}
+    <div class="tr-result ${trR?'show':''}">
+      <div class="tr-result-card" onclick="showPhrase('${esc(trDir==='zh2ja'?trR:trS)}','${esc(trDir==='zh2ja'?trS:trR)}')">
+        <div class="trc-target">${trR}</div>
+        <div class="trc-source">${trS}</div>
+        <div class="trc-hint">点击放大给对方看</div>
       </div>
-      <div class="tr-input-wrap">
-        <textarea id="trInput" placeholder="${trDir==='zh2ja'?'输入中文...':'日本語を入力...'}" oninput="autoResize(this)">${trSource}</textarea>
-        <button class="tr-btn" onclick="doTranslate()" ${trLoading?'disabled':''}>${trLoading?'...':'翻译'}</button>
-      </div>
-      ${trError ? `<div class="tr-error">${trError}</div>` : ''}
-      <div class="tr-result ${trResult?'show':''}">
-        <div class="tr-result-card" onclick="showPhrase('${esc(trDir==='zh2ja'?trResult:trSource)}','${esc(trDir==='zh2ja'?trSource:trResult)}')">
-          <div class="trc-target">${trResult}</div>
-          <div class="trc-source">${trSource}</div>
-          <div class="trc-hint">点击放大给对方看 / タップして拡大表示</div>
-        </div>
-      </div>
-    </div>`;
+    </div>
+  </div>`;
 
-  html += `</div></div>
-    <div class="footer">制作日期：2026年2月 ｜ 信息仅供参考，以现场实际为准</div>`;
-
-  app.insertAdjacentHTML('afterend','');
-  document.body.insertAdjacentHTML('beforeend', html);
+  html+=`</div></div><div class="footer">2026.02 ｜ 仅供参考</div>`;
+  document.body.insertAdjacentHTML('beforeend',html);
 }
 
-function esc(s){ return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 
 // ===== ACTIONS =====
-function selectRoute(i){
-  state = {route:i, step:0, checks:{}};
-  saveState();
-  render();
-  window.scrollTo(0,0);
-}
-
-function nextStep(){
-  state.step++;
-  saveState();
-  render();
-  window.scrollTo(0,0);
-}
-
-function jumpStep(i){
-  if(i <= state.step){
-    const body = document.getElementById(`step-body-${i}`);
-    const el = document.getElementById(`step-${i}`);
-    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
-  }
-}
-
-function toggleStep(i){
-  const body = document.getElementById(`step-body-${i}`);
-  const card = document.getElementById(`step-${i}`);
-  if(!body) return;
-  body.classList.toggle('open');
-  card.querySelector('.sh-arrow').classList.toggle('open');
-}
-
-function toggleCheck(key, stepIdx){
-  state.checks[key] = !state.checks[key];
-  saveState();
-  // Re-render just the checkbox
-  render();
-}
-
-function goBack(){
-  state.route = null;
-  // Don't reset progress, just go to landing
-  saveState();
-  render();
-  window.scrollTo(0,0);
-}
+function selectRoute(i){state={route:i,step:0,checks:{}};saveState();render();window.scrollTo(0,0);}
+function nextStep(){state.step++;saveState();render();window.scrollTo(0,0);}
+function jumpStep(i){const el=document.getElementById(`step-${i}`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
+function toggleStep(i){const b=document.getElementById(`step-body-${i}`);if(!b)return;b.classList.toggle('open');document.getElementById(`step-${i}`).querySelector('.sh-arrow').classList.toggle('open');}
+function toggleCheck(key){state.checks[key]=!state.checks[key];saveState();render();}
+function goBack(){state.route=null;saveState();render();window.scrollTo(0,0);}
 
 // Translation
-function toggleTrans(){
-  window._transOpen = !(window._transOpen !== false);
-  renderTranslation();
-}
-function switchCat(cat){
-  window._transCat = cat;
-  renderTranslation();
-}
-function showPhrase(jp, cn){
-  document.getElementById('soJp').textContent = jp;
-  document.getElementById('soCn').textContent = cn;
-  document.getElementById('showOverlay').classList.add('open');
-}
-function closeShow(){
-  document.getElementById('showOverlay').classList.remove('open');
-}
-
-// Translator
-function swapDir(){
-  window._trDir = (window._trDir || 'zh2ja') === 'zh2ja' ? 'ja2zh' : 'zh2ja';
-  window._trResult = '';
-  window._trSource = '';
-  window._trError = '';
-  renderTranslation();
-}
-
-function autoResize(el){
-  el.style.height = '44px';
-  el.style.height = el.scrollHeight + 'px';
-}
-
+function toggleTrans(){window._transOpen=!(window._transOpen!==false);renderTranslation();}
+function switchCat(c){window._transCat=c;renderTranslation();}
+function showPhrase(jp,cn){document.getElementById('soJp').textContent=jp;document.getElementById('soCn').textContent=cn;document.getElementById('showOverlay').classList.add('open');}
+function closeShow(){document.getElementById('showOverlay').classList.remove('open');}
+function swapDir(){window._trDir=(window._trDir||'zh2ja')==='zh2ja'?'ja2zh':'zh2ja';window._trResult='';window._trSource='';window._trError='';renderTranslation();}
+function autoResize(el){el.style.height='44px';el.style.height=el.scrollHeight+'px';}
 async function doTranslate(){
-  const input = document.getElementById('trInput');
-  const text = input.value.trim();
-  if(!text) return;
+  const input=document.getElementById('trInput');const text=input.value.trim();if(!text)return;
+  const dir=window._trDir||'zh2ja';const sl=dir==='zh2ja'?'zh-CN':'ja';const tl=dir==='zh2ja'?'ja':'zh-CN';
+  window._trLoading=true;window._trSource=text;window._trError='';renderTranslation();
+  try{
+    const r=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
+    if(!r.ok)throw 0;const d=await r.json();window._trResult=d[0].map(s=>s[0]).join('');
+  }catch(e){window._trResult='';window._trError='翻译失败，请检查网络';}
+  window._trLoading=false;renderTranslation();
+}
 
-  const dir = window._trDir || 'zh2ja';
-  const sl = dir === 'zh2ja' ? 'zh-CN' : 'ja';
-  const tl = dir === 'zh2ja' ? 'ja' : 'zh-CN';
+// Senior mode
+function toggleSenior(){
+  seniorMode=!seniorMode;
+  document.body.classList.toggle('senior',seniorMode);
+  localStorage.setItem('narita-senior',seniorMode?'1':'0');
+  render();
+}
 
-  window._trLoading = true;
-  window._trSource = text;
-  window._trError = '';
-  renderTranslation();
+// PWA
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+function installPWA(){
+  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}
+  else{alert('请使用浏览器的"添加到主屏幕"功能\nブラウザの「ホーム画面に追加」を使ってください');}
+}
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
 
-  try {
-    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('请求失败');
-    const data = await res.json();
-    const translated = data[0].map(s => s[0]).join('');
-    window._trResult = translated;
-    window._trError = '';
-  } catch(e) {
-    window._trResult = '';
-    window._trError = '翻译失败，请检查网络 / 翻訳に失敗しました';
+// Confetti
+function showConfetti(){
+  const c=document.createElement('div');c.className='confetti';
+  const colors=['#6366f1','#ec4899','#22c55e','#eab308','#14b8a6','#f87171'];
+  for(let i=0;i<40;i++){
+    const s=document.createElement('span');
+    s.style.cssText=`left:${Math.random()*100}%;top:${-Math.random()*20}%;background:${colors[i%colors.length]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;
+    c.appendChild(s);
   }
-
-  window._trLoading = false;
-  renderTranslation();
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),5000);
 }
 
 // ===== INIT =====

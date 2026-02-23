@@ -7,739 +7,590 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<title>成田空港→西大島 换乘指南</title>
+<title>成田→西大島 导航</title>
 <style>
 :root{
-  --bg:#0a0e1a;--bg2:#111827;--card:rgba(255,255,255,.06);--card-border:rgba(255,255,255,.1);
-  --text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
-  --accent:#6366f1;--accent2:#818cf8;--accent-glow:rgba(99,102,241,.3);
-  --red:#ef4444;--red-glow:rgba(239,68,68,.3);
-  --teal:#14b8a6;--teal-glow:rgba(20,184,166,.3);
-  --green:#22c55e;--green-glow:rgba(34,197,94,.3);
-  --yellow:#eab308;
-  --glass:rgba(255,255,255,.05);--glass-border:rgba(255,255,255,.08);
-  --font-base:14px;--font-sm:12px;--font-xs:10px;--font-lg:16px;--font-xl:20px;--font-2xl:24px;
+  --bg:#0a0e1a;--bg2:#111827;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.1);
+  --text:#f1f5f9;--text2:#94a3b8;--text3:#475569;
+  --accent:#818cf8;--accent-bg:rgba(129,140,248,.12);--accent-border:rgba(129,140,248,.3);
+  --teal:#2dd4bf;--teal-bg:rgba(45,212,191,.12);--teal-border:rgba(45,212,191,.3);
+  --green:#4ade80;--green-bg:rgba(74,222,128,.12);
+  --red:#f87171;--yellow:#fbbf24;
+  --fs:16px;
 }
-body.senior{
-  --font-base:20px;--font-sm:17px;--font-xs:15px;--font-lg:23px;--font-xl:28px;--font-2xl:34px;
-}
+body.senior{--fs:22px}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC",sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;font-size:var(--font-base);-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC",sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;font-size:var(--fs);overflow-x:hidden;-webkit-tap-highlight-color:transparent}
 
-/* Glass card */
-.glass{background:var(--card);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--card-border);border-radius:16px}
+/* ===== LANDING ===== */
+.landing{min-height:100vh;padding:16px;display:flex;flex-direction:column}
+.brand{text-align:center;padding:40px 0 30px}
+.brand .logo{font-size:56px;margin-bottom:12px;filter:drop-shadow(0 0 20px rgba(129,140,248,.4))}
+.brand h1{font-size:1.6em;font-weight:800;background:linear-gradient(135deg,#818cf8,#c084fc,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.brand .sub{font-size:.75em;color:var(--text3);margin-top:8px}
+.rc{border-radius:16px;padding:20px;margin-bottom:12px;cursor:pointer;position:relative;overflow:hidden;transition:transform .15s}
+.rc:active{transform:scale(.97)}
+.rc::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1.5px;background:linear-gradient(135deg,var(--accent),#c084fc);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.rc.t2::before{background:linear-gradient(135deg,var(--teal),#6ee7b7)}
+.rc .rc-badge{display:inline-block;font-size:.6em;padding:3px 10px;border-radius:20px;font-weight:700;margin-bottom:10px;background:var(--accent-bg);color:var(--accent)}
+.rc.t2 .rc-badge{background:var(--teal-bg);color:var(--teal)}
+.rc .rc-name{font-size:1.15em;font-weight:700;margin-bottom:6px}
+.rc .rc-visual{display:flex;align-items:center;gap:4px;margin:12px 0;font-size:.7em;color:var(--text2)}
+.rc .rc-visual .rv-stop{padding:4px 8px;border-radius:6px;background:var(--card);border:1px solid var(--border);white-space:nowrap}
+.rc .rc-visual .rv-arrow{color:var(--text3)}
+.rc .rc-meta{display:flex;gap:8px;font-size:.7em}
+.rc .rc-meta span{padding:4px 10px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:var(--text2)}
+.rc .rc-go{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:1.3em;color:var(--text3)}
+.resume-bar{border-radius:12px;padding:14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;cursor:pointer;background:var(--accent-bg);border:1px solid var(--accent-border)}
+.resume-bar:active{opacity:.8}
+.resume-bar .rb-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 2s infinite;flex-shrink:0}
+.resume-bar .rb-text{flex:1;font-size:.8em;color:var(--text2)}
+.resume-bar .rb-text b{display:block;color:var(--text);font-size:1em}
+.resume-bar .rb-go{color:var(--accent);font-weight:700}
+.l-footer{display:flex;gap:8px;margin-top:auto;padding-top:16px}
+.l-footer button{flex:1;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text2);font-size:.8em;cursor:pointer}
+.l-footer button:active{background:rgba(255,255,255,.1)}
 
-/* Landing */
-.landing{padding:20px 16px;min-height:100vh;display:flex;flex-direction:column}
-.brand{text-align:center;padding:30px 0 20px}
-.brand .logo{font-size:48px;margin-bottom:8px}
-.brand h1{font-size:var(--font-2xl);font-weight:800;background:linear-gradient(135deg,#6366f1,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1.3}
-.brand .sub{font-size:var(--font-sm);color:var(--text3);margin-top:8px;line-height:1.5}
-.route-pick{margin-top:16px;flex:1}
-.route-card{border-radius:16px;padding:20px;margin-bottom:14px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
-.route-card::before{content:'';position:absolute;inset:0;border-radius:16px;padding:1px;background:linear-gradient(135deg,rgba(99,102,241,.5),rgba(168,85,247,.3));-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-.route-card:active{transform:scale(.97)}
-.route-card .rc-badge{display:inline-block;font-size:var(--font-xs);padding:3px 10px;border-radius:20px;font-weight:700;margin-bottom:8px}
-.r1 .rc-badge{background:rgba(239,68,68,.15);color:#f87171}
-.r2 .rc-badge{background:rgba(20,184,166,.15);color:#5eead4}
-.route-card .rc-name{font-size:var(--font-lg);font-weight:700;margin-bottom:4px}
-.route-card .rc-stops{font-size:var(--font-sm);color:var(--text2);margin-bottom:12px}
-.route-card .rc-meta{display:flex;gap:8px;flex-wrap:wrap}
-.route-card .rc-meta span{font-size:var(--font-xs);padding:4px 10px;border-radius:8px;background:var(--glass);border:1px solid var(--glass-border)}
-.route-card .rc-arrow{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--text3)}
-.resume-card{border-radius:14px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;cursor:pointer;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
-.resume-card:active{opacity:.8}
-.resume-card .rc-dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:pulse 2s infinite}
-.resume-card .rc-info{flex:1;font-size:var(--font-sm);color:var(--text2)}
-.resume-card .rc-info b{display:block;color:var(--text);font-size:var(--font-base)}
-.resume-card .rc-go{color:var(--accent2);font-weight:700;font-size:var(--font-base)}
-.landing-footer{display:flex;gap:8px;margin-top:auto;padding-top:20px}
-.landing-footer button{flex:1;padding:10px;border:1px solid var(--card-border);border-radius:10px;background:var(--card);color:var(--text2);font-size:var(--font-sm);cursor:pointer}
-.landing-footer button:active{background:rgba(255,255,255,.1)}
+/* ===== NAV MODE ===== */
+.nav{min-height:100vh;display:flex;flex-direction:column}
 
-/* HUD Progress */
-.hud{position:sticky;top:0;z-index:100;background:rgba(10,14,26,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:10px 16px 14px;border-bottom:1px solid var(--card-border)}
-.hud-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.hud-top .ht-mission{font-size:var(--font-xs);color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:1px}
-.hud-top .ht-back{font-size:var(--font-xs);color:var(--text3);cursor:pointer;padding:4px 10px;border-radius:6px;border:1px solid var(--card-border);background:transparent}
-.hud-bar{display:flex;align-items:center}
-.hud-bar .hb-node{display:flex;flex-direction:column;align-items:center;cursor:pointer;flex-shrink:0;z-index:1}
-.hud-bar .hb-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--text3);background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:var(--font-xs);font-weight:700;color:var(--text3);transition:.3s}
-.hud-bar .hb-dot.done{border-color:var(--green);background:var(--green);color:#fff;box-shadow:0 0 10px var(--green-glow)}
-.hud-bar .hb-dot.current{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 0 12px var(--accent-glow);animation:pulse 2s infinite}
-.c2 .hb-dot.current{border-color:var(--teal);background:var(--teal);box-shadow:0 0 12px var(--teal-glow)}
-.hud-bar .hb-name{font-size:8px;color:var(--text3);margin-top:3px;max-width:55px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud-bar .hb-line{flex:1;height:2px;background:var(--text3);min-width:6px;opacity:.3}
-.hud-bar .hb-line.done{background:var(--green);opacity:1;box-shadow:0 0 6px var(--green-glow)}
+/* Top bar */
+.topbar{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:rgba(10,14,26,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+.topbar .tb-back{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text2);font-size:.7em;cursor:pointer}
+.topbar .tb-step{font-size:.7em;color:var(--accent);font-weight:700;letter-spacing:1px}
+.c2 .tb-step{color:var(--teal)}
+.topbar .tb-dots{display:flex;gap:4px}
+.topbar .tb-dots span{width:8px;height:8px;border-radius:50%;background:var(--text3)}
+.topbar .tb-dots span.done{background:var(--green)}
+.topbar .tb-dots span.cur{background:var(--accent);box-shadow:0 0 6px var(--accent);animation:pulse 2s infinite}
+.c2 .tb-dots span.cur{background:var(--teal);box-shadow:0 0 6px var(--teal)}
 
-/* Steps */
-.steps-area{padding:12px 16px 80px}
-.step-card{border-radius:16px;margin-bottom:14px;overflow:hidden;transition:.2s;background:var(--card);border:1px solid var(--card-border)}
-.step-card.current-card{border-color:rgba(99,102,241,.3);box-shadow:0 0 20px rgba(99,102,241,.1)}
-.c2 .step-card.current-card{border-color:rgba(20,184,166,.3);box-shadow:0 0 20px rgba(20,184,166,.1)}
-.step-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.step-head .sh-num{width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:var(--font-sm);font-weight:800;flex-shrink:0;background:var(--glass);color:var(--text3);border:1px solid var(--glass-border)}
-.step-head .sh-num.done{background:rgba(34,197,94,.15);color:var(--green);border-color:rgba(34,197,94,.3)}
-.step-head .sh-num.current{background:rgba(99,102,241,.15);color:var(--accent2);border-color:rgba(99,102,241,.3)}
-.c2 .sh-num.current{background:rgba(20,184,166,.15);color:var(--teal);border-color:rgba(20,184,166,.3)}
-.step-head .sh-info{flex:1}
-.step-head .sh-mission{font-size:var(--font-xs);color:var(--accent2);font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.c2 .sh-mission{color:var(--teal)}
-.step-head .sh-title{font-size:var(--font-base);font-weight:700}
-.step-head .sh-jp{font-size:var(--font-xs);color:var(--text3);margin-top:2px}
-.step-head .sh-arrow{color:var(--text3);transition:transform .2s;font-size:var(--font-base)}
-.step-head .sh-arrow.open{transform:rotate(90deg)}
-.step-body{display:none;padding:0 16px 16px}
-.step-body.open{display:block;animation:fadeIn .25s ease}
+/* Card area */
+.card-area{flex:1;display:flex;flex-direction:column;padding:16px}
 
-/* Mini-map */
-.minimap{background:rgba(0,0,0,.3);border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid var(--glass-border);font-size:var(--font-sm);position:relative;overflow:hidden}
-.minimap::before{content:'MAP';position:absolute;top:8px;right:10px;font-size:9px;color:var(--text3);letter-spacing:2px;font-weight:700;opacity:.5}
-.mm-floor{padding:8px 10px;border-radius:8px;margin-bottom:4px;display:flex;align-items:center;gap:8px;position:relative}
-.mm-floor.active{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2)}
-.c2 .mm-floor.active{background:rgba(20,184,166,.1);border:1px solid rgba(20,184,166,.2)}
-.mm-floor .mf-label{font-size:var(--font-xs);font-weight:700;color:var(--text3);width:32px;flex-shrink:0}
-.mm-floor .mf-content{flex:1;font-size:var(--font-sm);color:var(--text2);line-height:1.5}
-.mm-floor .mf-you{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent-glow);animation:pulse 2s infinite;margin-right:4px;vertical-align:middle}
-.c2 .mf-you{background:var(--teal);box-shadow:0 0 8px var(--teal-glow)}
-.mm-arrow{text-align:center;color:var(--text3);font-size:14px;margin:2px 0;animation:bounce .8s infinite}
-.mm-line{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
-.mm-line.keisei{background:#2563eb}.mm-line.hanzomon{background:#9333ea}.mm-line.shinjuku{background:#16a34a}.mm-line.access{background:#dc2626}
+/* Visual area - the big illustration */
+.visual{flex:1;min-height:260px;border-radius:20px;padding:20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;margin-bottom:16px}
+.visual::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(192,132,252,.05));border-radius:20px;border:1px solid rgba(129,140,248,.15)}
+.c2 .visual::before{background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(110,231,183,.05));border-color:rgba(45,212,191,.15)}
 
-/* Checklist */
-.checklist{margin:4px 0 8px}
-.cl-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--glass-border)}
-.cl-item:last-child{border-bottom:none}
-.cl-check{width:26px;height:26px;border-radius:8px;border:2px solid var(--text3);cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:.2s;margin-top:1px}
-.cl-check.checked{background:var(--green);border-color:var(--green);box-shadow:0 0 8px var(--green-glow)}
-.cl-check svg{width:14px;height:14px;opacity:0;color:#fff;transition:.15s}
-.cl-check.checked svg{opacity:1}
-.cl-text{flex:1;font-size:var(--font-sm);line-height:1.6;color:var(--text2)}
-.cl-text.checked{text-decoration:line-through;color:var(--text3)}
-.cl-text .cl-jp{display:block;font-size:var(--font-xs);color:var(--text3);margin-top:1px}
+/* Floor diagram inside visual */
+.v-floor{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin:3px 0;position:relative;z-index:1}
+.v-floor.here{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.c2 .v-floor.here{background:var(--teal-bg);border:1px solid var(--teal-border)}
+.v-floor .vf-tag{font-size:.65em;font-weight:800;color:var(--text3);width:36px;flex-shrink:0;text-align:center}
+.v-floor .vf-body{flex:1;font-size:.8em;color:var(--text2);line-height:1.5}
+.v-floor .vf-body b{color:var(--text)}
+.v-floor .vf-you{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 1.5s infinite;margin-right:6px;vertical-align:middle}
+.c2 .vf-you{background:var(--teal);box-shadow:0 0 10px var(--teal)}
+.v-arrow{text-align:center;font-size:18px;color:var(--text3);animation:bounce .8s infinite;margin:2px 0}
+.v-line{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.v-line.keisei{background:#3b82f6}.v-line.hanzomon{background:#a855f7}.v-line.shinjuku{background:#22c55e}.v-line.access{background:#ef4444}
+.v-icon{font-size:40px;text-align:center;margin:8px 0;filter:drop-shadow(0 0 12px rgba(255,255,255,.2))}
+.v-train{text-align:center;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px dashed var(--border);margin:6px 0}
+.v-train .vt-line{font-size:.7em;color:var(--text3)}
+.v-train .vt-name{font-size:1em;font-weight:700;margin:4px 0}
+.v-train .vt-dir{font-size:.75em;color:var(--accent)}
+.c2 .v-train .vt-dir{color:var(--teal)}
+.v-train .vt-time{font-size:.7em;color:var(--text3);margin-top:4px}
 
-/* Alerts */
-.wrn{background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.2);border-radius:10px;padding:10px 12px;font-size:var(--font-sm);color:#fbbf24;margin-top:10px;line-height:1.5}
-.wrn::before{content:"\26A0\FE0F "}
-.wrn .wrn-jp{font-size:var(--font-xs);color:rgba(251,191,36,.6);display:block;margin-top:4px}
-.tip{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;padding:10px 12px;font-size:var(--font-sm);color:#4ade80;margin-top:10px;line-height:1.5}
-.tip::before{content:"\1F4A1 "}
-.tip .tip-jp{font-size:var(--font-xs);color:rgba(74,222,128,.6);display:block;margin-top:4px}
-.ml{display:block;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:10px;padding:10px 12px;margin-top:8px;text-decoration:none;color:var(--accent2);font-size:var(--font-sm);font-weight:600;text-align:center;line-height:1.4;transition:.15s}
-.ml:active{background:rgba(99,102,241,.15)}
-.ml-photo{background:rgba(234,179,8,.08);border-color:rgba(234,179,8,.2);color:#fbbf24}
+/* Instruction */
+.instruction{margin-bottom:12px}
+.instruction .ins-cn{font-size:1.3em;font-weight:800;line-height:1.4}
+.instruction .ins-jp{font-size:.8em;color:var(--text2);margin-top:4px}
 
-/* Next button */
-.next-btn{display:block;width:100%;padding:16px;border:none;border-radius:12px;font-size:var(--font-lg);font-weight:700;color:#fff;cursor:pointer;margin-top:16px;transition:.15s;position:relative;overflow:hidden}
-.next-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
-.c2 .next-btn{background:linear-gradient(135deg,#14b8a6,#0d9488)}
-.next-btn:active{transform:scale(.97);opacity:.9}
-.next-btn.finish{background:linear-gradient(135deg,#22c55e,#16a34a)}
-.next-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 3s infinite}
+/* Warning */
+.ins-warn{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:.8em;color:var(--red);line-height:1.5}
+.ins-warn .iw-jp{color:rgba(248,113,113,.6);font-size:.85em;display:block;margin-top:4px}
 
-/* Done screen */
-.done-screen{text-align:center;padding:60px 20px}
-.done-screen .ds-emoji{font-size:80px;margin-bottom:20px}
-.done-screen .ds-title{font-size:var(--font-2xl);font-weight:800;background:linear-gradient(135deg,#22c55e,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.done-screen .ds-sub{font-size:var(--font-base);color:var(--text2);margin:12px 0 30px;line-height:1.6}
-.done-screen .ds-btn{padding:12px 28px;border:1px solid var(--card-border);border-radius:12px;background:var(--card);font-size:var(--font-sm);color:var(--text2);cursor:pointer}
+/* Tip */
+.ins-tip{background:var(--green-bg);border:1px solid rgba(74,222,128,.2);border-radius:12px;padding:12px;margin-bottom:12px;font-size:.8em;color:var(--green);line-height:1.5}
+.ins-tip .it-jp{color:rgba(74,222,128,.6);font-size:.85em;display:block;margin-top:4px}
 
-/* Translation */
-.trans-section{margin:0 16px 16px;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--card-border)}
-.trans-header{padding:14px 16px;font-size:var(--font-base);font-weight:700;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
-.trans-header .th-arrow{transition:transform .2s;color:var(--text3)}
-.trans-header .th-arrow.open{transform:rotate(90deg)}
-.trans-body{display:none;padding:0 16px 16px}
-.trans-body.open{display:block}
-.trans-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
-.trans-tabs::-webkit-scrollbar{display:none}
-.tt-btn{padding:7px 12px;border:1px solid var(--card-border);border-radius:8px;font-size:var(--font-xs);white-space:nowrap;cursor:pointer;background:transparent;color:var(--text3);flex-shrink:0;transition:.15s}
-.tt-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.phrase-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer;transition:.15s}
-.phrase-card:active{background:rgba(255,255,255,.1)}
-.phrase-card .pc-jp{font-size:var(--font-lg);font-weight:700;color:#f87171;line-height:1.5}
-.phrase-card .pc-cn{font-size:var(--font-xs);color:var(--text3);margin-top:3px}
-.phrase-card .pc-hint{font-size:var(--font-xs);color:var(--text3);margin-top:4px;opacity:.5}
+/* Link */
+.ins-link{display:block;text-decoration:none;background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:12px;padding:12px;margin-bottom:12px;text-align:center;font-size:.8em;font-weight:600;color:var(--accent);line-height:1.4}
+.ins-link:active{opacity:.7}
 
-/* Translator */
-.translator{margin-top:14px;padding-top:14px;border-top:1px solid var(--glass-border)}
-.translator .tr-label{font-size:var(--font-sm);font-weight:700;margin-bottom:8px}
-.translator .tr-swap{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0;font-size:var(--font-xs);color:var(--text3)}
-.translator .tr-swap button{background:var(--glass);border:1px solid var(--glass-border);border-radius:6px;padding:2px 10px;font-size:16px;cursor:pointer;color:var(--text2)}
-.translator .tr-input-wrap{display:flex;gap:8px}
-.translator textarea{flex:1;border:1px solid var(--card-border);border-radius:10px;padding:10px 12px;font-size:var(--font-base);font-family:inherit;resize:none;height:44px;line-height:1.4;outline:none;background:var(--glass);color:var(--text);transition:.15s}
-.translator textarea:focus{border-color:var(--accent)}
-.translator textarea::placeholder{color:var(--text3)}
-.translator .tr-btn{width:56px;border:none;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-size:var(--font-base);font-weight:700;cursor:pointer;flex-shrink:0}
-.translator .tr-btn:active{opacity:.8}
-.translator .tr-btn:disabled{opacity:.4}
+/* Done button */
+.done-btn{width:100%;padding:18px;border:none;border-radius:14px;font-size:1.1em;font-weight:700;color:#fff;cursor:pointer;position:relative;overflow:hidden;transition:.15s}
+.done-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.c2 .done-btn{background:linear-gradient(135deg,#14b8a6,#0d9488)}
+.done-btn.final{background:linear-gradient(135deg,#22c55e,#16a34a)}
+.done-btn:active{transform:scale(.97);opacity:.9}
+.done-btn::after{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent,rgba(255,255,255,.1),transparent);animation:shimmer 3s infinite}
+
+/* Bottom status */
+.bottom-bar{padding:12px 16px;border-top:1px solid var(--border);background:rgba(10,14,26,.95);display:flex;align-items:center;justify-content:space-between;font-size:.7em;color:var(--text3)}
+.bottom-bar .bb-dest{display:flex;align-items:center;gap:6px}
+.bottom-bar .bb-dest .bd-pin{color:var(--accent)}
+.c2 .bb-dest .bd-pin{color:var(--teal)}
+
+/* ===== DONE SCREEN ===== */
+.done-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center}
+.done-wrap .dw-emoji{font-size:80px;margin-bottom:20px}
+.done-wrap .dw-title{font-size:1.6em;font-weight:800;background:linear-gradient(135deg,#4ade80,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.done-wrap .dw-sub{font-size:.9em;color:var(--text2);margin:12px 0 30px;line-height:1.6}
+.done-wrap button{padding:12px 30px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text2);font-size:.85em;cursor:pointer}
+
+/* ===== TOOLS (translate + phrases) ===== */
+.tools-toggle{position:fixed;bottom:16px;right:16px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(99,102,241,.4);z-index:200;display:flex;align-items:center;justify-content:center}
+.tools-toggle:active{transform:scale(.9)}
+.tools-panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;max-height:70vh;background:var(--bg2);border-top-left-radius:20px;border-top-right-radius:20px;border:1px solid var(--border);border-bottom:none;z-index:300;display:none;overflow:hidden;flex-direction:column}
+.tools-panel.open{display:flex}
+.tp-header{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);flex-shrink:0}
+.tp-header span{font-weight:700;font-size:.95em}
+.tp-header button{background:none;border:none;color:var(--text3);font-size:1.2em;cursor:pointer;padding:4px}
+.tp-body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px 20px;flex:1}
+.tp-tabs{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;padding:0 16px 8px}
+.tp-tabs::-webkit-scrollbar{display:none}
+.tp-tab{padding:7px 14px;border:1px solid var(--border);border-radius:8px;font-size:.75em;white-space:nowrap;cursor:pointer;background:transparent;color:var(--text3);flex-shrink:0}
+.tp-tab.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.ph-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;cursor:pointer}
+.ph-card:active{background:rgba(255,255,255,.1)}
+.ph-card .ph-jp{font-size:1.05em;font-weight:700;color:var(--red);line-height:1.5}
+.ph-card .ph-cn{font-size:.75em;color:var(--text3);margin-top:2px}
+/* Translator in panel */
+.tr-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.tr-section .tr-label{font-size:.85em;font-weight:700;margin-bottom:8px}
+.tr-swap{display:flex;align-items:center;justify-content:center;gap:8px;margin:6px 0 10px;font-size:.75em;color:var(--text3)}
+.tr-swap button{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:2px 12px;font-size:16px;cursor:pointer;color:var(--text2)}
+.tr-row{display:flex;gap:8px}
+.tr-row textarea{flex:1;border:1px solid var(--border);border-radius:10px;padding:10px;font-size:.9em;font-family:inherit;resize:none;height:44px;background:var(--card);color:var(--text);outline:none}
+.tr-row textarea::placeholder{color:var(--text3)}
+.tr-row textarea:focus{border-color:var(--accent)}
+.tr-row .tr-btn{width:52px;border:none;border-radius:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;cursor:pointer;flex-shrink:0}
+.tr-row .tr-btn:disabled{opacity:.4}
 .tr-result{margin-top:10px;display:none}
 .tr-result.show{display:block}
-.tr-result-card{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:14px;cursor:pointer}
-.tr-result-card:active{background:rgba(99,102,241,.15)}
-.tr-result-card .trc-target{font-size:var(--font-xl);font-weight:700;color:var(--accent2);line-height:1.5}
-.tr-result-card .trc-source{font-size:var(--font-xs);color:var(--text3);margin-top:4px}
-.tr-result-card .trc-hint{font-size:var(--font-xs);color:var(--text3);margin-top:6px;opacity:.5}
-.tr-error{margin-top:8px;font-size:var(--font-xs);color:var(--red)}
+.tr-result-card{background:var(--accent-bg);border:1px solid var(--accent-border);border-radius:12px;padding:14px;cursor:pointer}
+.tr-result-card:active{opacity:.7}
+.tr-result-card .trc-jp{font-size:1.2em;font-weight:700;color:var(--accent);line-height:1.5}
+.tr-result-card .trc-cn{font-size:.75em;color:var(--text3);margin-top:4px}
+.tr-result-card .trc-hint{font-size:.65em;color:var(--text3);margin-top:6px;opacity:.5}
+.tr-error{margin-top:6px;font-size:.75em;color:var(--red)}
 
 /* Show overlay */
-.show-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.95);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer}
+.show-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:999;flex-direction:column;align-items:center;justify-content:center;padding:30px;cursor:pointer}
 .show-overlay.open{display:flex}
-.show-overlay .so-jp{font-size:36px;font-weight:700;color:#fff;text-align:center;line-height:1.6;margin-bottom:16px}
-.show-overlay .so-cn{font-size:16px;color:rgba(255,255,255,.4);text-align:center}
-.show-overlay .so-close{font-size:12px;color:rgba(255,255,255,.2);margin-top:40px}
-body.senior .show-overlay .so-jp{font-size:48px}
-
-/* Footer */
-.footer{text-align:center;font-size:var(--font-xs);color:var(--text3);padding:16px}
-.reset-link{font-size:var(--font-xs);color:var(--text3);text-align:center;display:block;margin-top:12px;cursor:pointer;opacity:.5}
+.show-overlay .so-jp{font-size:2.2em;font-weight:700;color:#fff;text-align:center;line-height:1.6}
+body.senior .show-overlay .so-jp{font-size:2.8em}
+.show-overlay .so-cn{font-size:1em;color:rgba(255,255,255,.35);text-align:center;margin-top:12px}
+.show-overlay .so-close{font-size:.7em;color:rgba(255,255,255,.15);margin-top:40px}
 
 /* Animations */
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 @keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg)}100%{transform:translateX(100%) rotate(45deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 @keyframes confettiFall{0%{transform:translateY(-100vh) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
-
-/* Confetti */
-.confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:998;overflow:hidden}
+.card-area{animation:fadeUp .3s ease}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:998;overflow:hidden}
 .confetti span{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall 3s linear forwards}
 </style>
 </head>
 <body>
-
 <div id="app"></div>
 <div class="show-overlay" id="showOverlay" onclick="closeShow()">
   <div class="so-jp" id="soJp"></div>
   <div class="so-cn" id="soCn"></div>
-  <div class="so-close">点击任意处关闭 / タップして閉じる</div>
+  <div class="so-close">点击关闭 / タップして閉じる</div>
 </div>
+<button class="tools-toggle" id="toolsBtn" onclick="openTools()">📖</button>
+<div class="tools-panel" id="toolsPanel"></div>
 
 <script>
-// ===== DATA =====
-const ROUTES = [
-  {
-    id:1, color:'#ef4444', accentClass:'', label:'路线①', name:'Access特快（快速推荐）',
-    nameJp:'アクセス特急（速い・おすすめ）',
-    stops:['成田空港','押上','住吉','西大島'],
-    summary:{time:'70-80min',cost:'~1500¥',transfers:'2次站内换乘'},
-    steps:[
-      {
-        title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
-        mission:'PREPARE',
-        checklist:[
-          {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
-          {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
-          {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
-        ],
-        minimap:[
-          {floor:'1F',content:'到着ロビー → 找京成線售票机',active:true,you:true},
-        ],
-        warnings:[],
-        tips:[{cn:'充值机有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}],
-        links:[],
-      },
-      {
-        title:{cn:'成田空港 → 押上',jp:'成田空港 → 押上（アクセス特急）'},
-        mission:'RIDE 01',
-        checklist:[
-          {cn:'跟着「京成線 / Keisei」标识走',jp:'「京成線」の案内に従う'},
-          {cn:'下到地下B1F',jp:'B1Fへ降りる'},
-          {cn:'进改札（刷IC卡）',jp:'改札を入る（ICカードタッチ）'},
-          {cn:'去1号站台（不要通过中间改札口！）',jp:'1番ホームへ（中間改札口を通らない！）'},
-          {cn:'确认是「アクセス特急」',jp:'「アクセス特急」を確認'},
-          {cn:'坐上车，往押上/羽田空港方向',jp:'押上・羽田空港方面に乗車'},
-          {cn:'到达押上站，下车（约60分钟）',jp:'押上駅で下車（約60分）'},
-        ],
-        minimap:[
-          {floor:'1F',content:'到着ロビー'},
-          {floor:'B1F',content:'<span class="mm-line access"></span>京成線改札口 → <b>1号站台</b>',active:true,you:true},
-          {floor:'',content:'<b>アクセス特急 → 押上方向</b> 🚃 约60min'},
-        ],
-        warnings:[
-          {cn:'不要坐「スカイライナー」！需要额外买特急券，很贵！',jp:'スカイライナーは別料金！アクセス特急に乗ってください！'},
-          {cn:'进改札后不要通过「中间改札口」！直接往1号站台走。',jp:'改札を入ったら「中間改札口」を通らず、直接1番ホームへ。'},
-        ],
-        tips:[{cn:'车程约60分钟，可以休息。',jp:'約60分、ゆっくり休めます。'}],
-        links:[{text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'}],
-      },
-      {
-        title:{cn:'押上 → 住吉',jp:'押上 → 住吉（半蔵門線乗り換え）'},
-        mission:'TRANSFER 01',
-        checklist:[
-          {cn:'下车后不要出改札！',jp:'改札を出ない！'},
-          {cn:'跟着「半蔵門線」标识走',jp:'「半蔵門線」の案内に従う'},
-          {cn:'B1F → B2F 出京成改札',jp:'B1F→B2F 京成改札を出る'},
-          {cn:'继续往半蔵門線方向 → B3F站台',jp:'半蔵門線方向→B3Fホーム'},
-          {cn:'坐半蔵門線，渋谷方向',jp:'半蔵門線 渋谷方面に乗車'},
-          {cn:'1站到住吉',jp:'1駅で住吉'},
-        ],
-        minimap:[
-          {floor:'B1F',content:'押上駅 到着（京成線ホーム）'},
-          {floor:'B2F',content:'京成改札を出る → <span class="mm-line hanzomon"></span>半蔵門線へ',active:true,you:true},
-          {floor:'B3F',content:'<span class="mm-line hanzomon"></span><b>半蔵門線ホーム → 渋谷方面</b>'},
-          {floor:'',content:'🚃 1駅 → 住吉'},
-        ],
-        warnings:[],
-        tips:[],
-        links:[
-          {text:{cn:'押上站 构内图（中文PDF）',jp:'押上駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
-          {text:{cn:'押上站换乘实拍教程',jp:'押上駅乗り換え写真付き解説'},url:'https://tren.hatenablog.com/entry/z14-a20',photo:true},
-        ],
-      },
-      {
-        title:{cn:'住吉 → 西大島',jp:'住吉 → 西大島（最後！）'},
-        mission:'FINAL',
-        checklist:[
-          {cn:'跟着「都営新宿線」标识走',jp:'「都営新宿線」の案内に従う'},
-          {cn:'同一层换乘，很近',jp:'同じフロアで乗り換え'},
-          {cn:'坐都営新宿線，本八幡方向',jp:'都営新宿線 本八幡方面に乗車'},
-          {cn:'1站到西大島！',jp:'1駅で西大島！'},
-        ],
-        minimap:[
-          {floor:'B3F',content:'住吉駅（半蔵門線ホーム）'},
-          {floor:'B3F',content:'<span class="mm-line shinjuku"></span><b>都営新宿線ホーム → 本八幡方面</b>',active:true,you:true},
-          {floor:'',content:'🚃 1駅 → <b>西大島！🎉</b>'},
-        ],
-        warnings:[],
-        tips:[{cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'}],
-        links:[],
-      },
-    ],
-  },
-  {
-    id:2, color:'#14b8a6', accentClass:'c2', label:'路线②', name:'京成本線（省钱方案）',
-    nameJp:'京成本線（安い）',
-    stops:['成田空港','京成八幡','本八幡','西大島'],
-    summary:{time:'100-110min',cost:'~1300¥',transfers:'1次换乘+步行5min'},
-    steps:[
-      {
-        title:{cn:'给IC卡充值',jp:'ICカードにチャージ'},
-        mission:'PREPARE',
-        checklist:[
-          {cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
-          {cn:'选择"チャージ"（充值）',jp:'「チャージ」を選択'},
-          {cn:'充值2000日元以上',jp:'2000円以上チャージする'},
-        ],
-        minimap:[
-          {floor:'1F',content:'到着ロビー → 找京成線售票机',active:true,you:true},
-        ],
-        warnings:[],
-        tips:[{cn:'充值机有中文界面，按"チャージ"按钮即可。',jp:'券売機には中国語表示あり。「チャージ」ボタンを押す。'}],
-        links:[],
-      },
-      {
-        title:{cn:'成田空港 → 京成八幡',jp:'成田空港 → 京成八幡（京成本線）'},
-        mission:'RIDE 01',
-        checklist:[
-          {cn:'跟着「京成線」标识走到地下',jp:'「京成線」の案内に従い地下へ'},
-          {cn:'进改札（刷IC卡）',jp:'改札を入る（ICカードタッチ）'},
-          {cn:'通过「中间改札口」到京成本线站台',jp:'「中間改札口」を通って京成本線ホームへ'},
-          {cn:'去2号或3号站台',jp:'2・3番ホームへ'},
-          {cn:'坐「快速特急」或「特急」',jp:'「快速特急」または「特急」に乗車'},
-          {cn:'到达京成八幡站，下车（约80分钟）',jp:'京成八幡駅で下車（約80分）'},
-        ],
-        minimap:[
-          {floor:'1F',content:'到着ロビー'},
-          {floor:'B1F',content:'京成線改札口 → <b>中間改札口を通る！</b>',active:true,you:true},
-          {floor:'B1F',content:'<span class="mm-line keisei"></span><b>2/3号站台</b> → 快速特急/特急'},
-          {floor:'',content:'🚃 京成本線 → 京成八幡 约80min'},
-        ],
-        warnings:[
-          {cn:'必须通过「中间改札口」才能到2/3号站台！IC卡刷两次是正常的。',jp:'中間改札口を通って京成本線ホームへ。ICカードで2回タッチは正常です。'},
-        ],
-        tips:[{cn:'车程约80分钟，可以休息。',jp:'約80分、ゆっくり休めます。'}],
-        links:[{text:{cn:'成田空港站 构内图（中文PDF）',jp:'成田空港駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'}],
-      },
-      {
-        title:{cn:'京成八幡 → 步行 → 本八幡',jp:'京成八幡 → 徒歩 → 本八幡'},
-        mission:'WALK',
-        checklist:[
-          {cn:'下车后坐扶梯到1F',jp:'下車後エスカレーターで1Fへ'},
-          {cn:'出改札',jp:'改札を出る'},
-          {cn:'出站后往左走',jp:'駅を出たら左に曲がる'},
-          {cn:'沿国道14号直走约5分钟',jp:'国道14号沿いに約5分歩く'},
-          {cn:'找到本八幡站入口（地下站）',jp:'本八幡駅の入口を見つける'},
-          {cn:'进入都営新宿線 本八幡站',jp:'都営新宿線 本八幡駅に入る'},
-        ],
-        minimap:[
-          {floor:'2F',content:'京成八幡駅（高架站）到着'},
-          {floor:'1F',content:'出改札 → 往左走',active:true,you:true},
-          {floor:'',content:'🚶 国道14号沿い 步行约5分钟'},
-          {floor:'B1F',content:'<span class="mm-line shinjuku"></span><b>本八幡駅（地下站）入口</b>'},
-        ],
-        warnings:[{cn:'带大行李箱走室外要注意，约5-7分钟。',jp:'スーツケースがある場合、歩道にご注意ください。'}],
-        tips:[],
-        links:[
-          {text:{cn:'京成八幡站 构内图（中文PDF）',jp:'京成八幡駅 構内図'},url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf'},
-          {text:{cn:'京成八幡→本八幡 步行实拍教程',jp:'京成八幡→本八幡 写真付き乗り換え解説'},url:'https://eroom.earthrevo.jp/archives/7326',photo:true},
-        ],
-      },
-      {
-        title:{cn:'本八幡 → 西大島',jp:'本八幡 → 西大島（最後！）'},
-        mission:'FINAL',
-        checklist:[
-          {cn:'刷IC卡进本八幡站改札',jp:'ICカードで改札を通る'},
-          {cn:'坐都営新宿線，新宿方向',jp:'都営新宿線 新宿方面に乗車'},
-          {cn:'6站（约15分钟）到西大島！',jp:'6駅（約15分）で西大島！'},
-        ],
-        minimap:[
-          {floor:'B1F',content:'本八幡駅 改札 → 入る',active:true,you:true},
-          {floor:'B2F',content:'<span class="mm-line shinjuku"></span><b>都営新宿線 → 新宿方面</b>'},
-          {floor:'',content:'🚃 6駅 → <b>西大島！🎉</b>'},
-        ],
-        warnings:[],
-        tips:[{cn:'到了！出站就到家了！',jp:'着きました！改札を出ればもうすぐです！'}],
-        links:[],
-      },
-    ],
-  },
+// ===== DATA: each sub-step is a "card" =====
+const ROUTES=[
+{
+  id:1,cls:'',label:'路线①',name:'Access特快',badge:'快速推荐',
+  stops:['成田空港','押上','住吉','西大島'],
+  meta:['⏱ 70-80min','💰 ~1500¥','🔄 2次站内'],
+  cards:[
+    // --- Step 0: Charge ---
+    {
+      instruction:{cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
+      visual:'icon', icon:'🔍',
+      map:[{tag:'1F',text:'到着ロビー',here:true}],
+      tip:{cn:'跟着「京成線 Keisei」的标识牌走',jp:'「京成線」の案内に従ってください'},
+    },
+    {
+      instruction:{cn:'给IC卡充值 2000日元以上',jp:'ICカードに2000円以上チャージ'},
+      visual:'icon', icon:'💳',
+      map:[{tag:'1F',text:'京成線 券売機',here:true}],
+      tip:{cn:'售票机有中文界面，按"チャージ"按钮',jp:'券売機には中国語表示あり'},
+    },
+    // --- Step 1: Narita → Oshiage ---
+    {
+      instruction:{cn:'下到地下 B1F',jp:'B1Fへ降りる'},
+      visual:'floors',
+      map:[{tag:'1F',text:'到着ロビー'},{tag:'↓',text:''},{tag:'B1F',text:'京成線 改札口',here:true}],
+    },
+    {
+      instruction:{cn:'刷IC卡进改札',jp:'ICカードで改札を入る'},
+      visual:'icon', icon:'🚪',
+      map:[{tag:'B1F',text:'改札口（检票口）',here:true}],
+    },
+    {
+      instruction:{cn:'去1号站台',jp:'1番ホームへ'},
+      visual:'platform',
+      map:[{tag:'B1F',text:'<b>→ 1号站台</b>（アクセス特急专用）',here:true}],
+      warn:{cn:'不要通过「中间改札口」！直接去1号站台！',jp:'「中間改札口」を通らず、直接1番ホームへ！'},
+    },
+    {
+      instruction:{cn:'坐 Access特快 → 押上',jp:'アクセス特急に乗車 → 押上'},
+      visual:'train',
+      train:{line:'access',lineName:'アクセス特急',dir:'押上・羽田空港方面',time:'约60分钟'},
+      warn:{cn:'不要坐「スカイライナー」！那个很贵！',jp:'スカイライナーは別料金！'},
+      link:{text:'成田空港 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+    },
+    {
+      instruction:{cn:'到达押上站，下车',jp:'押上駅で下車'},
+      visual:'icon', icon:'🚏',
+      map:[{tag:'',text:'🚃 → <b>押上駅</b> 到着！',here:true}],
+      tip:{cn:'不要出改札！直接换乘！',jp:'改札を出ないでください！'},
+    },
+    // --- Step 2: Oshiage → Sumiyoshi ---
+    {
+      instruction:{cn:'跟着「半蔵門線」标识走',jp:'「半蔵門線」の案内に従う'},
+      visual:'icon', icon:'🔍',
+      map:[{tag:'B1F',text:'押上駅（京成線ホーム）'},{tag:'↓',text:''},{tag:'B2F',text:'京成改札を出る → <span class="v-line hanzomon"></span>半蔵門線へ',here:true}],
+    },
+    {
+      instruction:{cn:'坐半蔵門線 → 住吉（1站）',jp:'半蔵門線で住吉へ（1駅）'},
+      visual:'train',
+      train:{line:'hanzomon',lineName:'半蔵門線',dir:'渋谷方面',time:'1站'},
+      link:{text:'押上站 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
+    },
+    // --- Step 3: Sumiyoshi → Nishi-Ojima ---
+    {
+      instruction:{cn:'同层换乘「都営新宿線」',jp:'同じフロアで「都営新宿線」に乗り換え'},
+      visual:'icon', icon:'🔄',
+      map:[{tag:'B3F',text:'住吉駅 → <span class="v-line shinjuku"></span><b>都営新宿線ホーム</b>',here:true}],
+      tip:{cn:'同一层走过去就好，很近！',jp:'同じフロア内、すぐ近くです！'},
+    },
+    {
+      instruction:{cn:'坐都営新宿線 → 西大島（1站）',jp:'都営新宿線で西大島へ（1駅）'},
+      visual:'train',
+      train:{line:'shinjuku',lineName:'都営新宿線',dir:'本八幡方面',time:'1站'},
+    },
+    {
+      instruction:{cn:'到达西大島！出站到家！',jp:'西大島に到着！改札を出ればすぐ！'},
+      visual:'icon', icon:'🎉',
+      map:[{tag:'',text:'<b>🏠 西大島駅 到着！！</b>',here:true}],
+      isFinal:true,
+    },
+  ],
+},
+{
+  id:2,cls:'c2',label:'路线②',name:'京成本線',badge:'省钱方案',
+  stops:['成田空港','京成八幡','本八幡','西大島'],
+  meta:['⏱ 100-110min','💰 ~1300¥','🔄 1次+步行'],
+  cards:[
+    {
+      instruction:{cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
+      visual:'icon', icon:'🔍',
+      map:[{tag:'1F',text:'到着ロビー',here:true}],
+      tip:{cn:'跟着「京成線 Keisei」标识牌走',jp:'「京成線」の案内に従ってください'},
+    },
+    {
+      instruction:{cn:'给IC卡充值 2000日元以上',jp:'ICカードに2000円以上チャージ'},
+      visual:'icon', icon:'💳',
+      map:[{tag:'1F',text:'京成線 券売機',here:true}],
+      tip:{cn:'售票机有中文界面，按"チャージ"按钮',jp:'券売機には中国語表示あり'},
+    },
+    {
+      instruction:{cn:'下到地下，进改札',jp:'地下へ降りて改札を入る'},
+      visual:'floors',
+      map:[{tag:'1F',text:'到着ロビー'},{tag:'↓',text:''},{tag:'B1F',text:'京成線 改札口',here:true}],
+    },
+    {
+      instruction:{cn:'通过「中间改札口」',jp:'「中間改札口」を通る'},
+      visual:'icon', icon:'🚪',
+      map:[{tag:'B1F',text:'改札 → <b>中間改札口</b> → 京成本線ホーム',here:true}],
+      warn:{cn:'IC卡会刷两次，这是正常的！',jp:'ICカードで2回タッチは正常です！'},
+    },
+    {
+      instruction:{cn:'去2/3号站台，坐快速特急',jp:'2・3番ホームで快速特急に乗車'},
+      visual:'train',
+      train:{line:'keisei',lineName:'快速特急 / 特急',dir:'京成上野・押上方面',time:'约80分钟'},
+      link:{text:'成田空港 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+    },
+    {
+      instruction:{cn:'到达京成八幡站，下车',jp:'京成八幡駅で下車'},
+      visual:'icon', icon:'🚏',
+      map:[{tag:'',text:'🚃 → <b>京成八幡駅</b> 到着！',here:true}],
+    },
+    {
+      instruction:{cn:'出站，往左走',jp:'改札を出て、左に曲がる'},
+      visual:'floors',
+      map:[{tag:'2F',text:'京成八幡駅（高架站）'},{tag:'↓',text:''},{tag:'1F',text:'出改札 → <b>左に曲がる</b>',here:true}],
+    },
+    {
+      instruction:{cn:'沿大马路走5分钟到本八幡站',jp:'国道14号沿い 徒歩5分で本八幡駅'},
+      visual:'icon', icon:'🚶',
+      map:[{tag:'',text:'京成八幡 →🚶5min→ <b>本八幡駅</b>（地下站入口）',here:true}],
+      warn:{cn:'带行李箱注意路面，约5-7分钟',jp:'スーツケースがある場合ご注意ください'},
+      link:{text:'京成八幡→本八幡 步行实拍',url:'https://eroom.earthrevo.jp/archives/7326'},
+    },
+    {
+      instruction:{cn:'进本八幡站，刷IC卡',jp:'本八幡駅に入り、ICカードで改札を通る'},
+      visual:'icon', icon:'🚪',
+      map:[{tag:'B1F',text:'<span class="v-line shinjuku"></span>都営新宿線 本八幡駅 改札',here:true}],
+    },
+    {
+      instruction:{cn:'坐都営新宿線 → 西大島（6站）',jp:'都営新宿線で西大島へ（6駅）'},
+      visual:'train',
+      train:{line:'shinjuku',lineName:'都営新宿線',dir:'新宿方面',time:'约15分钟'},
+    },
+    {
+      instruction:{cn:'到达西大島！出站到家！',jp:'西大島に到着！改札を出ればすぐ！'},
+      visual:'icon', icon:'🎉',
+      map:[{tag:'',text:'<b>🏠 西大島駅 到着！！</b>',here:true}],
+      isFinal:true,
+    },
+  ],
+},
 ];
 
-const PHRASES = {
-  transport:{label:'交通乘车',icon:'🚃',items:[
-    {cn:'我想去西大島站。',jp:'西大島駅に行きたいです。'},
-    {cn:'请问这趟车停押上吗？',jp:'すみません、この電車は押上に止まりますか？'},
-    {cn:'请问这是开往哪里的车？',jp:'すみません、この電車はどこ行きですか？'},
-    {cn:'我想坐Access特快。',jp:'アクセス特急に乗りたいです。'},
-    {cn:'我想在押上站换乘半蔵門线。',jp:'押上駅で半蔵門線に乗り換えたいです。'},
-    {cn:'请问都营新宿线在哪里？',jp:'都営新宿線はどこですか？'},
-    {cn:'从京成八幡到本八幡怎么走？',jp:'京成八幡駅から本八幡駅はどう行きますか？'},
-    {cn:'我坐过站了，怎么回去？',jp:'乗り過ごしました。どうやって戻れますか？'},
+const PHRASES={
+  transport:{label:'交通',icon:'🚃',items:[
+    {cn:'我想去西大島站。',jp:'西大島駅に行きたいです。'},{cn:'请问这趟车停押上吗？',jp:'すみません、この電車は押上に止まりますか？'},
+    {cn:'这是开往哪里的车？',jp:'この電車はどこ行きですか？'},{cn:'我坐过站了。',jp:'乗り過ごしました。'},
+    {cn:'我想坐Access特快。',jp:'アクセス特急に乗りたいです。'},{cn:'都营新宿线在哪？',jp:'都営新宿線はどこですか？'},
   ]},
-  ticket:{label:'买票充值',icon:'💳',items:[
-    {cn:'我想给IC卡充值。',jp:'ICカードにチャージしたいです。'},
-    {cn:'请问充值机在哪里？',jp:'チャージできる機械はどこですか？'},
-    {cn:'可以用现金充值吗？',jp:'現金でチャージできますか？'},
-    {cn:'请问去西大島多少钱？',jp:'西大島までいくらですか？'},
-    {cn:'我的IC卡余额不够了。',jp:'ICカードの残高が足りません。'},
+  ticket:{label:'充值',icon:'💳',items:[
+    {cn:'我想给IC卡充值。',jp:'ICカードにチャージしたいです。'},{cn:'充值机在哪？',jp:'チャージできる機械はどこですか？'},
+    {cn:'去西大島多少钱？',jp:'西大島までいくらですか？'},{cn:'余额不够了。',jp:'残高が足りません。'},
   ]},
   directions:{label:'问路',icon:'🗺️',items:[
-    {cn:'请问出口在哪里？',jp:'出口はどこですか？'},
-    {cn:'请问厕所在哪里？',jp:'トイレはどこですか？'},
-    {cn:'请问电梯在哪里？',jp:'エレベーターはどこですか？'},
-    {cn:'请问检票口在哪里？',jp:'改札はどこですか？'},
-    {cn:'请问哪个是1号站台？',jp:'1番ホームはどちらですか？'},
-    {cn:'我迷路了，能帮帮我吗？',jp:'道に迷いました。助けてもらえますか？'},
+    {cn:'出口在哪？',jp:'出口はどこですか？'},{cn:'厕所在哪？',jp:'トイレはどこですか？'},
+    {cn:'电梯在哪？',jp:'エレベーターはどこですか？'},{cn:'检票口在哪？',jp:'改札はどこですか？'},
+    {cn:'我迷路了，能帮我吗？',jp:'道に迷いました。助けてもらえますか？'},
   ]},
-  emergency:{label:'紧急求助',icon:'🆘',items:[
-    {cn:'请帮帮我！',jp:'助けてください！'},
-    {cn:'我不会说日语。',jp:'日本語が話せません。'},
-    {cn:'可以帮我叫出租车吗？',jp:'タクシーを呼んでもらえますか？'},
-    {cn:'我的东西丢了。',jp:'荷物をなくしました。'},
-    {cn:'请帮我叫警察。',jp:'警察を呼んでください。'},
-    {cn:'我身体不舒服。',jp:'体調が悪いです。'},
-    {cn:'请问附近有药店吗？',jp:'近くに薬局はありますか？'},
+  emergency:{label:'紧急',icon:'🆘',items:[
+    {cn:'请帮帮我！',jp:'助けてください！'},{cn:'我不会日语。',jp:'日本語が話せません。'},
+    {cn:'帮我叫出租车。',jp:'タクシーを呼んでもらえますか？'},{cn:'东西丢了。',jp:'荷物をなくしました。'},
+    {cn:'身体不舒服。',jp:'体調が悪いです。'},{cn:'附近有药店吗？',jp:'近くに薬局はありますか？'},
   ]},
 };
 
 // ===== STATE =====
-let state = loadState();
-let seniorMode = localStorage.getItem('narita-senior') === '1';
-if(seniorMode) document.body.classList.add('senior');
+let S=loadS();
+let senior=localStorage.getItem('narita-senior')==='1';
+if(senior) document.body.classList.add('senior');
 
-function loadState(){
-  try{ const s = JSON.parse(localStorage.getItem('narita-v4')); if(s && s.route!==undefined) return s; }catch(e){}
-  return {route:null, step:0, checks:{}};
-}
-function saveState(){ localStorage.setItem('narita-v4', JSON.stringify(state)); }
-function resetState(){ state={route:null,step:0,checks:{}}; saveState(); render(); }
+function loadS(){try{const s=JSON.parse(localStorage.getItem('narita-v5'));if(s&&s.route!==undefined)return s}catch(e){}return{route:null,card:0}}
+function saveS(){localStorage.setItem('narita-v5',JSON.stringify(S))}
+function resetS(){S={route:null,card:0};saveS();render()}
 
 // ===== RENDER =====
-const app = document.getElementById('app');
+const app=document.getElementById('app');
 
 function render(){
-  if(state.route===null) renderLanding();
+  document.getElementById('toolsBtn').style.display=S.route===null?'none':'flex';
+  if(S.route===null) renderLanding();
   else{
-    const route = ROUTES[state.route];
-    if(state.step>=route.steps.length) renderDone(route);
-    else renderJourney(route);
+    const r=ROUTES[S.route];
+    if(S.card>=r.cards.length) renderComplete(r);
+    else renderNav(r);
   }
-  renderTranslation();
 }
 
 function renderLanding(){
-  // Check if there's saved progress
-  let saved = null;
-  try{ const s=JSON.parse(localStorage.getItem('narita-v4')); if(s&&s.route!==null) saved=s; }catch(e){}
-
-  let resumeHtml='';
+  let saved=null;
+  try{const s=JSON.parse(localStorage.getItem('narita-v5'));if(s&&s.route!==null)saved=s}catch(e){}
+  let resumeH='';
   if(saved){
     const r=ROUTES[saved.route];
-    const sn = saved.step<r.steps.length ? r.steps[saved.step].title.cn : '已完成';
-    resumeHtml=`
-      <div class="resume-card" onclick="state=loadState();render()">
-        <div class="rc-dot"></div>
-        <div class="rc-info"><b>继续上次进度</b>${r.label} · ${sn}</div>
-        <div class="rc-go">继续 ›</div>
-      </div>`;
+    const cn=saved.card<r.cards.length?r.cards[saved.card].instruction.cn:'已完成';
+    resumeH=`<div class="resume-bar" onclick="S=loadS();render()">
+      <div class="rb-dot"></div>
+      <div class="rb-text"><b>继续上次进度</b>${r.label} · ${cn}</div>
+      <div class="rb-go">继续 ›</div>
+    </div>`;
   }
-
-  let html=`<div class="landing">
-    <div class="brand">
-      <div class="logo">🚃</div>
-      <h1>成田空港 → 西大島</h1>
-      <div class="sub">中日双语换乘指南<br>中日二ヶ国語ガイド</div>
-    </div>
-    ${resumeHtml}
-    <div class="route-pick">`;
+  let h=`<div class="landing"><div class="brand">
+    <div class="logo">🚃</div><h1>成田空港 → 西大島</h1>
+    <div class="sub">中日双语导航 / 中日二ヶ国語ナビ</div>
+  </div>${resumeH}`;
 
   ROUTES.forEach((r,i)=>{
-    html+=`
-      <div class="route-card ${i===0?'r1':'r2'}" onclick="selectRoute(${i})">
-        <span class="rc-badge">${r.label}</span>
-        <div class="rc-name">${r.name}</div>
-        <div class="rc-stops">${r.stops.join(' → ')}</div>
-        <div class="rc-meta">
-          <span>⏱ ${r.summary.time}</span>
-          <span>💰 ${r.summary.cost}</span>
-          <span>🔄 ${r.summary.transfers}</span>
-        </div>
-        <div class="rc-arrow">›</div>
-      </div>`;
+    h+=`<div class="rc ${i?'t2':''}" onclick="selectRoute(${i})">
+      <span class="rc-badge">${r.badge}</span>
+      <div class="rc-name">${r.name}</div>
+      <div class="rc-visual">${r.stops.map((s,j)=>`${j?'<span class="rv-arrow">→</span>':''}<span class="rv-stop">${s}</span>`).join('')}</div>
+      <div class="rc-meta">${r.meta.map(m=>`<span>${m}</span>`).join('')}</div>
+      <div class="rc-go">›</div>
+    </div>`;
   });
 
-  html+=`</div>
-    <div class="landing-footer">
-      <button onclick="toggleSenior()">${seniorMode?'✓ ':''}大字模式</button>
-      <button onclick="installPWA()">📲 添加到桌面</button>
+  h+=`<div class="l-footer">
+    <button onclick="toggleSenior()">${senior?'✓ ':''}大字模式</button>
+    <button onclick="installPWA()">📲 添加到桌面</button>
+  </div></div>`;
+  app.innerHTML=h;
+}
+
+function renderNav(route){
+  const ci=route.cls;
+  const card=route.cards[S.card];
+  const total=route.cards.length;
+
+  // Top bar with dots
+  let dots='';
+  for(let i=0;i<total;i++){
+    const c=i<S.card?'done':i===S.card?'cur':'';
+    dots+=`<span class="${c}"></span>`;
+  }
+
+  let h=`<div class="nav ${ci}">
+    <div class="topbar">
+      <button class="tb-back" onclick="goBack()">✕</button>
+      <span class="tb-step">STEP ${S.card+1} / ${total}</span>
+      <div class="tb-dots">${dots}</div>
     </div>
+    <div class="card-area">`;
+
+  // Visual
+  h+=`<div class="visual">`;
+  if(card.visual==='icon'&&card.icon){
+    h+=`<div class="v-icon">${card.icon}</div>`;
+  }
+  if(card.visual==='train'&&card.train){
+    const t=card.train;
+    h+=`<div class="v-train">
+      <div class="vt-line"><span class="v-line ${t.line}"></span>${t.lineName}</div>
+      <div class="vt-name">🚃 乘车中...</div>
+      <div class="vt-dir">${t.dir}</div>
+      <div class="vt-time">${t.time}</div>
+    </div>`;
+  }
+  if(card.map){
+    card.map.forEach(m=>{
+      if(m.tag==='↓'){h+=`<div class="v-arrow">↓</div>`;return}
+      h+=`<div class="v-floor ${m.here?'here':''}">
+        <span class="vf-tag">${m.tag}</span>
+        <span class="vf-body">${m.here?'<span class="vf-you"></span>':''}${m.text}</span>
+      </div>`;
+    });
+  }
+  h+=`</div>`;
+
+  // Instruction
+  h+=`<div class="instruction">
+    <div class="ins-cn">${card.instruction.cn}</div>
+    <div class="ins-jp">${card.instruction.jp}</div>
   </div>`;
-  app.innerHTML=html;
+
+  // Warning
+  if(card.warn) h+=`<div class="ins-warn">${card.warn.cn}<span class="iw-jp">${card.warn.jp}</span></div>`;
+  // Tip
+  if(card.tip) h+=`<div class="ins-tip">${card.tip.cn}<span class="it-jp">${card.tip.jp}</span></div>`;
+  // Link
+  if(card.link) h+=`<a class="ins-link" href="${card.link.url}" target="_blank">🗺️ ${card.link.text}</a>`;
+
+  // Button
+  const isFinal=card.isFinal;
+  h+=`<button class="done-btn ${isFinal?'final':''}" onclick="nextCard()">
+    ${isFinal?'🎉 到家了！':'做到了 ✓'}
+  </button>`;
+
+  h+=`</div>`;
+
+  // Bottom bar
+  const stepsLeft=total-S.card-1;
+  h+=`<div class="bottom-bar">
+    <div class="bb-dest"><span class="bd-pin">📍</span> 西大島</div>
+    <span>还有 ${stepsLeft} 步</span>
+  </div>`;
+
+  h+=`</div>`;
+  app.innerHTML=h;
 }
 
-function renderJourney(route){
-  const ci=route.accentClass;
-
-  // HUD
-  let hud=`<div class="hud ${ci}">
-    <div class="hud-top">
-      <span class="ht-mission">${route.label} · STEP ${state.step+1}/${route.steps.length}</span>
-      <button class="ht-back" onclick="goBack()">← 返回</button>
-    </div>
-    <div class="hud-bar">`;
-
-  route.stops.forEach((stop,i)=>{
-    if(i>0) hud+=`<div class="hb-line ${i<=state.step?'done':''}"></div>`;
-    let dc=i<state.step?'done':i===state.step?'current':'';
-    hud+=`<div class="hb-node" onclick="jumpStep(${i})">
-      <div class="hb-dot ${dc}">${dc==='done'?'✓':i}</div>
-      <div class="hb-name">${stop}</div>
-    </div>`;
-  });
-  hud+=`</div></div>`;
-
-  // Steps
-  let steps=`<div class="steps-area ${ci}">`;
-  route.steps.forEach((step,i)=>{
-    const isDone=i<state.step, isCurrent=i===state.step, isOpen=isCurrent;
-    const numC=isDone?'done':isCurrent?'current':'';
-    const cardC=isCurrent?'current-card':'';
-
-    steps+=`<div class="step-card ${cardC}" id="step-${i}">
-      <div class="step-head" onclick="toggleStep(${i})">
-        <div class="sh-num ${numC}">${isDone?'✓':i}</div>
-        <div class="sh-info">
-          <div class="sh-mission">${step.mission}</div>
-          <div class="sh-title">${step.title.cn}</div>
-          <div class="sh-jp">${step.title.jp}</div>
-        </div>
-        <div class="sh-arrow ${isOpen?'open':''}">›</div>
-      </div>
-      <div class="step-body ${isOpen?'open':''}" id="step-body-${i}">`;
-
-    // Mini-map
-    if(step.minimap&&step.minimap.length){
-      steps+=`<div class="minimap">`;
-      step.minimap.forEach((m,mi)=>{
-        if(mi>0) steps+=`<div class="mm-arrow">↓</div>`;
-        steps+=`<div class="mm-floor ${m.active?'active':''}">`;
-        if(m.floor) steps+=`<span class="mf-label">${m.floor}</span>`;
-        else steps+=`<span class="mf-label"></span>`;
-        steps+=`<span class="mf-content">${m.you?'<span class="mf-you"></span>':''}${m.content}</span>`;
-        steps+=`</div>`;
-      });
-      steps+=`</div>`;
-    }
-
-    // Checklist
-    steps+=`<div class="checklist">`;
-    step.checklist.forEach((item,j)=>{
-      const key=`${state.route}-${i}-${j}`, checked=state.checks[key];
-      steps+=`<div class="cl-item">
-        <div class="cl-check ${checked?'checked':''}" onclick="toggleCheck('${key}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-        </div>
-        <div class="cl-text ${checked?'checked':''}" onclick="toggleCheck('${key}')">${item.cn}<span class="cl-jp">${item.jp}</span></div>
-      </div>`;
-    });
-    steps+=`</div>`;
-
-    // Warnings, Tips, Links
-    step.warnings.forEach(w=>{
-      steps+=`<div class="wrn">${w.cn}<span class="wrn-jp">${w.jp}</span></div>`;
-    });
-    step.tips.forEach(t=>{
-      steps+=`<div class="tip">${t.cn}<span class="tip-jp">${t.jp}</span></div>`;
-    });
-    step.links.forEach(l=>{
-      steps+=`<a class="ml ${l.photo?'ml-photo':''}" href="${l.url}" target="_blank">${l.text.cn}<br><span style="font-size:var(--font-xs)">${l.text.jp}</span></a>`;
-    });
-
-    if(isCurrent){
-      const isLast=i===route.steps.length-1;
-      steps+=`<button class="next-btn ${isLast?'finish':''}" onclick="nextStep()">
-        ${isLast?'🎉 到达西大島！':'✓ 完成，下一步 →'}
-      </button>`;
-    }
-    steps+=`</div></div>`;
-  });
-
-  steps+=`<div class="reset-link" onclick="if(confirm('确定重置？'))resetState()">重置进度</div></div>`;
-  app.innerHTML=hud+steps;
-
-  setTimeout(()=>{
-    const el=document.getElementById(`step-${state.step}`);
-    if(el) el.scrollIntoView({behavior:'smooth',block:'center'});
-  },100);
-}
-
-function renderDone(route){
-  const ci=route.accentClass;
-  app.innerHTML=`
-    <div class="hud ${ci}">
-      <div class="hud-top">
-        <span class="ht-mission">MISSION COMPLETE</span>
-        <button class="ht-back" onclick="goBack()">← 返回</button>
-      </div>
-      <div class="hud-bar">
-        ${route.stops.map((s,i)=>`${i>0?'<div class="hb-line done"></div>':''}
-          <div class="hb-node"><div class="hb-dot done">✓</div><div class="hb-name">${s}</div></div>`).join('')}
-      </div>
-    </div>
-    <div class="done-screen">
-      <div class="ds-emoji">🎉🏠</div>
-      <div class="ds-title">MISSION COMPLETE</div>
-      <div class="ds-sub">到家了！お疲れ様でした！<br>所有步骤已完成</div>
-      <button class="ds-btn" onclick="resetState()">重新开始</button>
-    </div>`;
+function renderComplete(route){
+  app.innerHTML=`<div class="done-wrap">
+    <div class="dw-emoji">🎉🏠</div>
+    <div class="dw-title">到家了！</div>
+    <div class="dw-sub">お疲れ様でした！<br>全 ${route.cards.length} 步已完成</div>
+    <button onclick="resetS()">重新开始</button>
+  </div>`;
   showConfetti();
 }
 
-function renderTranslation(){
-  document.querySelectorAll('.trans-section,.footer').forEach(el=>el.remove());
-  const cats=Object.keys(PHRASES);
-  const activeCat=window._transCat||cats[0];
-  const isOpen=window._transOpen!==false;
+// ===== ACTIONS =====
+function selectRoute(i){S={route:i,card:0};saveS();render();window.scrollTo(0,0)}
+function nextCard(){S.card++;saveS();render();window.scrollTo(0,0)}
+function goBack(){S.route=null;saveS();render();window.scrollTo(0,0);closeTools()}
+function toggleSenior(){senior=!senior;document.body.classList.toggle('senior',senior);localStorage.setItem('narita-senior',senior?'1':'0');render()}
 
-  let html=`<div class="trans-section">
-    <div class="trans-header" onclick="toggleTrans()">
-      <span>📖 中日翻译助手</span>
-      <span class="th-arrow ${isOpen?'open':''}">›</span>
-    </div>
-    <div class="trans-body ${isOpen?'open':''}">
-      <div class="trans-tabs">`;
-  cats.forEach(c=>{
-    html+=`<div class="tt-btn ${c===activeCat?'active':''}" onclick="switchCat('${c}')">${PHRASES[c].icon} ${PHRASES[c].label}</div>`;
-  });
-  html+=`</div>`;
-  PHRASES[activeCat].items.forEach(item=>{
-    html+=`<div class="phrase-card" onclick="showPhrase('${esc(item.jp)}','${esc(item.cn)}')">
-      <div class="pc-jp">${item.jp}</div>
-      <div class="pc-cn">${item.cn}</div>
-      <div class="pc-hint">点击放大 / タップして拡大</div>
+// ===== TOOLS PANEL =====
+function openTools(){
+  const p=document.getElementById('toolsPanel');
+  if(p.classList.contains('open')){closeTools();return}
+  const cats=Object.keys(PHRASES);
+  const ac=window._tc||cats[0];
+  const trDir=window._trDir||'zh2ja';
+  const trR=window._trResult||'';
+  const trSrc=window._trSource||'';
+  const trE=window._trError||'';
+  const trL=window._trLoading||false;
+  const srcL=trDir==='zh2ja'?'中文':'日本語';
+  const tgtL=trDir==='zh2ja'?'日本語':'中文';
+
+  let h=`<div class="tp-header"><span>📖 翻译助手</span><button onclick="closeTools()">✕</button></div>
+    <div class="tp-tabs">${cats.map(c=>`<div class="tp-tab ${c===ac?'on':''}" onclick="switchTC('${c}')">${PHRASES[c].icon} ${PHRASES[c].label}</div>`).join('')}</div>
+    <div class="tp-body">`;
+
+  PHRASES[ac].items.forEach(item=>{
+    h+=`<div class="ph-card" onclick="showPhrase('${esc(item.jp)}','${esc(item.cn)}')">
+      <div class="ph-jp">${item.jp}</div><div class="ph-cn">${item.cn}</div>
     </div>`;
   });
 
-  // Translator
-  const trDir=window._trDir||'zh2ja';
-  const srcL=trDir==='zh2ja'?'中文':'日本語';
-  const tgtL=trDir==='zh2ja'?'日本語':'中文';
-  const trR=window._trResult||'';
-  const trS=window._trSource||'';
-  const trE=window._trError||'';
-  const trL=window._trLoading||false;
-
-  html+=`<div class="translator">
+  h+=`<div class="tr-section">
     <div class="tr-label">✏️ 实时翻译</div>
     <div class="tr-swap"><span>${srcL}</span><button onclick="swapDir()">⇄</button><span>${tgtL}</span></div>
-    <div class="tr-input-wrap">
-      <textarea id="trInput" placeholder="${trDir==='zh2ja'?'输入中文...':'日本語を入力...'}" oninput="autoResize(this)">${trS}</textarea>
+    <div class="tr-row">
+      <textarea id="trInput" placeholder="${trDir==='zh2ja'?'输入中文...':'日本語を入力...'}">${trSrc}</textarea>
       <button class="tr-btn" onclick="doTranslate()" ${trL?'disabled':''}>${trL?'...':'翻译'}</button>
     </div>
     ${trE?`<div class="tr-error">${trE}</div>`:''}
     <div class="tr-result ${trR?'show':''}">
-      <div class="tr-result-card" onclick="showPhrase('${esc(trDir==='zh2ja'?trR:trS)}','${esc(trDir==='zh2ja'?trS:trR)}')">
-        <div class="trc-target">${trR}</div>
-        <div class="trc-source">${trS}</div>
+      <div class="tr-result-card" onclick="showPhrase('${esc(trDir==='zh2ja'?trR:trSrc)}','${esc(trDir==='zh2ja'?trSrc:trR)}')">
+        <div class="trc-jp">${trR}</div><div class="trc-cn">${trSrc}</div>
         <div class="trc-hint">点击放大给对方看</div>
       </div>
     </div>
-  </div>`;
+  </div></div>`;
 
-  html+=`</div></div><div class="footer">2026.02 ｜ 仅供参考</div>`;
-  document.body.insertAdjacentHTML('beforeend',html);
+  p.innerHTML=h;
+  p.classList.add('open');
 }
-
-function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;');}
-
-// ===== ACTIONS =====
-function selectRoute(i){state={route:i,step:0,checks:{}};saveState();render();window.scrollTo(0,0);}
-function nextStep(){state.step++;saveState();render();window.scrollTo(0,0);}
-function jumpStep(i){const el=document.getElementById(`step-${i}`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});}
-function toggleStep(i){const b=document.getElementById(`step-body-${i}`);if(!b)return;b.classList.toggle('open');document.getElementById(`step-${i}`).querySelector('.sh-arrow').classList.toggle('open');}
-function toggleCheck(key){state.checks[key]=!state.checks[key];saveState();render();}
-function goBack(){state.route=null;saveState();render();window.scrollTo(0,0);}
-
-// Translation
-function toggleTrans(){window._transOpen=!(window._transOpen!==false);renderTranslation();}
-function switchCat(c){window._transCat=c;renderTranslation();}
-function showPhrase(jp,cn){document.getElementById('soJp').textContent=jp;document.getElementById('soCn').textContent=cn;document.getElementById('showOverlay').classList.add('open');}
-function closeShow(){document.getElementById('showOverlay').classList.remove('open');}
-function swapDir(){window._trDir=(window._trDir||'zh2ja')==='zh2ja'?'ja2zh':'zh2ja';window._trResult='';window._trSource='';window._trError='';renderTranslation();}
-function autoResize(el){el.style.height='44px';el.style.height=el.scrollHeight+'px';}
+function closeTools(){document.getElementById('toolsPanel').classList.remove('open')}
+function switchTC(c){window._tc=c;openTools()}
+function esc(s){return s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}
+function showPhrase(jp,cn){document.getElementById('soJp').textContent=jp;document.getElementById('soCn').textContent=cn;document.getElementById('showOverlay').classList.add('open')}
+function closeShow(){document.getElementById('showOverlay').classList.remove('open')}
+function swapDir(){window._trDir=(window._trDir||'zh2ja')==='zh2ja'?'ja2zh':'zh2ja';window._trResult='';window._trSource='';window._trError='';openTools()}
 async function doTranslate(){
-  const input=document.getElementById('trInput');const text=input.value.trim();if(!text)return;
+  const text=document.getElementById('trInput').value.trim();if(!text)return;
   const dir=window._trDir||'zh2ja';const sl=dir==='zh2ja'?'zh-CN':'ja';const tl=dir==='zh2ja'?'ja':'zh-CN';
-  window._trLoading=true;window._trSource=text;window._trError='';renderTranslation();
-  try{
-    const r=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);
-    if(!r.ok)throw 0;const d=await r.json();window._trResult=d[0].map(s=>s[0]).join('');
-  }catch(e){window._trResult='';window._trError='翻译失败，请检查网络';}
-  window._trLoading=false;renderTranslation();
-}
-
-// Senior mode
-function toggleSenior(){
-  seniorMode=!seniorMode;
-  document.body.classList.toggle('senior',seniorMode);
-  localStorage.setItem('narita-senior',seniorMode?'1':'0');
-  render();
+  window._trLoading=true;window._trSource=text;window._trError='';openTools();
+  try{const r=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`);if(!r.ok)throw 0;const d=await r.json();window._trResult=d[0].map(s=>s[0]).join('')}
+  catch(e){window._trResult='';window._trError='翻译失败'}
+  window._trLoading=false;openTools();
 }
 
 // PWA
 let deferredPrompt;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-function installPWA(){
-  if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null;}
-  else{alert('请使用浏览器的"添加到主屏幕"功能\nブラウザの「ホーム画面に追加」を使ってください');}
-}
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
+function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}else alert('请用浏览器的"添加到主屏幕"功能')}
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
 
 // Confetti
-function showConfetti(){
-  const c=document.createElement('div');c.className='confetti';
-  const colors=['#6366f1','#ec4899','#22c55e','#eab308','#14b8a6','#f87171'];
-  for(let i=0;i<40;i++){
-    const s=document.createElement('span');
-    s.style.cssText=`left:${Math.random()*100}%;top:${-Math.random()*20}%;background:${colors[i%colors.length]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;
-    c.appendChild(s);
-  }
-  document.body.appendChild(c);
-  setTimeout(()=>c.remove(),5000);
-}
+function showConfetti(){const c=document.createElement('div');c.className='confetti';const cols=['#818cf8','#f472b6','#4ade80','#fbbf24','#2dd4bf','#f87171'];for(let i=0;i<40;i++){const s=document.createElement('span');s.style.cssText=`left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;c.appendChild(s)}document.body.appendChild(c);setTimeout(()=>c.remove(),5000)}
 
-// ===== INIT =====
+// INIT
 render();
 </script>
 </body>

@@ -68,30 +68,103 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC"
 /* Card area */
 .card-area{flex:1;display:flex;flex-direction:column;padding:16px}
 
-/* Visual area - the big illustration */
-.visual{flex:1;min-height:260px;border-radius:20px;padding:20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;margin-bottom:16px}
+/* Visual area */
+.visual{flex:1;min-height:300px;border-radius:20px;padding:20px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden;margin-bottom:16px}
 .visual::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(129,140,248,.08),rgba(192,132,252,.05));border-radius:20px;border:1px solid rgba(129,140,248,.15)}
 .c2 .visual::before{background:linear-gradient(135deg,rgba(45,212,191,.08),rgba(110,231,183,.05));border-color:rgba(45,212,191,.15)}
+.visual>*{position:relative;z-index:1}
 
-/* Floor diagram inside visual */
-.v-floor{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;margin:3px 0;position:relative;z-index:1}
-.v-floor.here{background:var(--accent-bg);border:1px solid var(--accent-border)}
-.c2 .v-floor.here{background:var(--teal-bg);border:1px solid var(--teal-border)}
-.v-floor .vf-tag{font-size:.65em;font-weight:800;color:var(--text3);width:36px;flex-shrink:0;text-align:center}
-.v-floor .vf-body{flex:1;font-size:.8em;color:var(--text2);line-height:1.5}
-.v-floor .vf-body b{color:var(--text)}
-.v-floor .vf-you{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 1.5s infinite;margin-right:6px;vertical-align:middle}
-.c2 .vf-you{background:var(--teal);box-shadow:0 0 10px var(--teal)}
-.v-arrow{text-align:center;font-size:18px;color:var(--text3);animation:bounce .8s infinite;margin:2px 0}
-.v-line{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:middle}
-.v-line.keisei{background:#3b82f6}.v-line.hanzomon{background:#a855f7}.v-line.shinjuku{background:#22c55e}.v-line.access{background:#ef4444}
-.v-icon{font-size:40px;text-align:center;margin:8px 0;filter:drop-shadow(0 0 12px rgba(255,255,255,.2))}
-.v-train{text-align:center;padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px dashed var(--border);margin:6px 0}
-.v-train .vt-line{font-size:.7em;color:var(--text3)}
-.v-train .vt-name{font-size:1em;font-weight:700;margin:4px 0}
-.v-train .vt-dir{font-size:.75em;color:var(--accent)}
-.c2 .v-train .vt-dir{color:var(--teal)}
-.v-train .vt-time{font-size:.7em;color:var(--text3);margin-top:4px}
+/* Station sign */
+.sign{width:90%;max-width:320px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.sign .sign-bar{height:10px}
+.sign .sign-bar.blue{background:#2563eb}.sign .sign-bar.purple{background:#9333ea}.sign .sign-bar.green{background:#16a34a}.sign .sign-bar.red{background:#dc2626}
+.sign .sign-body{background:#fff;padding:16px;text-align:center}
+.sign .sign-jp{font-size:1.4em;font-weight:900;color:#1a1a1a;letter-spacing:2px}
+.sign .sign-en{font-size:.65em;color:#888;margin-top:2px;letter-spacing:1px}
+.sign .sign-num{display:inline-block;background:#eee;border-radius:6px;padding:2px 12px;font-size:.65em;font-weight:700;color:#555;margin-top:6px}
+.sign .sign-arrow{font-size:1.5em;margin-top:8px;animation:bounce .8s infinite}
+
+/* Ticket machine */
+.machine{width:180px;background:linear-gradient(180deg,#d1d5db,#9ca3af);border-radius:12px;padding:12px;box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.machine .m-screen{background:#1a1a2e;border-radius:8px;padding:14px;margin-bottom:10px;text-align:center}
+.machine .m-screen span{display:block;color:#4ade80;font-size:.7em;font-weight:700;line-height:1.6}
+.machine .m-slot{background:#374151;border-radius:4px;height:6px;width:60%;margin:0 auto 8px}
+.machine .m-btns{display:flex;gap:6px;justify-content:center}
+.machine .m-btns span{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+.machine .m-btns .m-charge{background:#22c55e;color:#fff;font-size:10px;font-weight:800;box-shadow:0 0 12px rgba(34,197,94,.5);animation:pulse 1.5s infinite}
+.machine .m-btns .m-gray{background:#6b7280}
+.machine .m-card{margin-top:10px;text-align:center}
+.machine .m-card span{display:inline-block;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:6px;padding:6px 18px;font-size:.6em;color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(99,102,241,.4)}
+
+/* Gate / 改札 */
+.gate{display:flex;gap:4px;align-items:flex-end}
+.gate .g-panel{width:40px;height:120px;background:linear-gradient(180deg,#6b7280,#4b5563);border-radius:6px 6px 0 0;position:relative}
+.gate .g-panel .g-sensor{position:absolute;top:20px;left:50%;transform:translateX(-50%);width:28px;height:28px;border-radius:6px;background:#1f2937;display:flex;align-items:center;justify-content:center;border:2px solid var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 1.5s infinite}
+.gate .g-panel .g-sensor span{font-size:12px}
+.gate .g-bar{width:60px;height:3px;background:#ef4444;margin-bottom:60px;border-radius:2px}
+.gate .g-bar.open{background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.5)}
+
+/* Platform layout */
+.platform{width:90%;max-width:300px}
+.platform .p-track{height:12px;background:repeating-linear-gradient(90deg,#374151 0px,#374151 20px,#1f2937 20px,#1f2937 30px);border-radius:2px;margin:6px 0}
+.platform .p-area{background:rgba(255,255,255,.08);border-radius:8px;padding:12px;display:flex;align-items:center;gap:10px;border:1px solid var(--border)}
+.platform .p-area.active{border-color:var(--accent);background:var(--accent-bg);box-shadow:0 0 12px var(--accent-bg)}
+.platform .p-area .p-num{font-size:1.8em;font-weight:900;color:var(--accent);width:50px;text-align:center}
+.platform .p-area .p-info{font-size:.7em;color:var(--text2);line-height:1.5}
+.platform .p-area .p-info b{color:var(--text)}
+.platform .p-warn{text-align:center;margin-top:8px;font-size:.7em;color:var(--red);font-weight:700}
+
+/* Train route line */
+.routeline{width:90%;max-width:300px;padding:10px 0}
+.routeline .rl-header{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.routeline .rl-color{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;font-weight:900}
+.rl-color.blue{background:#2563eb}.rl-color.purple{background:#9333ea}.rl-color.green{background:#16a34a}.rl-color.red{background:#dc2626}
+.routeline .rl-name{font-size:.9em;font-weight:700}
+.routeline .rl-dir{font-size:.7em;color:var(--text2)}
+.routeline .rl-stops{position:relative;padding-left:20px}
+.routeline .rl-line{position:absolute;left:8px;top:0;bottom:0;width:4px;border-radius:2px}
+.rl-line.blue{background:#2563eb}.rl-line.purple{background:#9333ea}.rl-line.green{background:#16a34a}.rl-line.red{background:#dc2626}
+.routeline .rl-stop{position:relative;padding:8px 0 8px 16px;font-size:.75em;color:var(--text3)}
+.routeline .rl-stop::before{content:'';position:absolute;left:-4px;top:50%;transform:translateY(-50%);width:12px;height:12px;border-radius:50%;background:var(--bg);border:3px solid var(--text3)}
+.routeline .rl-stop.from::before{background:var(--accent);border-color:var(--accent);box-shadow:0 0 8px var(--accent)}
+.routeline .rl-stop.from{color:var(--text);font-weight:700}
+.routeline .rl-stop.to::before{background:var(--green);border-color:var(--green);box-shadow:0 0 8px var(--green)}
+.routeline .rl-stop.to{color:var(--green);font-weight:700}
+.routeline .rl-stop .rl-dur{position:absolute;right:0;top:50%;transform:translateY(-50%);font-size:.9em;color:var(--text3)}
+.routeline .rl-time{text-align:center;margin-top:10px;font-size:.75em;color:var(--text3);background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px}
+
+/* Floor cross-section */
+.floors{width:85%;max-width:280px}
+.floors .fl-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;margin:4px 0}
+.floors .fl-row.here{background:var(--accent-bg);border:1px solid var(--accent-border)}
+.c2 .floors .fl-row.here{background:var(--teal-bg);border:1px solid var(--teal-border)}
+.floors .fl-tag{font-size:.8em;font-weight:900;color:var(--text3);width:40px;text-align:center;flex-shrink:0}
+.floors .fl-row.here .fl-tag{color:var(--accent)}
+.c2 .floors .fl-row.here .fl-tag{color:var(--teal)}
+.floors .fl-body{flex:1;font-size:.8em;color:var(--text2);line-height:1.5}
+.floors .fl-body b{color:var(--text)}
+.floors .fl-icon{font-size:1.3em;flex-shrink:0}
+.floors .fl-you{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);animation:pulse 1.5s infinite;margin-right:6px;vertical-align:middle}
+.c2 .floors .fl-you{background:var(--teal);box-shadow:0 0 10px var(--teal)}
+.floors .fl-arrow{text-align:center;font-size:24px;color:var(--text3);animation:bounce .8s infinite;margin:2px 0}
+.floors .fl-esc{text-align:center;font-size:.65em;color:var(--text3);margin:2px 0}
+
+/* Walk path */
+.walkpath{width:85%;max-width:300px;position:relative}
+.walkpath .wp-road{height:50px;background:repeating-linear-gradient(90deg,#374151 0,#374151 40px,#fbbf24 40px,#fbbf24 42px,#374151 42px,#374151 82px);border-radius:6px;margin:12px 0;position:relative}
+.walkpath .wp-road::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,var(--accent) 0%,var(--accent) 30%,transparent 30%);border-radius:6px;opacity:.2;animation:walkProgress 3s ease infinite}
+.walkpath .wp-from,.walkpath .wp-to{display:flex;align-items:center;gap:8px;font-size:.8em}
+.walkpath .wp-from .wp-dot{width:12px;height:12px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.walkpath .wp-to .wp-dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green)}
+.walkpath .wp-time{text-align:center;font-size:2em;font-weight:900;color:var(--text);margin:8px 0}
+.walkpath .wp-label{text-align:center;font-size:.7em;color:var(--text3)}
+
+/* Arrival */
+.arrival{text-align:center}
+.arrival .ar-emoji{font-size:80px;margin-bottom:12px;animation:bounce .8s infinite}
+.arrival .ar-name{font-size:1.5em;font-weight:900;background:linear-gradient(135deg,#4ade80,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+@keyframes walkProgress{0%{width:0}50%{width:100%}100%{width:100%}}
 
 /* Instruction */
 .instruction{margin-bottom:12px}
@@ -198,84 +271,138 @@ body.senior .show-overlay .so-jp{font-size:2.8em}
 <div class="tools-panel" id="toolsPanel"></div>
 
 <script>
-// ===== DATA: each sub-step is a "card" =====
+// ===== DATA =====
+// Visual HTML generators
+function vSign(jp,en,barColor,num,arrow){
+  return `<div class="sign"><div class="sign-bar ${barColor}"></div><div class="sign-body">
+    <div class="sign-jp">${jp}</div><div class="sign-en">${en}</div>
+    ${num?`<div class="sign-num">${num}</div>`:''}
+    ${arrow?`<div class="sign-arrow">${arrow}</div>`:''}
+  </div></div>`;
+}
+function vMachine(){
+  return `<div class="machine">
+    <div class="m-screen"><span>チャージ</span><span style="color:#fbbf24">充值 Charge</span></div>
+    <div class="m-slot"></div>
+    <div class="m-btns"><span class="m-gray"></span><span class="m-charge">充值</span><span class="m-gray"></span></div>
+    <div class="m-card"><span>💳 Suica / PASMO</span></div>
+  </div>`;
+}
+function vGate(open){
+  return `<div class="gate">
+    <div class="g-panel"><div class="g-sensor"><span>💳</span></div></div>
+    <div class="g-bar ${open?'open':''}"></div>
+    <div class="g-panel"></div>
+    <div class="g-bar ${open?'open':''}"></div>
+    <div class="g-panel"></div>
+  </div>`;
+}
+function vPlatform(num,label,warnText){
+  return `<div class="platform">
+    <div class="p-track"></div>
+    <div class="p-area active"><div class="p-num">${num}</div><div class="p-info"><b>${label}</b></div></div>
+    <div class="p-track"></div>
+    ${warnText?`<div class="p-warn">✕ ${warnText}</div>`:''}
+  </div>`;
+}
+function vRoute(color,name,from,to,midStops,dur){
+  let stops=`<div class="rl-stop from">${from}</div>`;
+  if(midStops) midStops.forEach(s=>{stops+=`<div class="rl-stop">${s}</div>`});
+  stops+=`<div class="rl-stop to">${to}<span class="rl-dur">🚃</span></div>`;
+  return `<div class="routeline">
+    <div class="rl-header"><div class="rl-color ${color}">🚃</div><div><div class="rl-name">${name}</div></div></div>
+    <div class="rl-stops"><div class="rl-line ${color}"></div>${stops}</div>
+    <div class="rl-time">⏱ ${dur}</div>
+  </div>`;
+}
+function vFloors(rows){
+  // rows: [{tag,text,here,icon}]
+  let h='<div class="floors">';
+  rows.forEach((r,i)=>{
+    if(r.tag==='↓'){h+=`<div class="fl-arrow">↓</div><div class="fl-esc">🔽 扶梯 / エスカレーター</div>`;return}
+    h+=`<div class="fl-row ${r.here?'here':''}">
+      <span class="fl-tag">${r.tag}</span>
+      <span class="fl-body">${r.here?'<span class="fl-you"></span>':''}${r.text}</span>
+      ${r.icon?`<span class="fl-icon">${r.icon}</span>`:''}
+    </div>`;
+  });
+  return h+'</div>';
+}
+function vWalk(from,to,time){
+  return `<div class="walkpath">
+    <div class="wp-from"><div class="wp-dot"></div><span>${from}</span></div>
+    <div class="wp-road"></div>
+    <div class="wp-to"><div class="wp-dot"></div><span>${to}</span></div>
+    <div class="wp-time">🚶 ${time}</div>
+    <div class="wp-label">沿国道14号直走 / 国道14号沿い</div>
+  </div>`;
+}
+function vArrival(){
+  return `<div class="arrival"><div class="ar-emoji">🏠</div><div class="ar-name">西大島駅</div></div>`;
+}
+
 const ROUTES=[
 {
   id:1,cls:'',label:'路线①',name:'Access特快',badge:'快速推荐',
   stops:['成田空港','押上','住吉','西大島'],
   meta:['⏱ 70-80min','💰 ~1500¥','🔄 2次站内'],
   cards:[
-    // --- Step 0: Charge ---
     {
-      instruction:{cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
-      visual:'icon', icon:'🔍',
-      map:[{tag:'1F',text:'到着ロビー',here:true}],
-      tip:{cn:'跟着「京成線 Keisei」的标识牌走',jp:'「京成線」の案内に従ってください'},
+      instruction:{cn:'跟着这个标识走',jp:'この案内に従ってください'},
+      vis:()=>vSign('京成線','Keisei Line','blue','','↓ 跟着走'),
+      tip:{cn:'在到达大厅找「京成線」标识',jp:'到着ロビーで「京成線」の案内を探す'},
     },
     {
-      instruction:{cn:'给IC卡充值 2000日元以上',jp:'ICカードに2000円以上チャージ'},
-      visual:'icon', icon:'💳',
-      map:[{tag:'1F',text:'京成線 券売機',here:true}],
-      tip:{cn:'售票机有中文界面，按"チャージ"按钮',jp:'券売機には中国語表示あり'},
+      instruction:{cn:'给IC卡充值 2000日元',jp:'ICカードに2000円チャージ'},
+      vis:vMachine,
+      tip:{cn:'按绿色"チャージ"按钮，有中文界面',jp:'緑のボタンを押す。中国語表示あり'},
     },
-    // --- Step 1: Narita → Oshiage ---
     {
       instruction:{cn:'下到地下 B1F',jp:'B1Fへ降りる'},
-      visual:'floors',
-      map:[{tag:'1F',text:'到着ロビー'},{tag:'↓',text:''},{tag:'B1F',text:'京成線 改札口',here:true}],
+      vis:()=>vFloors([{tag:'1F',text:'到着ロビー（现在在这里）',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}]),
     },
     {
       instruction:{cn:'刷IC卡进改札',jp:'ICカードで改札を入る'},
-      visual:'icon', icon:'🚪',
-      map:[{tag:'B1F',text:'改札口（检票口）',here:true}],
+      vis:()=>vGate(true),
     },
     {
       instruction:{cn:'去1号站台',jp:'1番ホームへ'},
-      visual:'platform',
-      map:[{tag:'B1F',text:'<b>→ 1号站台</b>（アクセス特急专用）',here:true}],
-      warn:{cn:'不要通过「中间改札口」！直接去1号站台！',jp:'「中間改札口」を通らず、直接1番ホームへ！'},
+      vis:()=>vPlatform('1','アクセス特急 専用ホーム','不要通过中间改札口！'),
+      warn:{cn:'直接去1号站台！不要通过「中间改札口」！',jp:'直接1番ホームへ！「中間改札口」を通らない！'},
     },
     {
-      instruction:{cn:'坐 Access特快 → 押上',jp:'アクセス特急に乗車 → 押上'},
-      visual:'train',
-      train:{line:'access',lineName:'アクセス特急',dir:'押上・羽田空港方面',time:'约60分钟'},
-      warn:{cn:'不要坐「スカイライナー」！那个很贵！',jp:'スカイライナーは別料金！'},
-      link:{text:'成田空港 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+      instruction:{cn:'坐这趟车去押上',jp:'この電車に乗って押上へ'},
+      vis:()=>vRoute('red','アクセス特急','成田空港','押上',['東松戸','新鎌ヶ谷'],'约 60 分钟'),
+      warn:{cn:'不是「スカイライナー」！那个很贵！',jp:'スカイライナーではない！別料金！'},
+      link:{text:'成田空港站 构内图',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
     },
     {
-      instruction:{cn:'到达押上站，下车',jp:'押上駅で下車'},
-      visual:'icon', icon:'🚏',
-      map:[{tag:'',text:'🚃 → <b>押上駅</b> 到着！',here:true}],
-      tip:{cn:'不要出改札！直接换乘！',jp:'改札を出ないでください！'},
-    },
-    // --- Step 2: Oshiage → Sumiyoshi ---
-    {
-      instruction:{cn:'跟着「半蔵門線」标识走',jp:'「半蔵門線」の案内に従う'},
-      visual:'icon', icon:'🔍',
-      map:[{tag:'B1F',text:'押上駅（京成線ホーム）'},{tag:'↓',text:''},{tag:'B2F',text:'京成改札を出る → <span class="v-line hanzomon"></span>半蔵門線へ',here:true}],
+      instruction:{cn:'到押上站，下车',jp:'押上駅で下車'},
+      vis:()=>vSign('押上','Oshiage','blue','A20','⬇ 下车'),
+      tip:{cn:'不要出改札！直接换乘半蔵門線！',jp:'改札を出ずに半蔵門線へ乗り換え！'},
     },
     {
-      instruction:{cn:'坐半蔵門線 → 住吉（1站）',jp:'半蔵門線で住吉へ（1駅）'},
-      visual:'train',
-      train:{line:'hanzomon',lineName:'半蔵門線',dir:'渋谷方面',time:'1站'},
-      link:{text:'押上站 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
+      instruction:{cn:'跟着这个标识换乘',jp:'この案内に従って乗り換え'},
+      vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘'),
+      tip:{cn:'从B1F下到B3F',jp:'B1F→B2F→B3Fホームへ'},
+      link:{text:'押上站 构内图',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
     },
-    // --- Step 3: Sumiyoshi → Nishi-Ojima ---
     {
-      instruction:{cn:'同层换乘「都営新宿線」',jp:'同じフロアで「都営新宿線」に乗り換え'},
-      visual:'icon', icon:'🔄',
-      map:[{tag:'B3F',text:'住吉駅 → <span class="v-line shinjuku"></span><b>都営新宿線ホーム</b>',here:true}],
+      instruction:{cn:'坐半蔵門線去住吉',jp:'半蔵門線で住吉へ'},
+      vis:()=>vRoute('purple','半蔵門線','押上','住吉',[],'1 站'),
+    },
+    {
+      instruction:{cn:'同层换乘都営新宿線',jp:'同じフロアで都営新宿線へ'},
+      vis:()=>vSign('都営新宿線','Shinjuku Line','green','S13','→ 换乘'),
       tip:{cn:'同一层走过去就好，很近！',jp:'同じフロア内、すぐ近くです！'},
     },
     {
-      instruction:{cn:'坐都営新宿線 → 西大島（1站）',jp:'都営新宿線で西大島へ（1駅）'},
-      visual:'train',
-      train:{line:'shinjuku',lineName:'都営新宿線',dir:'本八幡方面',time:'1站'},
+      instruction:{cn:'坐都営新宿線去西大島',jp:'都営新宿線で西大島へ'},
+      vis:()=>vRoute('green','都営新宿線','住吉','西大島',[],'1 站'),
     },
     {
-      instruction:{cn:'到达西大島！出站到家！',jp:'西大島に到着！改札を出ればすぐ！'},
-      visual:'icon', icon:'🎉',
-      map:[{tag:'',text:'<b>🏠 西大島駅 到着！！</b>',here:true}],
+      instruction:{cn:'到家了！！',jp:'着きました！！'},
+      vis:vArrival,
       isFinal:true,
     },
   ],
@@ -286,65 +413,54 @@ const ROUTES=[
   meta:['⏱ 100-110min','💰 ~1300¥','🔄 1次+步行'],
   cards:[
     {
-      instruction:{cn:'找到京成线售票机',jp:'京成線の券売機を探す'},
-      visual:'icon', icon:'🔍',
-      map:[{tag:'1F',text:'到着ロビー',here:true}],
-      tip:{cn:'跟着「京成線 Keisei」标识牌走',jp:'「京成線」の案内に従ってください'},
+      instruction:{cn:'跟着这个标识走',jp:'この案内に従ってください'},
+      vis:()=>vSign('京成線','Keisei Line','blue','','↓ 跟着走'),
+      tip:{cn:'在到达大厅找「京成線」标识',jp:'到着ロビーで「京成線」の案内を探す'},
     },
     {
-      instruction:{cn:'给IC卡充值 2000日元以上',jp:'ICカードに2000円以上チャージ'},
-      visual:'icon', icon:'💳',
-      map:[{tag:'1F',text:'京成線 券売機',here:true}],
-      tip:{cn:'售票机有中文界面，按"チャージ"按钮',jp:'券売機には中国語表示あり'},
+      instruction:{cn:'给IC卡充值 2000日元',jp:'ICカードに2000円チャージ'},
+      vis:vMachine,
+      tip:{cn:'按绿色"チャージ"按钮，有中文界面',jp:'緑のボタンを押す。中国語表示あり'},
     },
     {
-      instruction:{cn:'下到地下，进改札',jp:'地下へ降りて改札を入る'},
-      visual:'floors',
-      map:[{tag:'1F',text:'到着ロビー'},{tag:'↓',text:''},{tag:'B1F',text:'京成線 改札口',here:true}],
+      instruction:{cn:'下到地下 B1F，进改札',jp:'B1Fへ降りて改札を入る'},
+      vis:()=>vFloors([{tag:'1F',text:'到着ロビー',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}]),
     },
     {
       instruction:{cn:'通过「中间改札口」',jp:'「中間改札口」を通る'},
-      visual:'icon', icon:'🚪',
-      map:[{tag:'B1F',text:'改札 → <b>中間改札口</b> → 京成本線ホーム',here:true}],
-      warn:{cn:'IC卡会刷两次，这是正常的！',jp:'ICカードで2回タッチは正常です！'},
+      vis:()=>vGate(true),
+      warn:{cn:'IC卡刷两次是正常的！别紧张！',jp:'ICカードで2回タッチは正常です！'},
     },
     {
-      instruction:{cn:'去2/3号站台，坐快速特急',jp:'2・3番ホームで快速特急に乗車'},
-      visual:'train',
-      train:{line:'keisei',lineName:'快速特急 / 特急',dir:'京成上野・押上方面',time:'约80分钟'},
-      link:{text:'成田空港 构内图（中文）',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
+      instruction:{cn:'去2/3号站台坐车',jp:'2・3番ホームで乗車'},
+      vis:()=>vRoute('blue','快速特急 / 特急','成田空港','京成八幡',['京成佐倉','京成船橋'],'约 80 分钟'),
+      link:{text:'成田空港站 构内图',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
     },
     {
-      instruction:{cn:'到达京成八幡站，下车',jp:'京成八幡駅で下車'},
-      visual:'icon', icon:'🚏',
-      map:[{tag:'',text:'🚃 → <b>京成八幡駅</b> 到着！',here:true}],
+      instruction:{cn:'到京成八幡站，下车',jp:'京成八幡駅で下車'},
+      vis:()=>vSign('京成八幡','Keisei Yawata','blue','KS16','⬇ 下车'),
     },
     {
-      instruction:{cn:'出站，往左走',jp:'改札を出て、左に曲がる'},
-      visual:'floors',
-      map:[{tag:'2F',text:'京成八幡駅（高架站）'},{tag:'↓',text:''},{tag:'1F',text:'出改札 → <b>左に曲がる</b>',here:true}],
+      instruction:{cn:'出站，下到1楼',jp:'改札を出て1Fへ'},
+      vis:()=>vFloors([{tag:'2F',text:'京成八幡駅（高架站台）',icon:'🚃'},{tag:'↓',text:''},{tag:'1F',text:'<b>出改札 → 出站</b>',here:true,icon:'🚶'}]),
     },
     {
-      instruction:{cn:'沿大马路走5分钟到本八幡站',jp:'国道14号沿い 徒歩5分で本八幡駅'},
-      visual:'icon', icon:'🚶',
-      map:[{tag:'',text:'京成八幡 →🚶5min→ <b>本八幡駅</b>（地下站入口）',here:true}],
-      warn:{cn:'带行李箱注意路面，约5-7分钟',jp:'スーツケースがある場合ご注意ください'},
+      instruction:{cn:'往左走5分钟到本八幡站',jp:'左に曲がり5分歩いて本八幡駅へ'},
+      vis:()=>vWalk('京成八幡駅','本八幡駅','5 min'),
+      warn:{cn:'带行李箱注意路面',jp:'スーツケースの場合ご注意'},
       link:{text:'京成八幡→本八幡 步行实拍',url:'https://eroom.earthrevo.jp/archives/7326'},
     },
     {
-      instruction:{cn:'进本八幡站，刷IC卡',jp:'本八幡駅に入り、ICカードで改札を通る'},
-      visual:'icon', icon:'🚪',
-      map:[{tag:'B1F',text:'<span class="v-line shinjuku"></span>都営新宿線 本八幡駅 改札',here:true}],
+      instruction:{cn:'进本八幡站，刷IC卡',jp:'本八幡駅に入り改札を通る'},
+      vis:()=>vGate(true),
     },
     {
-      instruction:{cn:'坐都営新宿線 → 西大島（6站）',jp:'都営新宿線で西大島へ（6駅）'},
-      visual:'train',
-      train:{line:'shinjuku',lineName:'都営新宿線',dir:'新宿方面',time:'约15分钟'},
+      instruction:{cn:'坐都営新宿線去西大島',jp:'都営新宿線で西大島へ'},
+      vis:()=>vRoute('green','都営新宿線','本八幡','西大島',['篠崎','瑞江','一之江','船堀','東大島'],'约 15 分钟（6站）'),
     },
     {
-      instruction:{cn:'到达西大島！出站到家！',jp:'西大島に到着！改札を出ればすぐ！'},
-      visual:'icon', icon:'🎉',
-      map:[{tag:'',text:'<b>🏠 西大島駅 到着！！</b>',here:true}],
+      instruction:{cn:'到家了！！',jp:'着きました！！'},
+      vis:vArrival,
       isFinal:true,
     },
   ],
@@ -451,29 +567,7 @@ function renderNav(route){
     <div class="card-area">`;
 
   // Visual
-  h+=`<div class="visual">`;
-  if(card.visual==='icon'&&card.icon){
-    h+=`<div class="v-icon">${card.icon}</div>`;
-  }
-  if(card.visual==='train'&&card.train){
-    const t=card.train;
-    h+=`<div class="v-train">
-      <div class="vt-line"><span class="v-line ${t.line}"></span>${t.lineName}</div>
-      <div class="vt-name">🚃 乘车中...</div>
-      <div class="vt-dir">${t.dir}</div>
-      <div class="vt-time">${t.time}</div>
-    </div>`;
-  }
-  if(card.map){
-    card.map.forEach(m=>{
-      if(m.tag==='↓'){h+=`<div class="v-arrow">↓</div>`;return}
-      h+=`<div class="v-floor ${m.here?'here':''}">
-        <span class="vf-tag">${m.tag}</span>
-        <span class="vf-body">${m.here?'<span class="vf-you"></span>':''}${m.text}</span>
-      </div>`;
-    });
-  }
-  h+=`</div>`;
+  h+=`<div class="visual">${card.vis?card.vis():''}</div>`;
 
   // Instruction
   h+=`<div class="instruction">

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成田空港→西大島 换乘指南</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",sans-serif;background:#f0f4f8;color:#333;max-width:480px;margin:0 auto;padding:12px}
+h1{text-align:center;font-size:20px;color:#1a365d;margin:12px 0 6px;line-height:1.3}
+.sub{text-align:center;font-size:13px;color:#666;margin-bottom:16px}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button{flex:1;padding:10px 4px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;transition:.2s}
+.tabs .on1{background:#e63946;color:#fff;box-shadow:0 2px 8px rgba(230,57,70,.3)}
+.tabs .on2{background:#2a9d8f;color:#fff;box-shadow:0 2px 8px rgba(42,157,143,.3)}
+.tabs .off{background:#fff;color:#666;border:1px solid #ddd}
+.rt{display:none}.rt.show{display:block}
+.box{background:#fff;border-radius:12px;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.06);border-left:4px solid #e63946}
+.g .box{border-left-color:#2a9d8f}
+.num{display:inline-block;width:26px;height:26px;border-radius:50%;background:#e63946;color:#fff;text-align:center;line-height:26px;font-size:13px;font-weight:700;margin-right:8px}
+.g .num{background:#2a9d8f}
+.ttl{font-size:15px;font-weight:700;display:inline}
+.cn{display:block;margin:8px 0 4px;font-size:14px;line-height:1.6}
+.jp{display:block;background:#f7f7f7;border-radius:6px;padding:8px 10px;font-size:13px;color:#555;line-height:1.6;margin-top:4px}
+.wrn{background:#fff3cd;border-radius:6px;padding:8px 10px;font-size:13px;color:#856404;margin-top:8px;line-height:1.5}
+.wrn::before{content:"⚠️ "}
+.tip{background:#d4edda;border-radius:6px;padding:8px 10px;font-size:13px;color:#155724;margin-top:8px;line-height:1.5}
+.tip::before{content:"💡 "}
+.ml{display:block;background:#e8f4fd;border:1px solid #bee3f8;border-radius:8px;padding:10px 12px;margin-top:8px;text-decoration:none;color:#2b6cb0;font-size:13px;font-weight:600;text-align:center;line-height:1.5}
+.ml:hover{background:#bee3f8}
+.ml::before{content:"🗺️ "}
+.ph{display:block;background:#f0f0f0;border:2px dashed #ccc;border-radius:8px;padding:20px 12px;margin-top:8px;text-align:center;color:#999;font-size:12px;line-height:1.5}
+.arr{text-align:center;font-size:22px;color:#999;margin:4px 0}
+.sm{color:#fff;border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;line-height:1.7}
+.sm b{color:#ffd700}
+.sm1{background:linear-gradient(135deg,#667eea,#764ba2)}
+.sm2{background:linear-gradient(135deg,#2a9d8f,#264653)}
+.hlp{background:#fff;border-radius:12px;padding:14px;margin-top:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.hlp h3{font-size:15px;margin-bottom:10px;color:#1a365d}
+.hi{background:#f7f7f7;border-radius:8px;padding:10px;margin-bottom:8px}
+.hj{font-size:16px;font-weight:700;color:#e63946;line-height:1.6}
+.hc{font-size:12px;color:#666;margin-top:2px}
+.sec{font-size:16px;font-weight:700;color:#1a365d;margin:16px 0 8px;padding-left:8px;border-left:3px solid #e63946}
+.g .sec{border-left-color:#2a9d8f}
+</style>
+</head>
+<body>
+
+<h1>✈️ 成田空港 → 西大島<br>换乘指南</h1>
+<p class="sub">中日双语 / 中日二ヶ国語ガイド</p>
+
+<div class="tabs">
+  <button class="on1" id="b1" onclick="sw(1)">路线① 快速 70分钟</button>
+  <button class="off" id="b2" onclick="sw(2)">路线② 便宜 100分钟</button>
+</div>
+
+<!-- ====== 路线① ====== -->
+<div class="rt show" id="p1">
+
+<div class="sm sm1">
+  <b>路线①</b> Access特快（快速推荐）<br>
+  成田空港 → 押上 → 住吉 → 西大島<br>
+  全程约<b>70-80分钟</b>｜费用约<b>1500日元</b><br>
+  换乘2次，全部站内换乘，不用出站
+</div>
+
+<div class="sec">🔋 第0步：给IC卡充值</div>
+<div class="box">
+  <span class="num">0</span><span class="ttl">给IC卡充值</span>
+  <span class="cn">到达成田机场后，先在<b>到达大厅</b>找到<b>京成线的售票机</b>，给手机里的IC卡（Suica/PASMO）充值<b>2000日元</b>以上。</span>
+  <span class="jp">到着ロビーで「京成線」の券売機を探して、ICカード（Suica/PASMO）に<b>2000円以上</b>チャージしてください。</span>
+  <div class="tip">充值机上有中文界面，按"チャージ"（充值）按钮即可。<br>券売機には中国語表示あり。「チャージ」ボタンを押す。</div>
+   <img src="https://prebell.so-net.ne.jp/content/so_net/prebell/tips/pre_23071101/_jcr_content/mainparsys/image_2130419092.img.jpg/1689007438993.jpg" alt="充值机"> 
+</div>
+
+<div class="sec">🚃 出发！</div>
+<div class="box">
+  <span class="num">1</span><span class="ttl">成田空港 → 押上</span>
+  <span class="cn">从到达大厅跟着<b>「京成線 / Keisei」</b>的标识走到<b>地下B1F</b>。<br>进改札后，去<b>1号站台</b>（アクセス特急专用）。<br>坐<b>「アクセス特急」</b>（Access特快），往<b>押上/羽田空港</b>方向。<br>坐到<b>押上</b>站下车。约<b>60分钟</b>。</span>
+  <span class="jp">到着ロビーから「京成線」の案内に従いB1Fへ。<br>改札を入って<b>1番ホーム</b>で「<b>アクセス特急</b>」押上・羽田空港方面に乗車。<br><b>押上駅</b>で下車。約60分。</span>
+  <div class="wrn">绝对不要坐「スカイライナー」！那个需要额外买特急券，很贵！<br>スカイライナーは別料金です！アクセス特急に乗ってください！</div>
+  <div class="wrn">进改札后注意：不要通过「中间改札口」！直接往1号站台走。<br>改札を入ったら「中間改札口」を通らず、直接1番ホームへ。</div>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">点击查看：成田空港站 官方构内图（中文版PDF）<br>成田空港駅 構内図を見る</a>
+</div>
+
+<div class="arr">⬇️</div>
+<div class="box">
+  <span class="num">2</span><span class="ttl">押上 → 住吉（换乘半蔵門線）</span>
+  <span class="cn">在押上站下车后，<b>不要出改札</b>！<br>跟着<b>「半蔵門線 Hanzōmon Line」</b>的换乘标识走。<br>从B1F下到<b>B2F</b>出京成改札，然后往<b>半蔵門線</b>方向走，到<b>B3F</b>站台。<br>坐<b>半蔵門線</b>往<b>渋谷方向</b>，坐<b>1站</b>到<b>住吉</b>。</span>
+  <span class="jp">押上駅で降りたら改札を出ずに「<b>半蔵門線</b>」乗り換え案内に従う。<br>B1F→B2F（京成改札出る）→半蔵門線方向→B3Fホーム。<br><b>半蔵門線 渋谷方面</b>に乗車、<b>1駅で住吉</b>。</span>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf" target="_blank">点击查看：押上站 京成构内图（中文版PDF）<br>押上駅 構内図を見る</a>
+  <a class="ml" href="https://tren.hatenablog.com/entry/z14-a20" target="_blank" style="background:#fff3cd;border-color:#ffc107;color:#856404">📸 点击查看：押上站换乘实拍图文教程（日文，有照片）<br>押上駅乗り換え写真付き解説を見る</a>
+</div>
+
+<div class="arr">⬇️</div>
+<div class="box">
+  <span class="num">3</span><span class="ttl">住吉 → 西大島</span>
+  <span class="cn">到住吉站后，跟着<b>「都営新宿線 Shinjuku Line」</b>标识换乘。<br>同一层走过去就好，很近。<br>坐<b>都営新宿線</b>往<b>本八幡方向</b>，坐<b>1站</b>到<b>西大島</b>！</span>
+  <span class="jp">住吉駅で「<b>都営新宿線</b>」案内に従い乗り換え。同じフロア内。<br><b>都営新宿線 本八幡方面</b>に乗車、<b>1駅で西大島</b>！</span>
+  <div class="tip">到了！出站就到家了！🎉<br>着きました！改札を出ればもうすぐです！</div>
+</div>
+</div>
+
+<!-- ====== 路线② ====== -->
+<div class="rt g" id="p2">
+
+<div class="sm sm2">
+  <b>路线②</b> 京成本線（便宜）<br>
+  成田空港 → 京成八幡 → 本八幡 → 西大島<br>
+  全程约<b>100-110分钟</b>｜费用约<b>1300日元</b><br>
+  换乘1次，但需要出站步行约5分钟
+</div>
+
+<div class="sec">🔋 第0步：给IC卡充值</div>
+<div class="box">
+  <span class="num">0</span><span class="ttl">给IC卡充值</span>
+  <span class="cn">到达成田机场后，先在<b>到达大厅</b>找到<b>京成线的售票机</b>，给手机里的IC卡（Suica/PASMO）充值<b>2000日元</b>以上。</span>
+  <span class="jp">到着ロビーで「京成線」の券売機を探して、ICカードに<b>2000円以上</b>チャージしてください。</span>
+  <div class="tip">充值机上有中文界面，按"チャージ"按钮即可。</div>
+   <img src="https://prebell.so-net.ne.jp/content/so_net/prebell/tips/pre_23071101/_jcr_content/mainparsys/image_2130419092.img.jpg/1689007438993.jpg" alt="充值机"> 
+</div>
+
+<div class="sec">🚃 出发！</div>
+<div class="box">
+  <span class="num">1</span><span class="ttl">成田空港 → 京成八幡</span>
+  <span class="cn">从到达大厅跟着<b>「京成線 / Keisei」</b>标识走到<b>地下</b>。<br>进改札后，需要通过<b>「中间改札口」</b>，到达京成本线专用站台。<br>去<b>2号或3号站台</b>，坐<b>「快速特急」或「特急」</b>，往<b>京成上野/押上</b>方向。<br>坐到<b>京成八幡</b>站下车。约<b>80分钟</b>。</span>
+  <span class="jp">「京成線」の案内に従い地下へ。改札を入り、<b>「中間改札口」を通って</b>京成本線ホームへ。<br><b>2・3番ホーム</b>で「<b>快速特急</b>」または「<b>特急</b>」京成上野・押上方面に乗車。<br><b>京成八幡駅</b>で下車。約80分。</span>
+  <div class="wrn">注意！京成本线和Access线的站台是<b>分开的</b>！必须通过「中间改札口」才能到2/3号站台。<br>IC卡刷两次改札是正常的，不要紧张。<br>ICカードで2回タッチは正常です。</div>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">点击查看：成田空港站 官方构内图（中文版PDF）<br>成田空港駅 構内図を見る</a>
+</div>
+
+<div class="arr">⬇️</div>
+<div class="box">
+  <span class="num">2</span><span class="ttl">京成八幡 → 步行 → 本八幡</span>
+  <span class="cn">京成八幡是<b>高架站</b>（楼上）。下车后坐扶梯到1F，<b>出改札</b>。<br>出站后<b>往左走</b>，沿着大马路（国道14号）直走约<b>5分钟</b>，就能看到<b>本八幡站</b>的入口（地下站）。<br>进入<b>都営新宿線 本八幡站</b>。</span>
+  <span class="jp">京成八幡は高架駅です。下車後エスカレーターで1Fへ、改札を出ます。<br>出たら<b>左に曲がり</b>、国道14号沿いに約<b>5分</b>歩くと<b>本八幡駅</b>（都営新宿線・地下）の入口が見えます。</span>
+  <div class="wrn">带大行李箱的话走室外要注意，约5-7分钟路程。<br>スーツケースがある場合、歩道にご注意ください。</div>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf" target="_blank">点击查看：京成八幡站 官方构内图（中文版PDF）<br>京成八幡駅 構内図を見る</a>
+  <a class="ml" href="https://eroom.earthrevo.jp/archives/7326" target="_blank" style="background:#fff3cd;border-color:#ffc107;color:#856404">📸 点击查看：京成八幡→本八幡 步行实拍教程（有照片）<br>京成八幡→本八幡 写真付き乗り換え解説を見る</a>
+</div>
+
+<div class="arr">⬇️</div>
+<div class="box">
+  <span class="num">3</span><span class="ttl">本八幡 → 西大島</span>
+  <span class="cn">进入本八幡站（地下站），刷IC卡进改札。<br>坐<b>都営新宿線</b>往<b>新宿方向</b>，坐约<b>15分钟</b>（6站）到<b>西大島</b>！</span>
+  <span class="jp">本八幡駅に入り、ICカードで改札を通ります。<br><b>都営新宿線 新宿方面</b>に乗車、約<b>15分（6駅）</b>で<b>西大島</b>！</span>
+  <div class="tip">到了！出站就到家了！🎉<br>着きました！改札を出ればもうすぐです！</div>
+</div>
+</div>
+
+<!-- 求助用语 -->
+<div class="hlp">
+  <h3>🆘 万一迷路了？给日本人看：</h3>
+  <div class="hi"><div class="hj">西大島駅に行きたいです。</div><div class="hc">我想去西大島站。</div></div>
+  <div class="hi"><div class="hj">都営新宿線はどこですか？</div><div class="hc">都营新宿线在哪里？</div></div>
+  <div class="hi"><div class="hj">押上駅で半蔵門線に乗り換えたいです。</div><div class="hc">我想在押上站换乘半蔵門线。</div></div>
+  <div class="hi"><div class="hj">京成八幡駅から本八幡駅はどう行きますか？</div><div class="hc">从京成八幡到本八幡怎么走？</div></div>
+  <div class="hi"><div class="hj">ICカードにチャージしたいです。</div><div class="hc">我想给IC卡充值。</div></div>
+  <div class="hi"><div class="hj">すみません、この電車は押上に止まりますか？</div><div class="hc">请问这趟车停押上吗？</div></div>
+</div>
+
+<!-- 官方资源 -->
+<div class="hlp" style="margin-top:12px">
+  <h3>📎 官方构内图（中文版）</h3>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf" target="_blank">成田空港站（第1航站楼）</a>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/144.pdf" target="_blank">成田空港第2候机楼站</a>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf" target="_blank">押上站</a>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/213.pdf" target="_blank">京成八幡站</a>
+  <a class="ml" href="https://www.keisei.co.jp/keisei/tetudou/skyliner/tc/traffic/index.php" target="_blank">京成电铁 交通指南（中文官网）</a>
+  <a class="ml" href="https://www.narita-airport.jp/zh-sc/access/train/" target="_blank">成田机场官网 电车交通（简体中文）</a>
+</div>
+
+<p style="text-align:center;font-size:11px;color:#999;margin-top:16px">制作日期：2026年2月 ｜ 信息仅供参考，以现场实际为准</p>
+
+<script>
+function sw(n){
+  document.getElementById('p1').className=n===1?'rt show':'rt';
+  document.getElementById('p2').className=n===2?'rt g show':'rt g';
+  document.getElementById('b1').className=n===1?'on1':'off';
+  document.getElementById('b2').className=n===2?'on2':'off';
+}
+</script>
+</body>
+</html>

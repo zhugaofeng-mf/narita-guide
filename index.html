@@ -123,6 +123,27 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC"
 .show-overlay .so-cn{font-size:14px;color:rgba(255,255,255,.5);text-align:center}
 .show-overlay .so-close{font-size:12px;color:rgba(255,255,255,.3);margin-top:30px}
 
+/* Translator */
+.translator{margin-top:14px;padding-top:14px;border-top:1px solid #eee}
+.translator .tr-label{font-size:13px;font-weight:700;color:#1a365d;margin-bottom:8px}
+.translator .tr-input-wrap{display:flex;gap:8px}
+.translator textarea{flex:1;border:1px solid #ddd;border-radius:10px;padding:10px 12px;font-size:14px;font-family:inherit;resize:none;height:44px;line-height:1.4;outline:none;transition:border-color .15s}
+.translator textarea:focus{border-color:#667eea}
+.translator .tr-btn{width:52px;border:none;border-radius:10px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;font-size:14px;font-weight:700;cursor:pointer;flex-shrink:0;transition:.15s}
+.translator .tr-btn:active{transform:scale(.95);opacity:.9}
+.translator .tr-btn:disabled{opacity:.5}
+.translator .tr-swap{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0;font-size:12px;color:#888}
+.translator .tr-swap button{background:none;border:1px solid #ddd;border-radius:6px;padding:2px 10px;font-size:16px;cursor:pointer;color:#666}
+.translator .tr-swap button:active{background:#f0f0f0}
+.tr-result{margin-top:10px;display:none}
+.tr-result.show{display:block}
+.tr-result-card{background:#f0f4f8;border-radius:10px;padding:14px;cursor:pointer;transition:.15s}
+.tr-result-card:active{background:#e2e8f0}
+.tr-result-card .trc-target{font-size:18px;font-weight:700;color:#e63946;line-height:1.5}
+.tr-result-card .trc-source{font-size:12px;color:#888;margin-top:4px}
+.tr-result-card .trc-hint{font-size:10px;color:#bbb;margin-top:6px}
+.tr-error{margin-top:8px;font-size:12px;color:#e63946}
+
 /* Footer */
 .footer{text-align:center;font-size:11px;color:#999;padding:16px 14px}
 
@@ -587,6 +608,37 @@ function renderTranslation(){
       </div>`;
   });
 
+  // Translator
+  const trDir = window._trDir || 'zh2ja';
+  const srcLabel = trDir === 'zh2ja' ? '中文' : '日本語';
+  const tgtLabel = trDir === 'zh2ja' ? '日本語' : '中文';
+  const trResult = window._trResult || '';
+  const trSource = window._trSource || '';
+  const trError = window._trError || '';
+  const trLoading = window._trLoading || false;
+
+  html += `
+    <div class="translator">
+      <div class="tr-label">✏️ 实时翻译 / リアルタイム翻訳</div>
+      <div class="tr-swap">
+        <span>${srcLabel}</span>
+        <button onclick="swapDir()">⇄</button>
+        <span>${tgtLabel}</span>
+      </div>
+      <div class="tr-input-wrap">
+        <textarea id="trInput" placeholder="${trDir==='zh2ja'?'输入中文...':'日本語を入力...'}" oninput="autoResize(this)">${trSource}</textarea>
+        <button class="tr-btn" onclick="doTranslate()" ${trLoading?'disabled':''}>${trLoading?'...':'翻译'}</button>
+      </div>
+      ${trError ? `<div class="tr-error">${trError}</div>` : ''}
+      <div class="tr-result ${trResult?'show':''}">
+        <div class="tr-result-card" onclick="showPhrase('${esc(trDir==='zh2ja'?trResult:trSource)}','${esc(trDir==='zh2ja'?trSource:trResult)}')">
+          <div class="trc-target">${trResult}</div>
+          <div class="trc-source">${trSource}</div>
+          <div class="trc-hint">点击放大给对方看 / タップして拡大表示</div>
+        </div>
+      </div>
+    </div>`;
+
   html += `</div></div>
     <div class="footer">制作日期：2026年2月 ｜ 信息仅供参考，以现场实际为准</div>`;
 
@@ -658,6 +710,51 @@ function showPhrase(jp, cn){
 }
 function closeShow(){
   document.getElementById('showOverlay').classList.remove('open');
+}
+
+// Translator
+function swapDir(){
+  window._trDir = (window._trDir || 'zh2ja') === 'zh2ja' ? 'ja2zh' : 'zh2ja';
+  window._trResult = '';
+  window._trSource = '';
+  window._trError = '';
+  renderTranslation();
+}
+
+function autoResize(el){
+  el.style.height = '44px';
+  el.style.height = el.scrollHeight + 'px';
+}
+
+async function doTranslate(){
+  const input = document.getElementById('trInput');
+  const text = input.value.trim();
+  if(!text) return;
+
+  const dir = window._trDir || 'zh2ja';
+  const sl = dir === 'zh2ja' ? 'zh-CN' : 'ja';
+  const tl = dir === 'zh2ja' ? 'ja' : 'zh-CN';
+
+  window._trLoading = true;
+  window._trSource = text;
+  window._trError = '';
+  renderTranslation();
+
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('请求失败');
+    const data = await res.json();
+    const translated = data[0].map(s => s[0]).join('');
+    window._trResult = translated;
+    window._trError = '';
+  } catch(e) {
+    window._trResult = '';
+    window._trError = '翻译失败，请检查网络 / 翻訳に失敗しました';
+  }
+
+  window._trLoading = false;
+  renderTranslation();
 }
 
 // ===== INIT =====

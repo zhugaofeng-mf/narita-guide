@@ -1,7 +1,7 @@
 {
-  "name": "成田→西大島 换乘指南",
-  "short_name": "换乘指南",
-  "description": "成田空港到西大島的中日双语换乘指南",
+  "name": "成田空港 换乘导航",
+  "short_name": "成田导航",
+  "description": "成田空港出发的中日双语换乘导航，支持多个目的地",
   "start_url": "/narita-guide/",
   "display": "standalone",
   "background_color": "#0a0e1a",

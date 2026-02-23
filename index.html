@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
-<title>成田→西大島 导航</title>
+<title>成田空港 换乘导航</title>
 <style>
 :root{
   --bg:#0a0e1a;--bg2:#111827;--card:rgba(255,255,255,.06);--border:rgba(255,255,255,.1);
@@ -164,6 +164,87 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans SC"
 .arrival .ar-emoji{font-size:80px;margin-bottom:12px;animation:bounce .8s infinite}
 .arrival .ar-name{font-size:1.5em;font-weight:900;background:linear-gradient(135deg,#4ade80,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 
+/* Departure board (LED) */
+.board{width:90%;max-width:320px;background:#111;border-radius:10px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.5);margin-top:14px}
+.board .bd-header{display:flex;padding:6px 12px;font-size:.5em;color:#555;border-bottom:1px solid #222}
+.board .bd-header span{flex:1}
+.board .bd-row{display:flex;padding:7px 12px;font-size:.65em;color:#4ade80;font-family:'Courier New',monospace;border-bottom:1px solid #1a1a1a}
+.board .bd-row span{flex:1}
+.board .bd-row.hl{color:#fbbf24;text-shadow:0 0 8px rgba(251,191,36,.5);animation:pulse 1.5s infinite}
+
+/* IC card tap */
+.ic-tap{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:14px}
+.ic-tap .tap-card{width:110px;height:70px;background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65em;font-weight:700;box-shadow:0 4px 16px rgba(99,102,241,.4);animation:tapMove 1.5s ease infinite}
+.ic-tap .tap-sensor{width:70px;height:70px;border-radius:50%;border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.3em;position:relative}
+.ic-tap .tap-sensor::after{content:'ピッ';position:absolute;top:-6px;right:-18px;font-size:.45em;color:var(--green);font-weight:700;opacity:0;animation:tapBeep 1.5s ease infinite}
+.ic-tap .tap-ok{font-size:.65em;color:var(--green);font-weight:700}
+@keyframes tapMove{0%,100%{transform:translateY(0)}40%,60%{transform:translateY(16px)}}
+@keyframes tapBeep{0%,50%{opacity:0}60%{opacity:1}100%{opacity:0}}
+
+/* Escalator */
+.esc-vis{display:flex;align-items:center;gap:12px;margin-top:12px}
+.esc-vis .esc-box{width:50px;height:90px;background:linear-gradient(180deg,#374151,#1f2937);border-radius:8px;position:relative;overflow:hidden}
+.esc-vis .esc-steps{position:absolute;inset:4px;background:repeating-linear-gradient(180deg,#4b5563 0px,#4b5563 7px,#374151 7px,#374151 14px);border-radius:4px;animation:escMove 1s linear infinite}
+.esc-vis.up .esc-steps{animation-direction:reverse}
+.esc-vis .esc-label{font-size:.75em;color:var(--text2);line-height:1.5}
+.esc-vis .esc-label b{display:block;color:var(--text);font-size:1.1em}
+@keyframes escMove{0%{background-position:0 0}100%{background-position:0 14px}}
+
+/* Transfer corridor */
+.transfer{width:90%;max-width:320px;margin-top:14px}
+.transfer .tf-ends{display:flex;justify-content:space-between;align-items:center}
+.transfer .tf-end{text-align:center;padding:6px 10px;border-radius:8px;font-size:.65em;font-weight:700;background:var(--card);border:1px solid var(--border)}
+.transfer .tf-end .tf-dot{width:28px;height:6px;border-radius:3px;margin:0 auto 4px}
+.transfer .tf-corridor{height:36px;margin:6px 0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 18px,transparent 18px,transparent 20px);border-radius:6px;border:1px dashed var(--border);display:flex;align-items:center;justify-content:center}
+.transfer .tf-corridor .tf-person{animation:tfWalk 2.5s linear infinite;font-size:1.1em}
+.transfer .tf-time{text-align:center;font-size:.65em;color:var(--text3)}
+@keyframes tfWalk{0%{transform:translateX(-50px)}100%{transform:translateX(50px)}}
+
+/* Exit sign */
+.exit-sign{background:#1a8c3a;border-radius:10px;padding:12px 20px;display:inline-flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(26,140,58,.3);margin-top:12px}
+.exit-sign .es-icon{font-size:1.8em}
+.exit-sign .es-body{color:#fff}
+.exit-sign .es-num{font-size:1.3em;font-weight:900;letter-spacing:2px}
+.exit-sign .es-sub{font-size:.6em;opacity:.8}
+
+/* Map frame */
+.map-frame{margin:12px 0;border-radius:14px;overflow:hidden;position:relative;border:1px solid var(--border)}
+.map-frame iframe{width:100%;height:200px;border:0;display:block}
+.map-frame .mf-label{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);color:#fff;font-size:.55em;padding:2px 8px;border-radius:4px;z-index:1;pointer-events:none}
+.map-fallback{display:none;padding:14px;text-align:center;background:var(--card);border-radius:14px;border:1px solid var(--border);font-size:.8em}
+.map-fallback a{color:var(--accent);text-decoration:none;font-weight:600}
+body.offline .map-frame{display:none}
+body.offline .map-fallback{display:block}
+
+/* Additional route colors */
+.sign .sign-bar.orange{background:#f59e0b}
+.rl-color.orange{background:#f59e0b}
+.rl-line.orange{background:#f59e0b}
+.rl-color.yellow{background:#eab308}
+.rl-line.yellow{background:#eab308}
+
+/* Landing: sections */
+.l-section{margin-top:20px}
+.ls-title{font-size:.7em;color:var(--text3);font-weight:700;letter-spacing:2px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.ls-title::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Preset grid */
+.preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.preset-item{border-radius:12px;padding:12px 6px;text-align:center;cursor:pointer;background:var(--card);border:1px solid var(--border);transition:.15s}
+.preset-item:active{transform:scale(.95);background:rgba(255,255,255,.1)}
+.preset-item .pi-emoji{font-size:1.4em;margin-bottom:4px}
+.preset-item .pi-name{font-size:.85em;font-weight:700}
+.preset-item .pi-via{font-size:.5em;color:var(--text3);margin-top:3px;line-height:1.3}
+
+/* Search section */
+.search-row{display:flex;gap:8px;margin-top:8px}
+.search-row input{flex:1;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:.85em;font-family:inherit;background:var(--card);color:var(--text);outline:none}
+.search-row input::placeholder{color:var(--text3)}
+.search-row input:focus{border-color:var(--accent)}
+.search-row button{padding:12px 18px;border:none;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;font-weight:700;font-size:.8em;cursor:pointer;white-space:nowrap}
+.search-row button:active{opacity:.8}
+.search-hint{font-size:.6em;color:var(--text3);margin-top:6px}
+
 @keyframes walkProgress{0%{width:0}50%{width:100%}100%{width:100%}}
 
 /* Instruction */
@@ -271,8 +352,7 @@ body.senior .show-overlay .so-jp{font-size:2.8em}
 <div class="tools-panel" id="toolsPanel"></div>
 
 <script>
-// ===== DATA =====
-// Visual HTML generators
+// ===== VISUAL GENERATORS =====
 function vSign(jp,en,barColor,num,arrow){
   return `<div class="sign"><div class="sign-bar ${barColor}"></div><div class="sign-body">
     <div class="sign-jp">${jp}</div><div class="sign-en">${en}</div>
@@ -316,7 +396,6 @@ function vRoute(color,name,from,to,midStops,dur){
   </div>`;
 }
 function vFloors(rows){
-  // rows: [{tag,text,here,icon}]
   let h='<div class="floors">';
   rows.forEach((r,i)=>{
     if(r.tag==='↓'){h+=`<div class="fl-arrow">↓</div><div class="fl-esc">🔽 扶梯 / エスカレーター</div>`;return}
@@ -328,22 +407,69 @@ function vFloors(rows){
   });
   return h+'</div>';
 }
-function vWalk(from,to,time){
+function vWalk(from,to,time,label){
   return `<div class="walkpath">
     <div class="wp-from"><div class="wp-dot"></div><span>${from}</span></div>
     <div class="wp-road"></div>
     <div class="wp-to"><div class="wp-dot"></div><span>${to}</span></div>
     <div class="wp-time">🚶 ${time}</div>
-    <div class="wp-label">沿国道14号直走 / 国道14号沿い</div>
+    ${label?`<div class="wp-label">${label}</div>`:''}
   </div>`;
 }
-function vArrival(){
-  return `<div class="arrival"><div class="ar-emoji">🏠</div><div class="ar-name">西大島駅</div></div>`;
+function vArrival(name){
+  return `<div class="arrival"><div class="ar-emoji">🏠</div><div class="ar-name">${name||'西大島駅'}</div></div>`;
 }
+// New visual generators
+function vBoard(lines){
+  let h='<div class="board"><div class="bd-header"><span>のりば</span><span>行先</span><span>発車</span></div>';
+  lines.forEach(l=>{h+=`<div class="bd-row ${l.hl?'hl':''}"><span>${l.num}</span><span>${l.dest}</span><span>${l.time}</span></div>`});
+  return h+'</div>';
+}
+function vTap(){
+  return `<div class="ic-tap"><div class="tap-card">💳 IC Card</div><div class="tap-sensor">📶</div><div class="tap-ok">✓ ピッ！通过</div></div>`;
+}
+function vEscalator(dir,from,to){
+  return `<div class="esc-vis ${dir}"><div class="esc-box"><div class="esc-steps"></div></div><div class="esc-label"><b>${dir==='down'?'⬇':'⬆'} ${to}</b>${from} → ${to}</div></div>`;
+}
+function vTransfer(from,fromColor,to,toColor,time){
+  return `<div class="transfer"><div class="tf-ends"><div class="tf-end"><div class="tf-dot" style="background:${fromColor}"></div>${from}</div><div class="tf-end"><div class="tf-dot" style="background:${toColor}"></div>${to}</div></div><div class="tf-corridor"><span class="tf-person">🚶</span></div><div class="tf-time">🚶 ${time}</div></div>`;
+}
+function vExit(num,sub){
+  return `<div class="exit-sign"><span class="es-icon">🚪</span><div class="es-body"><div class="es-num">出口 ${num}</div><div class="es-sub">${sub}</div></div></div>`;
+}
+
+// ===== ROUTE DATA =====
+// Common Narita departure cards (shared by presets)
+const COMMON_NARITA=[
+  {
+    instruction:{cn:'跟着京成線标识走',jp:'京成線の案内に従う'},
+    vis:()=>vSign('京成線','Keisei Line','blue','','↓ 跟着走'),
+    tip:{cn:'在到达大厅找「京成線」标识',jp:'到着ロビーで「京成線」の案内を探す'},
+    mapEmbed:'https://maps.google.com/maps?q=成田空港駅&z=16&output=embed',
+  },
+  {
+    instruction:{cn:'给IC卡充值 2000日元',jp:'ICカードに2000円チャージ'},
+    vis:()=>vMachine()+vTap(),
+    tip:{cn:'按绿色"チャージ"按钮，有中文界面',jp:'緑のボタンを押す。中国語表示あり'},
+  },
+  {
+    instruction:{cn:'下到B1F，刷IC卡进改札',jp:'B1Fへ降り、改札を入る'},
+    vis:()=>vFloors([{tag:'1F',text:'到着ロビー',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}])+vEscalator('down','1F','B1F'),
+  },
+  {
+    instruction:{cn:'去1号站台坐Access特快',jp:'1番ホームでアクセス特急に乗る'},
+    vis:()=>vPlatform('1','アクセス特急 → 押上方面','不要通过中间改札口！')+vBoard([{num:'1',dest:'押上方面 アクセス特急',time:'次発',hl:true},{num:'2',dest:'京成佐倉方面',time:'--:--'}]),
+    warn:{cn:'不是「スカイライナー」！那个很贵！',jp:'スカイライナーではない！別料金！'},
+  },
+  {
+    instruction:{cn:'乘车约60分钟到押上',jp:'約60分で押上に到着'},
+    vis:()=>vRoute('red','アクセス特急','成田空港','押上',['東松戸','新鎌ヶ谷'],'约 60 分钟'),
+  },
+];
 
 const ROUTES=[
 {
-  id:1,cls:'',label:'路线①',name:'Access特快',badge:'快速推荐',
+  id:1,cls:'',label:'路线①',name:'Access特快',badge:'快速推荐',dest:'西大島',
   stops:['成田空港','押上','住吉','西大島'],
   meta:['⏱ 70-80min','💰 ~1500¥','🔄 2次站内'],
   cards:[
@@ -351,23 +477,24 @@ const ROUTES=[
       instruction:{cn:'跟着这个标识走',jp:'この案内に従ってください'},
       vis:()=>vSign('京成線','Keisei Line','blue','','↓ 跟着走'),
       tip:{cn:'在到达大厅找「京成線」标识',jp:'到着ロビーで「京成線」の案内を探す'},
+      mapEmbed:'https://maps.google.com/maps?q=成田空港駅&z=16&output=embed',
     },
     {
       instruction:{cn:'给IC卡充值 2000日元',jp:'ICカードに2000円チャージ'},
-      vis:vMachine,
+      vis:()=>vMachine()+vTap(),
       tip:{cn:'按绿色"チャージ"按钮，有中文界面',jp:'緑のボタンを押す。中国語表示あり'},
     },
     {
       instruction:{cn:'下到地下 B1F',jp:'B1Fへ降りる'},
-      vis:()=>vFloors([{tag:'1F',text:'到着ロビー（现在在这里）',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}]),
+      vis:()=>vFloors([{tag:'1F',text:'到着ロビー（现在在这里）',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}])+vEscalator('down','1F','B1F'),
     },
     {
       instruction:{cn:'刷IC卡进改札',jp:'ICカードで改札を入る'},
-      vis:()=>vGate(true),
+      vis:()=>vGate(true)+vTap(),
     },
     {
       instruction:{cn:'去1号站台',jp:'1番ホームへ'},
-      vis:()=>vPlatform('1','アクセス特急 専用ホーム','不要通过中间改札口！'),
+      vis:()=>vPlatform('1','アクセス特急 専用ホーム','不要通过中间改札口！')+vBoard([{num:'1',dest:'押上方面 アクセス特急',time:'次発',hl:true},{num:'2',dest:'京成佐倉方面',time:'--:--'}]),
       warn:{cn:'直接去1号站台！不要通过「中间改札口」！',jp:'直接1番ホームへ！「中間改札口」を通らない！'},
     },
     {
@@ -380,10 +507,11 @@ const ROUTES=[
       instruction:{cn:'到押上站，下车',jp:'押上駅で下車'},
       vis:()=>vSign('押上','Oshiage','blue','A20','⬇ 下车'),
       tip:{cn:'不要出改札！直接换乘半蔵門線！',jp:'改札を出ずに半蔵門線へ乗り換え！'},
+      mapEmbed:'https://maps.google.com/maps?q=押上駅&z=17&output=embed',
     },
     {
       instruction:{cn:'跟着这个标识换乘',jp:'この案内に従って乗り換え'},
-      vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘'),
+      vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘')+vTransfer('京成線','#dc2626','半蔵門線','#9333ea','B1F→B3F 约3分')+vEscalator('down','B1F','B3F'),
       tip:{cn:'从B1F下到B3F',jp:'B1F→B2F→B3Fホームへ'},
       link:{text:'押上站 构内图',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/101.pdf'},
     },
@@ -393,8 +521,9 @@ const ROUTES=[
     },
     {
       instruction:{cn:'同层换乘都営新宿線',jp:'同じフロアで都営新宿線へ'},
-      vis:()=>vSign('都営新宿線','Shinjuku Line','green','S13','→ 换乘'),
+      vis:()=>vSign('都営新宿線','Shinjuku Line','green','S13','→ 换乘')+vTransfer('半蔵門線','#9333ea','都営新宿線','#16a34a','同层 约1分'),
       tip:{cn:'同一层走过去就好，很近！',jp:'同じフロア内、すぐ近くです！'},
+      mapEmbed:'https://maps.google.com/maps?q=住吉駅+都営新宿線&z=17&output=embed',
     },
     {
       instruction:{cn:'坐都営新宿線去西大島',jp:'都営新宿線で西大島へ'},
@@ -402,13 +531,14 @@ const ROUTES=[
     },
     {
       instruction:{cn:'到家了！！',jp:'着きました！！'},
-      vis:vArrival,
+      vis:()=>vArrival('西大島駅'),
       isFinal:true,
+      mapEmbed:'https://maps.google.com/maps?q=西大島駅&z=17&output=embed',
     },
   ],
 },
 {
-  id:2,cls:'c2',label:'路线②',name:'京成本線',badge:'省钱方案',
+  id:2,cls:'c2',label:'路线②',name:'京成本線',badge:'省钱方案',dest:'西大島',
   stops:['成田空港','京成八幡','本八幡','西大島'],
   meta:['⏱ 100-110min','💰 ~1300¥','🔄 1次+步行'],
   cards:[
@@ -416,43 +546,46 @@ const ROUTES=[
       instruction:{cn:'跟着这个标识走',jp:'この案内に従ってください'},
       vis:()=>vSign('京成線','Keisei Line','blue','','↓ 跟着走'),
       tip:{cn:'在到达大厅找「京成線」标识',jp:'到着ロビーで「京成線」の案内を探す'},
+      mapEmbed:'https://maps.google.com/maps?q=成田空港駅&z=16&output=embed',
     },
     {
       instruction:{cn:'给IC卡充值 2000日元',jp:'ICカードに2000円チャージ'},
-      vis:vMachine,
+      vis:()=>vMachine()+vTap(),
       tip:{cn:'按绿色"チャージ"按钮，有中文界面',jp:'緑のボタンを押す。中国語表示あり'},
     },
     {
       instruction:{cn:'下到地下 B1F，进改札',jp:'B1Fへ降りて改札を入る'},
-      vis:()=>vFloors([{tag:'1F',text:'到着ロビー',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}]),
+      vis:()=>vFloors([{tag:'1F',text:'到着ロビー',icon:'🏢'},{tag:'↓',text:''},{tag:'B1F',text:'<b>京成線 改札口</b>',here:true,icon:'🚪'}])+vEscalator('down','1F','B1F'),
     },
     {
       instruction:{cn:'通过「中间改札口」',jp:'「中間改札口」を通る'},
-      vis:()=>vGate(true),
+      vis:()=>vGate(true)+vTap(),
       warn:{cn:'IC卡刷两次是正常的！别紧张！',jp:'ICカードで2回タッチは正常です！'},
     },
     {
       instruction:{cn:'去2/3号站台坐车',jp:'2・3番ホームで乗車'},
-      vis:()=>vRoute('blue','快速特急 / 特急','成田空港','京成八幡',['京成佐倉','京成船橋'],'约 80 分钟'),
+      vis:()=>vRoute('blue','快速特急 / 特急','成田空港','京成八幡',['京成佐倉','京成船橋'],'约 80 分钟')+vBoard([{num:'2',dest:'京成佐倉・京成八幡方面',time:'次発',hl:true},{num:'3',dest:'京成上野方面',time:'--:--'}]),
       link:{text:'成田空港站 构内图',url:'https://www.keisei.co.jp/keisei/tetudou/stationmap/pdf/ch/145.pdf'},
     },
     {
       instruction:{cn:'到京成八幡站，下车',jp:'京成八幡駅で下車'},
-      vis:()=>vSign('京成八幡','Keisei Yawata','blue','KS16','⬇ 下车'),
+      vis:()=>vSign('京成八幡','Keisei Yawata','blue','KS16','⬇ 下车')+vExit('南口','本八幡駅方面'),
     },
     {
       instruction:{cn:'出站，下到1楼',jp:'改札を出て1Fへ'},
-      vis:()=>vFloors([{tag:'2F',text:'京成八幡駅（高架站台）',icon:'🚃'},{tag:'↓',text:''},{tag:'1F',text:'<b>出改札 → 出站</b>',here:true,icon:'🚶'}]),
+      vis:()=>vFloors([{tag:'2F',text:'京成八幡駅（高架站台）',icon:'🚃'},{tag:'↓',text:''},{tag:'1F',text:'<b>出改札 → 出站</b>',here:true,icon:'🚶'}])+vEscalator('down','2F','1F'),
     },
     {
       instruction:{cn:'往左走5分钟到本八幡站',jp:'左に曲がり5分歩いて本八幡駅へ'},
-      vis:()=>vWalk('京成八幡駅','本八幡駅','5 min'),
+      vis:()=>vWalk('京成八幡駅','本八幡駅','5 min','沿国道14号直走 / 国道14号沿い'),
       warn:{cn:'带行李箱注意路面',jp:'スーツケースの場合ご注意'},
       link:{text:'京成八幡→本八幡 步行实拍',url:'https://eroom.earthrevo.jp/archives/7326'},
+      mapEmbed:'https://maps.google.com/maps?saddr=京成八幡駅&daddr=本八幡駅&dirflg=w&z=16&output=embed',
     },
     {
       instruction:{cn:'进本八幡站，刷IC卡',jp:'本八幡駅に入り改札を通る'},
-      vis:()=>vGate(true),
+      vis:()=>vGate(true)+vTap(),
+      mapEmbed:'https://maps.google.com/maps?q=本八幡駅+都営新宿線&z=17&output=embed',
     },
     {
       instruction:{cn:'坐都営新宿線去西大島',jp:'都営新宿線で西大島へ'},
@@ -460,11 +593,111 @@ const ROUTES=[
     },
     {
       instruction:{cn:'到家了！！',jp:'着きました！！'},
-      vis:vArrival,
+      vis:()=>vArrival('西大島駅'),
       isFinal:true,
+      mapEmbed:'https://maps.google.com/maps?q=西大島駅&z=17&output=embed',
     },
   ],
 },
+];
+
+// Preset destinations (use Access Express to 押上, then transfer)
+const PRESETS=[
+  {
+    name:'渋谷',nameJp:'渋谷駅',emoji:'🛍️',cls:'',dest:'渋谷',
+    via:'Access特快→押上→半蔵門線',time:'~90min',cost:'~1700¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换半蔵門線',jp:'押上で半蔵門線に乗換'},vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘')+vTransfer('京成線','#dc2626','半蔵門線','#9333ea','B1F→B3F 约3分'),tip:{cn:'不要出改札！',jp:'改札を出ないで！'}},
+      {instruction:{cn:'坐半蔵門線直达渋谷',jp:'半蔵門線で渋谷へ'},vis:()=>vRoute('purple','半蔵門線','押上','渋谷',['錦糸町','大手町','表参道'],'约 30 分钟')},
+      {instruction:{cn:'到渋谷了！',jp:'渋谷に着きました！'},vis:()=>vArrival('渋谷駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=渋谷駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'新宿',nameJp:'新宿駅',emoji:'🏙️',cls:'',dest:'新宿',
+    via:'Access→押上→住吉→新宿線',time:'~100min',cost:'~1700¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换半蔵門線',jp:'押上で半蔵門線に乗換'},vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘'),tip:{cn:'不要出改札！',jp:'改札を出ないで！'}},
+      {instruction:{cn:'坐2站到住吉',jp:'2駅で住吉へ'},vis:()=>vRoute('purple','半蔵門線','押上','住吉',[],'2 站')},
+      {instruction:{cn:'同层换乘都営新宿線',jp:'同じフロアで都営新宿線へ'},vis:()=>vTransfer('半蔵門線','#9333ea','都営新宿線','#16a34a','同层 约1分')},
+      {instruction:{cn:'坐新宿線直达新宿',jp:'新宿線で新宿へ'},vis:()=>vRoute('green','都営新宿線','住吉','新宿',['森下','神保町'],'约 25 分钟')},
+      {instruction:{cn:'到新宿了！',jp:'新宿に着きました！'},vis:()=>vArrival('新宿駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=新宿駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'浅草',nameJp:'浅草駅',emoji:'⛩️',cls:'',dest:'浅草',
+    via:'Access特快→押上→浅草線',time:'~65min',cost:'~1400¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换都営浅草線',jp:'押上で都営浅草線に乗換'},vis:()=>vSign('都営浅草線','Toei Asakusa Line','red','A20','↓ 换乘')},
+      {instruction:{cn:'坐2站到浅草！',jp:'2駅で浅草！'},vis:()=>vRoute('red','都営浅草線','押上','浅草',['本所吾妻橋'],'约 3 分钟'),tip:{cn:'超近！2站就到',jp:'超近い！2駅だけ'}},
+      {instruction:{cn:'到浅草了！',jp:'浅草に着きました！'},vis:()=>vArrival('浅草駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=浅草駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'東京',nameJp:'東京駅',emoji:'🏛️',cls:'',dest:'東京',
+    via:'Access→押上→半蔵門線→大手町',time:'~80min',cost:'~1600¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换半蔵門線',jp:'押上で半蔵門線に乗換'},vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘'),tip:{cn:'不要出改札！',jp:'改札を出ないで！'}},
+      {instruction:{cn:'坐到大手町',jp:'大手町まで乗る'},vis:()=>vRoute('purple','半蔵門線','押上','大手町',['錦糸町','三越前'],'约 15 分钟'),tip:{cn:'大手町和東京駅地下相连',jp:'大手町は東京駅と地下で繋がっています'}},
+      {instruction:{cn:'到東京了！',jp:'東京に着きました！'},vis:()=>vArrival('大手町/東京駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=東京駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'品川',nameJp:'品川駅',emoji:'🚄',cls:'',dest:'品川',
+    via:'Access→押上→浅草線→品川',time:'~90min',cost:'~1700¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换都営浅草線',jp:'押上で都営浅草線に乗換'},vis:()=>vSign('都営浅草線','Toei Asakusa Line','red','A20','↓ 换乘')},
+      {instruction:{cn:'坐浅草線往泉岳寺方面',jp:'浅草線で泉岳寺方面へ'},vis:()=>vRoute('red','都営浅草線','押上','泉岳寺',['浅草','新橋','三田'],'约 25 分钟'),tip:{cn:'部分列车直通京急到品川',jp:'京急直通で品川まで行く電車あり'}},
+      {instruction:{cn:'到品川了！',jp:'品川に着きました！'},vis:()=>vArrival('品川駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=品川駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'池袋',nameJp:'池袋駅',emoji:'🎮',cls:'',dest:'池袋',
+    via:'Access→押上→半蔵門線→丸ノ内線',time:'~95min',cost:'~1700¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换半蔵門線',jp:'押上で半蔵門線に乗換'},vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘'),tip:{cn:'不要出改札！',jp:'改札を出ないで！'}},
+      {instruction:{cn:'坐到大手町',jp:'大手町まで乗る'},vis:()=>vRoute('purple','半蔵門線','押上','大手町',['錦糸町','三越前'],'约 15 分钟')},
+      {instruction:{cn:'换丸ノ内線去池袋',jp:'丸ノ内線で池袋へ'},vis:()=>vSign('丸ノ内線','Marunouchi Line','red','M18','↓ 换乘')+vRoute('red','丸ノ内線','大手町','池袋',['東京','御茶ノ水','後楽園'],'约 18 分钟')},
+      {instruction:{cn:'到池袋了！',jp:'池袋に着きました！'},vis:()=>vArrival('池袋駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=池袋駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'上野',nameJp:'上野駅',emoji:'🐼',cls:'',dest:'上野',
+    via:'Access→押上→半蔵門線→銀座線',time:'~80min',cost:'~1500¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换半蔵門線',jp:'押上で半蔵門線に乗換'},vis:()=>vSign('半蔵門線','Hanzomon Line','purple','Z14','↓ 换乘')},
+      {instruction:{cn:'坐到三越前',jp:'三越前まで乗る'},vis:()=>vRoute('purple','半蔵門線','押上','三越前',['錦糸町','住吉'],'约 10 分钟')},
+      {instruction:{cn:'换銀座線去上野',jp:'銀座線で上野へ'},vis:()=>vSign('銀座線','Ginza Line','orange','G09','↓ 换乘')+vRoute('orange','銀座線','三越前','上野',['神田','末広町'],'约 6 分钟')},
+      {instruction:{cn:'到上野了！',jp:'上野に着きました！'},vis:()=>vArrival('上野駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=上野駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'秋葉原',nameJp:'秋葉原駅',emoji:'🎌',cls:'',dest:'秋葉原',
+    via:'Access→押上→浅草線→JR',time:'~75min',cost:'~1500¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换都営浅草線',jp:'押上で都営浅草線に乗換'},vis:()=>vSign('都営浅草線','Toei Asakusa Line','red','A20','↓ 换乘')},
+      {instruction:{cn:'坐到浅草橋',jp:'浅草橋まで乗る'},vis:()=>vRoute('red','都営浅草線','押上','浅草橋',['浅草','蔵前'],'约 6 分钟'),tip:{cn:'在浅草橋出改札换JR',jp:'浅草橋でJRに乗り換え'}},
+      {instruction:{cn:'换JR 1站到秋葉原',jp:'JR1駅で秋葉原'},vis:()=>vSign('JR総武線','JR Sobu Line','yellow','','↓ 换乘')+vRoute('yellow','JR総武線','浅草橋','秋葉原',[],'1 站')},
+      {instruction:{cn:'到秋葉原了！',jp:'秋葉原に着きました！'},vis:()=>vArrival('秋葉原駅'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=秋葉原駅&z=17&output=embed'},
+    ],
+  },
+  {
+    name:'銀座',nameJp:'銀座駅',emoji:'💎',cls:'',dest:'銀座',
+    via:'Access→押上→浅草線→東銀座',time:'~80min',cost:'~1600¥',
+    cards:[
+      ...COMMON_NARITA,
+      {instruction:{cn:'到押上，换都営浅草線',jp:'押上で都営浅草線に乗換'},vis:()=>vSign('都営浅草線','Toei Asakusa Line','red','A20','↓ 换乘')},
+      {instruction:{cn:'坐到東銀座',jp:'東銀座まで乗る'},vis:()=>vRoute('red','都営浅草線','押上','東銀座',['浅草','日本橋','宝町'],'约 15 分钟'),tip:{cn:'東銀座出来就是銀座！',jp:'東銀座を出れば銀座です！'}},
+      {instruction:{cn:'到銀座了！',jp:'銀座に着きました！'},vis:()=>vArrival('銀座/東銀座'),isFinal:true,mapEmbed:'https://maps.google.com/maps?q=東銀座駅&z=17&output=embed'},
+    ],
+  },
 ];
 
 const PHRASES={
@@ -494,41 +727,58 @@ let S=loadS();
 let senior=localStorage.getItem('narita-senior')==='1';
 if(senior) document.body.classList.add('senior');
 
-function loadS(){try{const s=JSON.parse(localStorage.getItem('narita-v5'));if(s&&s.route!==undefined)return s}catch(e){}return{route:null,card:0}}
-function saveS(){localStorage.setItem('narita-v5',JSON.stringify(S))}
-function resetS(){S={route:null,card:0};saveS();render()}
+function loadS(){
+  try{
+    const s=JSON.parse(localStorage.getItem('narita-v6'));
+    if(s&&s.mode!==undefined) return s;
+    // Migrate from v5
+    const s5=JSON.parse(localStorage.getItem('narita-v5'));
+    if(s5&&s5.route!==null) return {mode:'route',route:s5.route,card:s5.card,preset:null};
+  }catch(e){}
+  return {mode:null,route:null,card:0,preset:null};
+}
+function saveS(){localStorage.setItem('narita-v6',JSON.stringify(S))}
+function resetS(){S={mode:null,route:null,card:0,preset:null};saveS();render()}
 
 // ===== RENDER =====
 const app=document.getElementById('app');
 
 function render(){
-  document.getElementById('toolsBtn').style.display=S.route===null?'none':'flex';
-  if(S.route===null) renderLanding();
-  else{
-    const r=ROUTES[S.route];
-    if(S.card>=r.cards.length) renderComplete(r);
-    else renderNav(r);
-  }
+  document.getElementById('toolsBtn').style.display=S.mode?'flex':'none';
+  if(!S.mode) return renderLanding();
+  let src;
+  if(S.mode==='route') src=ROUTES[S.route];
+  else if(S.mode==='preset') src=PRESETS[S.preset];
+  else return renderLanding();
+  if(S.card>=src.cards.length) renderComplete(src);
+  else renderNav(src);
 }
 
 function renderLanding(){
   let saved=null;
-  try{const s=JSON.parse(localStorage.getItem('narita-v5'));if(s&&s.route!==null)saved=s}catch(e){}
+  try{
+    const s=JSON.parse(localStorage.getItem('narita-v6'));
+    if(s&&s.mode) saved=s;
+  }catch(e){}
   let resumeH='';
   if(saved){
-    const r=ROUTES[saved.route];
-    const cn=saved.card<r.cards.length?r.cards[saved.card].instruction.cn:'已完成';
-    resumeH=`<div class="resume-bar" onclick="S=loadS();render()">
-      <div class="rb-dot"></div>
-      <div class="rb-text"><b>继续上次进度</b>${r.label} · ${cn}</div>
-      <div class="rb-go">继续 ›</div>
-    </div>`;
+    let src=saved.mode==='route'?ROUTES[saved.route]:saved.mode==='preset'?PRESETS[saved.preset]:null;
+    if(src){
+      const cn=saved.card<src.cards.length?src.cards[saved.card].instruction.cn:'已完成';
+      resumeH=`<div class="resume-bar" onclick="S=loadS();render()">
+        <div class="rb-dot"></div>
+        <div class="rb-text"><b>继续上次进度</b>${src.name} · ${cn}</div>
+        <div class="rb-go">继续 ›</div>
+      </div>`;
+    }
   }
   let h=`<div class="landing"><div class="brand">
-    <div class="logo">🚃</div><h1>成田空港 → 西大島</h1>
-    <div class="sub">中日双语导航 / 中日二ヶ国語ナビ</div>
+    <div class="logo">🚃</div><h1>成田空港 换乘导航</h1>
+    <div class="sub">中日双语导航 / 中日二ヶ国語乗換ナビ</div>
   </div>${resumeH}`;
 
+  // Detailed routes section
+  h+=`<div class="l-section"><div class="ls-title">🏠 详细路线 · 西大島</div></div>`;
   ROUTES.forEach((r,i)=>{
     h+=`<div class="rc ${i?'t2':''}" onclick="selectRoute(${i})">
       <span class="rc-badge">${r.badge}</span>
@@ -539,6 +789,26 @@ function renderLanding(){
     </div>`;
   });
 
+  // Preset destinations
+  h+=`<div class="l-section"><div class="ls-title">🗼 热门目的地</div></div>`;
+  h+=`<div class="preset-grid">`;
+  PRESETS.forEach((p,i)=>{
+    h+=`<div class="preset-item" onclick="selectPreset(${i})">
+      <div class="pi-emoji">${p.emoji}</div>
+      <div class="pi-name">${p.name}</div>
+      <div class="pi-via">${p.time} · ${p.cost}</div>
+    </div>`;
+  });
+  h+=`</div>`;
+
+  // Free search
+  h+=`<div class="l-section"><div class="ls-title">✈️ 自由搜索</div></div>`;
+  h+=`<div class="search-row">
+    <input type="text" placeholder="输入目的地站名..." id="searchDest">
+    <button onclick="openSearch()">导航</button>
+  </div>
+  <div class="search-hint">将打开 Google Maps 公交路线（从成田空港出发）</div>`;
+
   h+=`<div class="l-footer">
     <button onclick="toggleSenior()">${senior?'✓ ':''}大字模式</button>
     <button onclick="installPWA()">📲 添加到桌面</button>
@@ -546,12 +816,12 @@ function renderLanding(){
   app.innerHTML=h;
 }
 
-function renderNav(route){
-  const ci=route.cls;
-  const card=route.cards[S.card];
-  const total=route.cards.length;
+function renderNav(src){
+  const ci=src.cls||'';
+  const card=src.cards[S.card];
+  const total=src.cards.length;
+  const destName=src.dest||src.name;
 
-  // Top bar with dots
   let dots='';
   for(let i=0;i<total;i++){
     const c=i<S.card?'done':i===S.card?'cur':'';
@@ -569,6 +839,15 @@ function renderNav(route){
   // Visual
   h+=`<div class="visual">${card.vis?card.vis():''}</div>`;
 
+  // Map embed
+  if(card.mapEmbed){
+    h+=`<div class="map-frame">
+      <span class="mf-label">📍 Google Maps</span>
+      <iframe src="${card.mapEmbed}" loading="lazy" referrerpolicy="no-referrer"></iframe>
+    </div>
+    <div class="map-fallback"><a href="${card.mapEmbed.replace('&output=embed','')}" target="_blank">📍 在 Google Maps 中打开</a></div>`;
+  }
+
   // Instruction
   h+=`<div class="instruction">
     <div class="ins-cn">${card.instruction.cn}</div>
@@ -585,7 +864,7 @@ function renderNav(route){
   // Button
   const isFinal=card.isFinal;
   h+=`<button class="done-btn ${isFinal?'final':''}" onclick="nextCard()">
-    ${isFinal?'🎉 到家了！':'做到了 ✓'}
+    ${isFinal?'🎉 到达了！':'做到了 ✓'}
   </button>`;
 
   h+=`</div>`;
@@ -593,7 +872,7 @@ function renderNav(route){
   // Bottom bar
   const stepsLeft=total-S.card-1;
   h+=`<div class="bottom-bar">
-    <div class="bb-dest"><span class="bd-pin">📍</span> 西大島</div>
+    <div class="bb-dest"><span class="bd-pin">📍</span> ${destName}</div>
     <span>还有 ${stepsLeft} 步</span>
   </div>`;
 
@@ -601,21 +880,28 @@ function renderNav(route){
   app.innerHTML=h;
 }
 
-function renderComplete(route){
+function renderComplete(src){
+  const destName=src.dest||src.name;
   app.innerHTML=`<div class="done-wrap">
     <div class="dw-emoji">🎉🏠</div>
-    <div class="dw-title">到家了！</div>
-    <div class="dw-sub">お疲れ様でした！<br>全 ${route.cards.length} 步已完成</div>
+    <div class="dw-title">到${destName}了！</div>
+    <div class="dw-sub">お疲れ様でした！<br>全 ${src.cards.length} 步已完成</div>
     <button onclick="resetS()">重新开始</button>
   </div>`;
   showConfetti();
 }
 
 // ===== ACTIONS =====
-function selectRoute(i){S={route:i,card:0};saveS();render();window.scrollTo(0,0)}
+function selectRoute(i){S={mode:'route',route:i,card:0,preset:null};saveS();render();window.scrollTo(0,0)}
+function selectPreset(i){S={mode:'preset',route:null,card:0,preset:i};saveS();render();window.scrollTo(0,0)}
 function nextCard(){S.card++;saveS();render();window.scrollTo(0,0)}
-function goBack(){S.route=null;saveS();render();window.scrollTo(0,0);closeTools()}
+function goBack(){S={mode:null,route:null,card:0,preset:null};saveS();render();window.scrollTo(0,0);closeTools()}
 function toggleSenior(){senior=!senior;document.body.classList.toggle('senior',senior);localStorage.setItem('narita-senior',senior?'1':'0');render()}
+function openSearch(){
+  const dest=document.getElementById('searchDest').value.trim();
+  if(!dest) return;
+  window.open('https://www.google.com/maps/dir/'+encodeURIComponent('成田空港')+'/'+encodeURIComponent(dest)+'/?travelmode=transit','_blank');
+}
 
 // ===== TOOLS PANEL =====
 function openTools(){
@@ -675,11 +961,17 @@ async function doTranslate(){
   window._trLoading=false;openTools();
 }
 
-// PWA
+// ===== PWA + OFFLINE =====
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e});
 function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt=null}else alert('请用浏览器的"添加到主屏幕"功能')}
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js');
+
+// Offline detection
+function updateOnline(){document.body.classList.toggle('offline',!navigator.onLine)}
+window.addEventListener('online',updateOnline);
+window.addEventListener('offline',updateOnline);
+updateOnline();
 
 // Confetti
 function showConfetti(){const c=document.createElement('div');c.className='confetti';const cols=['#818cf8','#f472b6','#4ade80','#fbbf24','#2dd4bf','#f87171'];for(let i=0;i<40;i++){const s=document.createElement('span');s.style.cssText=`left:${Math.random()*100}%;background:${cols[i%cols.length]};animation-delay:${Math.random()*2}s;animation-duration:${2+Math.random()*2}s;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px`;c.appendChild(s)}document.body.appendChild(c);setTimeout(()=>c.remove(),5000)}

@@ -1,4 +1,4 @@
-const CACHE = 'narita-v4';
+const CACHE = 'narita-v6';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
@@ -15,6 +15,7 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   if (e.request.url.includes('translate.googleapis.com')) return;
+  if (e.request.url.includes('maps.google.com') || e.request.url.includes('google.com/maps')) return;
   e.respondWith(
     caches.match(e.request).then(r => r || fetch(e.request).then(res => {
       const clone = res.clone();
